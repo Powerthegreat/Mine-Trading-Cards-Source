@@ -1,13 +1,13 @@
 package com.is.mtc.village;
 
+import cpw.mods.fml.common.registry.VillagerRegistry;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
+
 import java.util.List;
 import java.util.Random;
 
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-import cpw.mods.fml.common.registry.VillagerRegistry;
-
 public class CardMasterHomeHandler
-implements VillagerRegistry.IVillageCreationHandler {
+		implements VillagerRegistry.IVillageCreationHandler {
 	@Override
 	public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
 		return new StructureVillagePieces.PieceWeight(CardMasterHome.class, 9, 1);

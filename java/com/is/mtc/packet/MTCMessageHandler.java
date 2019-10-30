@@ -1,17 +1,15 @@
 package com.is.mtc.packet;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-
 import com.is.mtc.binder.BinderItem;
 import com.is.mtc.binder.BinderItemInterfaceContainer;
 import com.is.mtc.root.Logs;
-
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 
-public class MTCMessageHandler implements IMessageHandler<MTCMessage, IMessage>{
+public class MTCMessageHandler implements IMessageHandler<MTCMessage, IMessage> {
 
 	@Override
 	public IMessage onMessage(MTCMessage message, MessageContext ctx) {
@@ -22,32 +20,32 @@ public class MTCMessageHandler implements IMessageHandler<MTCMessage, IMessage>{
 			return null;
 
 		switch (message.id) {
-		case BinderItemInterfaceContainer.LESS1:
-			BinderItem.changePageBy(binderStack, -1);
-			break;
-		case BinderItemInterfaceContainer.LESS2:
-			BinderItem.changePageBy(binderStack, -4);
-			break;
-		case BinderItemInterfaceContainer.LESS3:
-			BinderItem.changePageBy(binderStack, -8);
-			break;
+			case BinderItemInterfaceContainer.LESS1:
+				BinderItem.changePageBy(binderStack, -1);
+				break;
+			case BinderItemInterfaceContainer.LESS2:
+				BinderItem.changePageBy(binderStack, -4);
+				break;
+			case BinderItemInterfaceContainer.LESS3:
+				BinderItem.changePageBy(binderStack, -8);
+				break;
 
-		case BinderItemInterfaceContainer.MORE1:
-			BinderItem.changePageBy(binderStack, 1);
-			break;
-		case BinderItemInterfaceContainer.MORE2:
-			BinderItem.changePageBy(binderStack, 4);
-			break;
-		case BinderItemInterfaceContainer.MORE3:
-			BinderItem.changePageBy(binderStack, 8);
-			break;
+			case BinderItemInterfaceContainer.MORE1:
+				BinderItem.changePageBy(binderStack, 1);
+				break;
+			case BinderItemInterfaceContainer.MORE2:
+				BinderItem.changePageBy(binderStack, 4);
+				break;
+			case BinderItemInterfaceContainer.MORE3:
+				BinderItem.changePageBy(binderStack, 8);
+				break;
 
-		case BinderItemInterfaceContainer.MODE_SWITCH:
-			int mode = binderStack.stackTagCompound.getInteger("mode_mtc");
+			case BinderItemInterfaceContainer.MODE_SWITCH:
+				int mode = binderStack.stackTagCompound.getInteger("mode_mtc");
 
-			binderStack.stackTagCompound.setInteger("mode_mtc", mode == BinderItem.MODE_STD ? BinderItem.MODE_FIL : BinderItem.MODE_STD);
-			Logs.devLog("Server: " + mode + ">>" + binderStack.stackTagCompound.getInteger("mode_mtc"));
-			break;
+				binderStack.stackTagCompound.setInteger("mode_mtc", mode == BinderItem.MODE_STD ? BinderItem.MODE_FIL : BinderItem.MODE_STD);
+				Logs.devLog("Server: " + mode + ">>" + binderStack.stackTagCompound.getInteger("mode_mtc"));
+				break;
 		}
 
 		//((EntityPlayerMP)p).sendContainerToPlayer(p.inventoryContainer); // Update

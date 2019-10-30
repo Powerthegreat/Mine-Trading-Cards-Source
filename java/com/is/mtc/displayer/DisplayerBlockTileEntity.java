@@ -1,5 +1,6 @@
 package com.is.mtc.displayer;
 
+import com.is.mtc.root.Tools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -9,8 +10,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-
-import com.is.mtc.root.Tools;
 
 public class DisplayerBlockTileEntity extends TileEntity implements IInventory {
 	public static final int INVENTORY_SIZE = 4;
@@ -51,7 +50,7 @@ public class DisplayerBlockTileEntity extends TileEntity implements IInventory {
 		for (int i = 0; i < content.length; ++i) {
 			if (content[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte)i);
+				nbttagcompound1.setByte("Slot", (byte) i);
 				content[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}
@@ -170,6 +169,6 @@ public class DisplayerBlockTileEntity extends TileEntity implements IInventory {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer user) { // Use standard chest formula
-		return worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : user.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
+		return worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && user.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
 }

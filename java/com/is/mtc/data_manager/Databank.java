@@ -1,11 +1,11 @@
 package com.is.mtc.data_manager;
 
+import com.is.mtc.root.Logs;
+import com.is.mtc.root.Rarity;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
-
-import com.is.mtc.root.Logs;
-import com.is.mtc.root.Rarity;
 
 public class Databank {
 
@@ -16,15 +16,14 @@ public class Databank {
 	//-
 
 	/// NOTE LinkedHashMap to keep the precise order
-	public static void setup()
-	{
+	public static void setup() {
 		editions_by_id = new LinkedHashMap<String, EditionStructure>();
 		editions_by_name = new LinkedHashMap<String, EditionStructure>();
 		editions_by_numeral_id = new LinkedHashMap<Integer, EditionStructure>();
 
 		cards_by_cdwd = new LinkedHashMap<String, CardStructure>();
 
-		cards_by_wrarity = new LinkedHashMap<Integer, Map<Integer,CardStructure>>();
+		cards_by_wrarity = new LinkedHashMap<Integer, Map<Integer, CardStructure>>();
 		cards_by_wrarity.put(Rarity.COMMON, new LinkedHashMap<Integer, CardStructure>());
 		cards_by_wrarity.put(Rarity.UNCOMMON, new LinkedHashMap<Integer, CardStructure>());
 		cards_by_wrarity.put(Rarity.RARE, new LinkedHashMap<Integer, CardStructure>());
@@ -38,14 +37,13 @@ public class Databank {
 		wrarity_tw.put(Rarity.ANCIENT, 0);
 		wrarity_tw.put(Rarity.LEGENDARY, 0);
 
-		cards_by_wraed = new LinkedHashMap<String, Map<Integer,Map<Integer,CardStructure>>>();
-		wraed = new LinkedHashMap<String, Map<Integer,Integer>>();
+		cards_by_wraed = new LinkedHashMap<String, Map<Integer, Map<Integer, CardStructure>>>();
+		wraed = new LinkedHashMap<String, Map<Integer, Integer>>();
 	}
 
 	//-
 
-	public static boolean registerAnEdition(EditionStructure eStruct)
-	{
+	public static boolean registerAnEdition(EditionStructure eStruct) {
 		if (!eStruct.isValid()) {
 			Logs.errLog("Edition is invalid (Invalid/missing ID or name)");
 			return false;
@@ -83,20 +81,19 @@ public class Databank {
 		return true;
 	}
 
-	public static int getEditionsCount() { return editions_by_id.size(); }
+	public static int getEditionsCount() {
+		return editions_by_id.size();
+	}
 
-	public static EditionStructure getEditionWithId(String id)
-	{
+	public static EditionStructure getEditionWithId(String id) {
 		return editions_by_id.containsKey(id) ? editions_by_id.get(id) : null;
 	}
 
-	public static EditionStructure getEditionWithName(String name)
-	{
+	public static EditionStructure getEditionWithName(String name) {
 		return editions_by_name.containsKey(name) ? editions_by_name.get(name) : null;
 	}
 
-	public static EditionStructure getEditionWithNumeralId(int nid)
-	{
+	public static EditionStructure getEditionWithNumeralId(int nid) {
 		return editions_by_numeral_id.containsKey(nid) ? editions_by_numeral_id.get(nid) : null;
 	}
 
@@ -114,8 +111,7 @@ public class Databank {
 
 	private static int wedition_tw; // Weighted edition total weight
 
-	public static boolean registerACard(CardStructure cStruct)
-	{
+	public static boolean registerACard(CardStructure cStruct) {
 		if (!cStruct.isValid()) {
 			Logs.errLog("Card is invalid (Invalid/missing ID, name or rarity)");
 			return false;
@@ -142,9 +138,8 @@ public class Databank {
 
 			cards_by_wraed.get(cStruct.getEdition()).get(cStruct.getRarity()).put(wraed.get(cStruct.getEdition()).get(cStruct.getRarity()) + cStruct.getWeight(), cStruct);
 			wraed.get(cStruct.getEdition()).put(cStruct.getRarity(), wraed.get(cStruct.getEdition()).get(cStruct.getRarity()) + cStruct.getWeight());
-		}
-		else {
-			Logs.errLog("Warning: Card does not have a strictely positive weight. Card will be usable but not droppable");
+		} else {
+			Logs.errLog("Warning: Card does not have a strictly positive weight. Card will be usable but not droppable");
 			Logs.devLog("Card registered: " + cStruct.toString());
 
 			return false;
@@ -155,8 +150,7 @@ public class Databank {
 		return true;
 	}
 
-	public static CardStructure getCardByCDWD(String cdwd)
-	{
+	public static CardStructure getCardByCDWD(String cdwd) {
 		return cards_by_cdwd.containsKey(cdwd) ? cards_by_cdwd.get(cdwd) : null;
 	}
 

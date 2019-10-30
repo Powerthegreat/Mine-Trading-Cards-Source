@@ -1,19 +1,17 @@
 package com.is.mtc.village;
 
-import java.util.Random;
-
+import com.is.mtc.MineTradingCards;
+import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
-import com.is.mtc.MineTradingCards;
-
-import cpw.mods.fml.common.registry.VillagerRegistry;
+import java.util.Random;
 
 public class VillageHandler
-implements VillagerRegistry.IVillageTradeHandler {
+		implements VillagerRegistry.IVillageTradeHandler {
 	public static int TRADER_ID = 7117;
 
 	public VillageHandler() {

@@ -1,13 +1,12 @@
 package com.is.mtc.binder;
 
+import com.is.mtc.root.CardSlot;
+import com.is.mtc.root.Tools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import com.is.mtc.root.CardSlot;
-import com.is.mtc.root.Tools;
 
 public class BinderItemContainer extends Container {
 	private static final int offsetBinderX = 44, offsetBinderY = 44; // Top left
@@ -53,7 +52,7 @@ public class BinderItemContainer extends Container {
 	}
 
 	public ItemStack getCardStackAtIndex(int idx) {
-		return ((Slot)inventorySlots.get(idx + 36)).getStack(); // +Inventory size
+		return ((Slot) inventorySlots.get(idx + 36)).getStack(); // +Inventory size
 	}
 
 	public ItemStack getBinderStack() {
@@ -64,7 +63,7 @@ public class BinderItemContainer extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int providerSlotIndex) {
-		Slot providerSlot = (Slot)inventorySlots.get(providerSlotIndex); // Slot from where the stack comes from
+		Slot providerSlot = (Slot) inventorySlots.get(providerSlotIndex); // Slot from where the stack comes from
 		ItemStack providedStack = null; // Stack that is to be moved
 		int binderpage = -1;
 		int tmp;
@@ -87,24 +86,23 @@ public class BinderItemContainer extends Container {
 			tmp = providedStack.stackSize;
 			providerSlot.putStack(tmp < 1 ? null : providedStack); // Inform the slot about some changes
 			providerSlot.onSlotChanged();
-		}
-		else { // From inv to binder
+		} else { // From inv to binder
 			int mode = player.getCurrentEquippedItem().stackTagCompound.getInteger("mode_mtc");
 
 			if (!Tools.isValidCard(providedStack))
 				return null;
 
 			switch (mode) {
-			case BinderItem.MODE_STD:
-				if (!mergeItemStack(providedStack, 36 + (binderpage * BinderItemInventory.getStacksPerPage()),
-						36 + BinderItemInventory.getStacksPerPage() + (binderpage * BinderItemInventory.getStacksPerPage()), false))
-					return null;
-				break;
-			case BinderItem.MODE_FIL:
-				if (!mergeItemStack(providedStack, 36 + (binderpage * BinderItemInventory.getStacksPerPage()),
-						36 + (BinderItemInventory.getStacksPerPage() * BinderItemInventory.getTotalPages()), false))
-					return null;
-				break;
+				case BinderItem.MODE_STD:
+					if (!mergeItemStack(providedStack, 36 + (binderpage * BinderItemInventory.getStacksPerPage()),
+							36 + BinderItemInventory.getStacksPerPage() + (binderpage * BinderItemInventory.getStacksPerPage()), false))
+						return null;
+					break;
+				case BinderItem.MODE_FIL:
+					if (!mergeItemStack(providedStack, 36 + (binderpage * BinderItemInventory.getStacksPerPage()),
+							36 + (BinderItemInventory.getStacksPerPage() * BinderItemInventory.getTotalPages()), false))
+						return null;
+					break;
 				/*case BinderItem.MODE_PLA:
 				CardStructure cs = Databank.getCardByCDWD(providerSlot.getStack().stackTagCompound.getString("cdwd"));
 

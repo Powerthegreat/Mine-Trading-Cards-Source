@@ -1,6 +1,9 @@
 package com.is.mtc.displayer;
 
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.Reference;
+import com.is.mtc.handler.GuiHandler;
+import com.is.mtc.root.Tools;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -10,10 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.MineTradingCards;
-import com.is.mtc.root.Tools;
 
 public class DisplayerBlock extends BlockContainer {
 
@@ -38,7 +37,7 @@ public class DisplayerBlock extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World w, int px, int py, int pz, EntityPlayer player,
-			int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+									int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
 		TileEntity tileEntity = w.getTileEntity(px, py, pz);
 
 		if (tileEntity == null || !(tileEntity instanceof DisplayerBlockTileEntity))
@@ -71,7 +70,7 @@ public class DisplayerBlock extends BlockContainer {
 		if (w.isRemote)
 			return;
 
-		emptyDisplayerBlockTileEntity((DisplayerBlockTileEntity)w.getTileEntity(x, y, z), w, x, y, z);
+		emptyDisplayerBlockTileEntity((DisplayerBlockTileEntity) w.getTileEntity(x, y, z), w, x, y, z);
 		w.removeTileEntity(x, y, z);
 	}
 

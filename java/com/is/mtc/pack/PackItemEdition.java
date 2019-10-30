@@ -1,10 +1,11 @@
 package com.is.mtc.pack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.is.mtc.Reference;
+import com.is.mtc.data_manager.CardStructure;
+import com.is.mtc.data_manager.Databank;
+import com.is.mtc.data_manager.EditionStructure;
+import com.is.mtc.root.Logs;
+import com.is.mtc.root.Rarity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -12,17 +13,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
 
-import com.is.mtc.data_manager.CardStructure;
-import com.is.mtc.data_manager.Databank;
-import com.is.mtc.data_manager.EditionStructure;
-import com.is.mtc.root.Logs;
-import com.is.mtc.MineTradingCards;
-import com.is.mtc.root.Rarity;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class PackItemEdition extends PackItemBase {
 
-	private static final int cCount[] = { 7, 2, 1 };
-	private static final int rWeight[] = { 25, 29, 30 };
+	private static final int[] cCount = {7, 2, 1};
+	private static final int[] rWeight = {25, 29, 30};
 	private static final int rtWeight = rWeight[2];
 
 	public PackItemEdition() {
@@ -54,8 +52,7 @@ public class PackItemEdition extends PackItemBase {
 				return "edition_pack_" + eid;
 			else
 				return eStruct.getName() + " Pack";
-		}
-		else
+		} else
 			return super.getItemStackDisplayName(stack);
 	}
 
@@ -80,8 +77,7 @@ public class PackItemEdition extends PackItemBase {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player)
-	{
+	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player) {
 		ArrayList<String> created;
 		EditionStructure eStruct;
 		NBTTagCompound nbt;
@@ -123,8 +119,7 @@ public class PackItemEdition extends PackItemBase {
 				spawnCard(player, w, cdwd);
 			}
 			stack.stackSize -= 1;
-		}
-		else {
+		} else {
 			Logs.chatMessage(player, "Zero cards were registered, thus zero cards were generated");
 			Logs.errLog("Zero cards were registered, thus zero cards were generated");
 		}

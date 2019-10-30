@@ -1,28 +1,25 @@
 package com.is.mtc.displayer;
 
 import com.is.mtc.Reference;
+import com.is.mtc.card.CardItem;
+import com.is.mtc.data_manager.CardStructure;
+import com.is.mtc.data_manager.Databank;
+import com.is.mtc.root.Rarity;
+import com.is.mtc.root.Tools;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-
 import org.lwjgl.opengl.GL11;
-
-import com.is.mtc.card.CardItem;
-import com.is.mtc.data_manager.CardStructure;
-import com.is.mtc.data_manager.Databank;
-import com.is.mtc.MineTradingCards;
-import com.is.mtc.root.Rarity;
-import com.is.mtc.root.Tools;
 
 public class DisplayerBlockRenderer extends TileEntitySpecialRenderer {
 
 	@Override
 	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float par5) {
 		Tessellator tessellator = Tessellator.instance;
-		DisplayerBlockTileEntity dbte = (DisplayerBlockTileEntity)te;
+		DisplayerBlockTileEntity dbte = (DisplayerBlockTileEntity) te;
 
 		RenderHelper.disableStandardItemLighting();
 		GL11.glPushMatrix();
@@ -76,7 +73,7 @@ public class DisplayerBlockRenderer extends TileEntitySpecialRenderer {
 			if (!Tools.isValidCard(stack))
 				tessellator.setColorRGBA_F(1, 1, 1, 0);
 			else {
-				CardItem ci = (CardItem)stack.getItem();
+				CardItem ci = (CardItem) stack.getItem();
 				CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
 
 				if (cStruct == null || cStruct.getDynamicTexture() == null) // Card not registered or unregistered illustration, use item image instead
@@ -88,8 +85,7 @@ public class DisplayerBlockRenderer extends TileEntitySpecialRenderer {
 
 				tessellator.setColorRGBA_F(1, 1, 1, 1);
 			}
-		}
-		else
+		} else
 			tessellator.setColorRGBA_F(1, 1, 1, 0);
 	}
 }

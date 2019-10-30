@@ -1,17 +1,5 @@
 package com.is.mtc;
 
-import java.io.File;
-
-import com.is.mtc.root.*;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-
 import com.is.mtc.binder.BinderItem;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.DataLoader;
@@ -29,10 +17,10 @@ import com.is.mtc.pack.PackItemStandard;
 import com.is.mtc.packet.MTCMessage;
 import com.is.mtc.packet.MTCMessageHandler;
 import com.is.mtc.proxy.CommonProxy;
+import com.is.mtc.root.*;
 import com.is.mtc.village.CardMasterHome;
 import com.is.mtc.village.CardMasterHomeHandler;
 import com.is.mtc.village.VillageHandler;
-
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -46,6 +34,16 @@ import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+
+import java.io.File;
 
 @Mod(modid = Reference.MODID, version = Reference.VERSION, name = Reference.NAME)
 public class MineTradingCards {
@@ -75,7 +73,8 @@ public class MineTradingCards {
 
 	// The creative tab that the mod uses
 	public static CreativeTabs MODTAB = new CreativeTabs("tab_mtc") {
-		@Override public Item getTabIconItem() {
+		@Override
+		public Item getTabIconItem() {
 			return MineTradingCards.packStandard;
 		}
 	};

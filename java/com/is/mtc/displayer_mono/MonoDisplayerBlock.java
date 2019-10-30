@@ -1,6 +1,9 @@
 package com.is.mtc.displayer_mono;
 
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.Reference;
+import com.is.mtc.handler.GuiHandler;
+import com.is.mtc.root.Tools;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -12,10 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
-import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.MineTradingCards;
-import com.is.mtc.root.Tools;
 
 public class MonoDisplayerBlock extends BlockContainer {
 
@@ -38,7 +37,7 @@ public class MonoDisplayerBlock extends BlockContainer {
 
 	@Override
 	public boolean onBlockActivated(World w, int px, int py, int pz, EntityPlayer player,
-			int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+									int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
 		TileEntity tileEntity = w.getTileEntity(px, py, pz);
 
 		if (tileEntity == null || !(tileEntity instanceof MonoDisplayerBlockTileEntity))
@@ -52,23 +51,22 @@ public class MonoDisplayerBlock extends BlockContainer {
 	public void onBlockPlacedBy(World w, int x, int y, int z, EntityLivingBase player, ItemStack p_149689_6_) {
 		int l = MathHelper.floor_double((player.rotationYaw * 4F) / 360F + 0.5D) & 3;
 
-		switch (l)
-		{
-		case 0:
-			w.setBlockMetadataWithNotify(x, y, z, 2, 1 | 2);
-			break;
+		switch (l) {
+			case 0:
+				w.setBlockMetadataWithNotify(x, y, z, 2, 1 | 2);
+				break;
 
-		case 1:
-			w.setBlockMetadataWithNotify(x, y, z, 5, 1 | 2);
-			break;
+			case 1:
+				w.setBlockMetadataWithNotify(x, y, z, 5, 1 | 2);
+				break;
 
-		case 2:
-			w.setBlockMetadataWithNotify(x, y, z, 3, 1 | 2);
-			break;
+			case 2:
+				w.setBlockMetadataWithNotify(x, y, z, 3, 1 | 2);
+				break;
 
-		case 3:
-			w.setBlockMetadataWithNotify(x, y, z, 4, 1 | 2);
-			break;
+			case 3:
+				w.setBlockMetadataWithNotify(x, y, z, 4, 1 | 2);
+				break;
 		}
 	}
 
@@ -95,7 +93,7 @@ public class MonoDisplayerBlock extends BlockContainer {
 		if (w.isRemote)
 			return;
 
-		emptyMonoDisplayerBlockTileEntity((MonoDisplayerBlockTileEntity)w.getTileEntity(x, y, z), w, x, y, z);
+		emptyMonoDisplayerBlockTileEntity((MonoDisplayerBlockTileEntity) w.getTileEntity(x, y, z), w, x, y, z);
 		w.removeTileEntity(x, y, z);
 	}
 

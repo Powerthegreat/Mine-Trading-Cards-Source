@@ -1,12 +1,13 @@
 package com.is.mtc.packet;
 
-import io.netty.buffer.ByteBuf;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import io.netty.buffer.ByteBuf;
 
 public class MTCMessage implements IMessage {
 	public int id;
 
-	public MTCMessage() {}
+	public MTCMessage() {
+	}
 
 	public MTCMessage(int id) {
 		this.id = id;

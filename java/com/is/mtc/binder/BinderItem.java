@@ -1,17 +1,16 @@
 package com.is.mtc.binder;
 
-import java.util.List;
-
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.Reference;
+import com.is.mtc.handler.GuiHandler;
+import com.is.mtc.root.Tools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
-import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.MineTradingCards;
-import com.is.mtc.root.Tools;
+import java.util.List;
 
 public class BinderItem extends Item {
 
@@ -37,7 +36,7 @@ public class BinderItem extends Item {
 			return stack;
 
 		testNBT(stack);
-		player.openGui(MineTradingCards.INSTANCE, GuiHandler.GUI_BINDER, w, (int)player.posX, (int)player.posY, (int)player.posZ);
+		player.openGui(MineTradingCards.INSTANCE, GuiHandler.GUI_BINDER, w, (int) player.posX, (int) player.posY, (int) player.posZ);
 
 		return stack;
 	}
@@ -65,7 +64,7 @@ public class BinderItem extends Item {
 
 	public static int setCurrentPage(ItemStack binderStack, int page) {
 		testNBT(binderStack);
-		binderStack.stackTagCompound.setInteger("page", (int)Tools.clamp(0, page, BinderItemInventory.getTotalPages() - 1));
+		binderStack.stackTagCompound.setInteger("page", (int) Tools.clamp(0, page, BinderItemInventory.getTotalPages() - 1));
 
 		return getCurrentPage(binderStack);
 	}

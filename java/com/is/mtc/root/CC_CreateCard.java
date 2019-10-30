@@ -1,7 +1,6 @@
 package com.is.mtc.root;
 
-import java.util.List;
-
+import com.is.mtc.data_manager.Databank;
 import net.minecraft.command.CommandTime;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.item.EntityItem;
@@ -10,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
-import com.is.mtc.data_manager.Databank;
+import java.util.List;
 
 public class CC_CreateCard extends CommandTime { // Command to create an existing card
 
@@ -55,8 +54,7 @@ public class CC_CreateCard extends CommandTime { // Command to create an existin
 	}
 
 	@Override
-	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_)
-	{
+	public List addTabCompletionOptions(ICommandSender p_71516_1_, String[] p_71516_2_) {
 		return null;
 	}
 }

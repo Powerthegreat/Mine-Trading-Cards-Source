@@ -1,13 +1,12 @@
 package com.is.mtc.displayer_mono;
 
+import com.is.mtc.displayer.DisplayerBlockTileEntity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-
-import com.is.mtc.displayer.DisplayerBlockTileEntity;
 
 public class MonoDisplayerBlockTileEntity extends DisplayerBlockTileEntity {
 	public static final int INVENTORY_SIZE = 1;
@@ -48,7 +47,7 @@ public class MonoDisplayerBlockTileEntity extends DisplayerBlockTileEntity {
 		for (int i = 0; i < content.length; ++i) {
 			if (content[i] != null) {
 				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte)i);
+				nbttagcompound1.setByte("Slot", (byte) i);
 				content[i].writeToNBT(nbttagcompound1);
 				nbttaglist.appendTag(nbttagcompound1);
 			}

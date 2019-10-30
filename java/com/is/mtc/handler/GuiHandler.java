@@ -1,10 +1,5 @@
 package com.is.mtc.handler;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.world.World;
-
 import com.is.mtc.binder.BinderItemContainer;
 import com.is.mtc.binder.BinderItemInterfaceContainer;
 import com.is.mtc.binder.BinderItemInventory;
@@ -19,8 +14,11 @@ import com.is.mtc.displayer_mono.MonoDisplayerBlockInterface;
 import com.is.mtc.displayer_mono.MonoDisplayerBlockTileEntity;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Tools;
-
 import cpw.mods.fml.common.network.IGuiHandler;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
 
 public class GuiHandler implements IGuiHandler {
 
@@ -34,18 +32,18 @@ public class GuiHandler implements IGuiHandler {
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
 
 		switch (ID) {
-		case GUI_DISPLAYER:
-			if (tileEntity != null)
-				return new DisplayerBlockContainer(player.inventory, (DisplayerBlockTileEntity)tileEntity);
-			break;
+			case GUI_DISPLAYER:
+				if (tileEntity != null)
+					return new DisplayerBlockContainer(player.inventory, (DisplayerBlockTileEntity) tileEntity);
+				break;
 
-		case GUI_BINDER:
-			return new BinderItemContainer(player.inventory, new BinderItemInventory(player.getHeldItem()));
+			case GUI_BINDER:
+				return new BinderItemContainer(player.inventory, new BinderItemInventory(player.getHeldItem()));
 
-		case GUI_MONODISPLAYER:
-			if (tileEntity != null)
-				return new MonoDisplayerBlockContainer(player.inventory, (MonoDisplayerBlockTileEntity)tileEntity);
-			break;
+			case GUI_MONODISPLAYER:
+				if (tileEntity != null)
+					return new MonoDisplayerBlockContainer(player.inventory, (MonoDisplayerBlockTileEntity) tileEntity);
+				break;
 		}
 
 		return null;
@@ -56,32 +54,32 @@ public class GuiHandler implements IGuiHandler {
 		TileEntity tileEntity = world.getTileEntity(x, y, z);
 
 		switch (ID) {
-		case GUI_CARD:
-			ItemStack stack = player.getHeldItem();
-			if (Tools.hasCDWD(stack)) {
-				CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
+			case GUI_CARD:
+				ItemStack stack = player.getHeldItem();
+				if (Tools.hasCDWD(stack)) {
+					CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
 
-				if (cStruct != null && cStruct.getDynamicTexture() != null) // Card registered and dynamic texture (illustration) exists
-					return new CardItemInterface(player.getHeldItem());
-				else {
-					Logs.chatMessage(player, "Unable to open card illustration: Missing client side illustration: " + stack.stackTagCompound.getString("cdwd"));
-					Logs.errLog("Unable to open card illustration: Missing client side illustration: " + stack.stackTagCompound.getString("cdwd"));
+					if (cStruct != null && cStruct.getDynamicTexture() != null) // Card registered and dynamic texture (illustration) exists
+						return new CardItemInterface(player.getHeldItem());
+					else {
+						Logs.chatMessage(player, "Unable to open card illustration: Missing client side illustration: " + stack.stackTagCompound.getString("cdwd"));
+						Logs.errLog("Unable to open card illustration: Missing client side illustration: " + stack.stackTagCompound.getString("cdwd"));
+					}
 				}
-			}
-			break;
+				break;
 
-		case GUI_DISPLAYER:
-			if (tileEntity != null)
-				return new DisplayerBlockInterface(player.inventory, (DisplayerBlockTileEntity)tileEntity);
-			break;
+			case GUI_DISPLAYER:
+				if (tileEntity != null)
+					return new DisplayerBlockInterface(player.inventory, (DisplayerBlockTileEntity) tileEntity);
+				break;
 
-		case GUI_BINDER:
-			return new BinderItemInterfaceContainer(new BinderItemContainer(player.inventory, new BinderItemInventory(player.getHeldItem())));
+			case GUI_BINDER:
+				return new BinderItemInterfaceContainer(new BinderItemContainer(player.inventory, new BinderItemInventory(player.getHeldItem())));
 
-		case GUI_MONODISPLAYER:
-			if (tileEntity != null)
-				return new MonoDisplayerBlockInterface(player.inventory, (MonoDisplayerBlockTileEntity)tileEntity);
-			break;
+			case GUI_MONODISPLAYER:
+				if (tileEntity != null)
+					return new MonoDisplayerBlockInterface(player.inventory, (MonoDisplayerBlockTileEntity) tileEntity);
+				break;
 		}
 
 		return null;

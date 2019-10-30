@@ -1,17 +1,15 @@
 package com.is.mtc.pack;
 
-import java.util.ArrayList;
-
 import com.is.mtc.Reference;
+import com.is.mtc.data_manager.CardStructure;
+import com.is.mtc.data_manager.Databank;
+import com.is.mtc.root.Logs;
+import com.is.mtc.root.Rarity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import com.is.mtc.data_manager.CardStructure;
-import com.is.mtc.data_manager.Databank;
-import com.is.mtc.root.Logs;
-import com.is.mtc.MineTradingCards;
-import com.is.mtc.root.Rarity;
+import java.util.ArrayList;
 
 /*
  * Pack item drop informations
@@ -28,14 +26,13 @@ public class PackItemRarity extends PackItemBase {
 	private static final int[] rCount = new int[]{5, 3, 2, 0, 0};
 	private static final int[] aCount = new int[]{3, 3, 3, 1, 0};
 	private static final int[] lCount = new int[]{0, 0, 0, 0, 1};
-	private static final int[][] tCount = { cCount, uCount, rCount, aCount, lCount };
+	private static final int[][] tCount = {cCount, uCount, rCount, aCount, lCount};
 
 	private static final String _str = "item_pack_";
 
 	private int rarity;
 
-	public PackItemRarity(int r)
-	{
+	public PackItemRarity(int r) {
 		setUnlocalizedName(_str + Rarity.toString(r).toLowerCase());
 		setTextureName(Reference.MODID + ":" + _str + Rarity.toString(r).toLowerCase());
 
@@ -43,8 +40,7 @@ public class PackItemRarity extends PackItemBase {
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player)
-	{
+	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player) {
 		ArrayList<String> created;
 
 		if (w.isRemote)
@@ -62,8 +58,7 @@ public class PackItemRarity extends PackItemBase {
 				spawnCard(player, w, cdwd);
 			}
 			stack.stackSize -= 1;
-		}
-		else {
+		} else {
 			Logs.chatMessage(player, "Zero cards were registered, thus zero cards were generated");
 			Logs.errLog("Zero cards were registered, thus zero cards can be generated");
 		}

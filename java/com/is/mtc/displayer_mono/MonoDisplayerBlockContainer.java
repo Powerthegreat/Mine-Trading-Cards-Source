@@ -1,13 +1,12 @@
 package com.is.mtc.displayer_mono;
 
+import com.is.mtc.root.CardSlot;
+import com.is.mtc.root.Tools;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-
-import com.is.mtc.root.CardSlot;
-import com.is.mtc.root.Tools;
 
 public class MonoDisplayerBlockContainer extends Container {
 	private MonoDisplayerBlockTileEntity tileEntity;
@@ -37,7 +36,7 @@ public class MonoDisplayerBlockContainer extends Container {
 
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int providerSlotIndex) {
-		Slot providerSlot = (Slot)inventorySlots.get(providerSlotIndex); // Since slots are syncs, get from self
+		Slot providerSlot = (Slot) inventorySlots.get(providerSlotIndex); // Since slots are syncs, get from self
 		ItemStack providedStack = null;
 		int tmp;
 
@@ -53,8 +52,7 @@ public class MonoDisplayerBlockContainer extends Container {
 			tmp = providedStack.stackSize;
 			providerSlot.putStack(tmp < 1 ? null : providedStack); // Inform the slot about some changes
 			providerSlot.onSlotChanged();
-		}
-		else { // Not from slot ? then from inventory !
+		} else { // Not from slot ? then from inventory !
 			if (!Tools.isValidCard(providedStack))
 				return null;
 
