@@ -18,7 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /*
- * Card is identified by id and edition. Same id can be in two differents editions
+ * Card is identified by id and edition. Same id can be in two different editions
  * Mandatory parameters are id, edition and rarity
  */
 public class CardStructure {
@@ -26,10 +26,12 @@ public class CardStructure {
 	private int rarity;
 	public int numeral;
 
-	private String name, category, assetPath, desc;
+	private String name, category, /*assetPath, */
+			desc;
+	private List<String> assetPath;
 	private int weight;
 
-	private DynamicTexture dytex;
+	private List<DynamicTexture> dytex;
 	private ResourceLocation relo;
 
 	public CardStructure(JsonElement jsonId, JsonElement jsonEdition, JsonElement jsonRarity) {
@@ -59,11 +61,19 @@ public class CardStructure {
 
 		this.name = Tools.clean(name);
 		this.category = Tools.clean(category);
-		this.assetPath = Tools.clean(assetPath);
+		this.assetPath = new ArrayList<>();
+		for (String asset : assetPath) {
+			this.assetPath.add(Tools.clean(asset));
+		}
+		//this.assetPath = Tools.clean(assetPath);
 		this.desc = Tools.clean(desc);
 
 		if (!this.assetPath.isEmpty()) {
-			File asset = new File(MineTradingCards.getDataDir() + "assets/", this.assetPath + ".png");
+			dytex = new ArrayList<>();
+
+			for (String asset : this.assetPath) {
+				if (!asset.isEmpty()) {
+					File assetFile = new File(MineTradingCards.getDataDir() + "assets/", asset + ".png");
 
 					try {
 						BufferedImage image = ImageIO.read(assetFile);
@@ -72,8 +82,12 @@ public class CardStructure {
 						Logs.errLog("Missing texture at: '" + assetFile.getAbsolutePath() + "'");
 						//dytex = null;
 
-				return false;
+						//return false;
+					}
+				}
 			}
+
+			return !dytex.isEmpty();
 		}
 
 		return true;
@@ -111,11 +125,11 @@ public class CardStructure {
 				"[name:'" + name + "' category:'" + category + "' weight:" + weight + " asset_path:" + assetPath + "]";
 	}
 
-	public void preloadRessource(TextureManager tema) {
+	public void preloadRessource(TextureManager tema, int assetNumber) {
 		if (dytex == null)
 			return;
 
-		relo = tema.getDynamicTextureLocation("mtc_dytex", dytex);
+		relo = tema.getDynamicTextureLocation("mtc_dytex", dytex.get(assetNumber));
 	}
 
 	public String getId() {

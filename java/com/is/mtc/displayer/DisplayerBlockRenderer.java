@@ -79,7 +79,7 @@ public class DisplayerBlockRenderer extends TileEntitySpecialRenderer {
 				if (cStruct == null || cStruct.getDynamicTexture() == null) // Card not registered or unregistered illustration, use item image instead
 					bindTexture(new ResourceLocation(Reference.MODID, "textures/items/item_card_" + Rarity.toString(ci.getCardRarity()).toLowerCase() + ".png"));
 				else {
-					cStruct.preloadRessource(field_147501_a.field_147553_e);
+					cStruct.preloadRessource(field_147501_a.field_147553_e, stack.stackTagCompound.getInteger("assetnumber"));
 					bindTexture(cStruct.getResourceLocation());
 				}
 
