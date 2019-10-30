@@ -1,5 +1,6 @@
 package com.is.mtc.displayer;
 
+import com.is.mtc.Reference;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -11,7 +12,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Tools;
 
 public class DisplayerBlock extends BlockContainer {
@@ -24,7 +25,7 @@ public class DisplayerBlock extends BlockContainer {
 		setLightLevel(0.9375F);
 
 		setBlockName("block_displayer");
-		setBlockTextureName(MineTradingCards.MODID + ":block_displayer");
+		setBlockTextureName(Reference.MODID + ":block_displayer");
 		setCreativeTab(MineTradingCards.MODTAB);
 
 		setHardness(5.0F);

@@ -13,7 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 
@@ -45,10 +45,12 @@ public class DropHandler {
 	}
 
 	private void testDrop(int rate, Item drop, LivingDropsEvent event) {
+		if (rate <= 0)
+			return;
 		Random r = new Random();
 		int dv = r.nextInt(rate);
 
-		if (rate > 0 && dv == 0)
+		if (dv == 0)
 			addDrop(drop, event);
 	}
 

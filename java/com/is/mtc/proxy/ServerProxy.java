@@ -1,7 +1,7 @@
 package com.is.mtc.proxy;
 
 import com.is.mtc.root.Logs;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;

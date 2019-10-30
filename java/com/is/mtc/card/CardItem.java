@@ -2,6 +2,7 @@ package com.is.mtc.card;
 
 import java.util.List;
 
+import com.is.mtc.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +14,7 @@ import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.handler.GuiHandler;
 import com.is.mtc.root.Logs;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.root.Tools;
 
@@ -26,7 +27,7 @@ public class CardItem extends Item {
 
 	public CardItem(int r) {
 		setUnlocalizedName(prefix + Rarity.toString(r).toLowerCase());
-		setTextureName(MineTradingCards.MODID + ":" + prefix + Rarity.toString(r).toLowerCase());
+		setTextureName(Reference.MODID + ":" + prefix + Rarity.toString(r).toLowerCase());
 		setCreativeTab(MineTradingCards.MODTAB);
 
 		rarity = r;

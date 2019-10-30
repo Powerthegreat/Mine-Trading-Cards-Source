@@ -3,12 +3,13 @@ package com.is.mtc.pack;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.is.mtc.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.is.mtc.root.Logs;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Rarity;
 
 public class PackItemStandard extends PackItemBase{
@@ -19,7 +20,7 @@ public class PackItemStandard extends PackItemBase{
 
 	public PackItemStandard() {
 		setUnlocalizedName("item_pack_standard");
-		setTextureName(MineTradingCards.MODID + ":item_pack_standard");
+		setTextureName(Reference.MODID + ":item_pack_standard");
 	}
 
 	@Override

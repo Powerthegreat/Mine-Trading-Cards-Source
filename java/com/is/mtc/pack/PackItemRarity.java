@@ -2,6 +2,7 @@ package com.is.mtc.pack;
 
 import java.util.ArrayList;
 
+import com.is.mtc.Reference;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -9,7 +10,7 @@ import net.minecraft.world.World;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.root.Logs;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Rarity;
 
 /*
@@ -36,7 +37,7 @@ public class PackItemRarity extends PackItemBase {
 	public PackItemRarity(int r)
 	{
 		setUnlocalizedName(_str + Rarity.toString(r).toLowerCase());
-		setTextureName(MineTradingCards.MODID + ":" + _str + Rarity.toString(r).toLowerCase());
+		setTextureName(Reference.MODID + ":" + _str + Rarity.toString(r).toLowerCase());
 
 		rarity = r;
 	}

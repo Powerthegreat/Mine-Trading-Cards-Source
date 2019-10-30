@@ -1,5 +1,6 @@
 package com.is.mtc.displayer;
 
+import com.is.mtc.Reference;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -12,7 +13,7 @@ import org.lwjgl.opengl.GL11;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.root.Tools;
 
@@ -79,7 +80,7 @@ public class DisplayerBlockRenderer extends TileEntitySpecialRenderer {
 				CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
 
 				if (cStruct == null || cStruct.getDynamicTexture() == null) // Card not registered or unregistered illustration, use item image instead
-					bindTexture(new ResourceLocation(MineTradingCards.MODID, "textures/items/item_card_" + Rarity.toString(ci.getCardRarity()).toLowerCase() + ".png"));
+					bindTexture(new ResourceLocation(Reference.MODID, "textures/items/item_card_" + Rarity.toString(ci.getCardRarity()).toLowerCase() + ".png"));
 				else {
 					cStruct.preloadRessource(field_147501_a.field_147553_e);
 					bindTexture(cStruct.getResourceLocation());

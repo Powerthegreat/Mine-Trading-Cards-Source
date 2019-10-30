@@ -1,5 +1,6 @@
 package com.is.mtc.root;
 
+import com.is.mtc.MineTradingCards;
 import net.minecraft.util.EnumChatFormatting;
 
 import com.is.mtc.card.CardItem;

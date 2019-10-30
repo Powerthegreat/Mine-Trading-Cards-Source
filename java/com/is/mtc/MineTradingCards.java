@@ -1,7 +1,8 @@
-package com.is.mtc.root;
+package com.is.mtc;
 
 import java.io.File;
 
+import com.is.mtc.root.*;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -46,15 +47,10 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import cpw.mods.fml.relauncher.Side;
 
-@Mod(modid = MineTradingCards.MODID, version = MineTradingCards.VERSION, name = MineTradingCards.NAME)
+@Mod(modid = Reference.MODID, version = Reference.VERSION, name = Reference.NAME)
 public class MineTradingCards {
-	// Information about the mod
-	public static final String MODID = "is_mtc";
-	public static final String VERSION = "2.1.1";
-	public static final String NAME = "Mine Trading Cards";
-
 	// The instance of the mod class that forge uses
-	@Instance(MineTradingCards.MODID)
+	@Instance(Reference.MODID)
 	public static MineTradingCards INSTANCE;
 
 	// Whether the proxy is remote
@@ -148,7 +144,7 @@ public class MineTradingCards {
 		Injector.registerBlock(monoDisplayerBlock);
 
 		// Sets up the network wrapper
-		simpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(MODID);
+		simpleNetworkWrapper = NetworkRegistry.INSTANCE.newSimpleChannel(Reference.MODID);
 		simpleNetworkWrapper.registerMessage(MTCMessageHandler.class, MTCMessage.class, 0, Side.SERVER);
 
 		// Sets up the gui and drop handlers
@@ -186,20 +182,20 @@ public class MineTradingCards {
 		Configuration config = new Configuration(new File(CONF_DIR, "Mine Trading Cards.cfg"), "1v", false);
 		config.load();
 
-		Logs.ENABLE_DEV_LOGS = config.getBoolean("devlog_enabled", "logs", false, "Enable developper logs");
+		Logs.ENABLE_DEV_LOGS = config.getBoolean("devlog_enabled", "logs", false, "Enable developer logs");
 
 		DropHandler.CAN_DROP_MOB = config.getBoolean("mobs_can_drop", "drops", true, "Can mobs drop packs on death");
 		DropHandler.CAN_DROP_ANIMAL = config.getBoolean("animals_can_drop", "drops", false, "Can animals drop packs on death");
 		DropHandler.CAN_DROP_PLAYER = config.getBoolean("players_can_drop", "drops", false, "Can players drop packs on death");
 
-		DropHandler.DROP_RATE_COM = config.getInt("pack_drop_rate_common", "drops", 16, 0, Integer.MAX_VALUE, "1 chance out of X to drop");
-		DropHandler.DROP_RATE_UNC = config.getInt("pack_drop_rate_uncommon", "drops", 32, 0, Integer.MAX_VALUE, "1 chance out of X to drop");
-		DropHandler.DROP_RATE_RAR = config.getInt("pack_drop_rate_rare", "drops", 48, 0, Integer.MAX_VALUE, "1 chance out of X to drop");
-		DropHandler.DROP_RATE_ANC = config.getInt("pack_drop_rate_ancient", "drops", 64, 0, Integer.MAX_VALUE, "1 chance out of X to drop");
-		DropHandler.DROP_RATE_LEG = config.getInt("pack_drop_rate_legendary", "drops", 256, 0, Integer.MAX_VALUE, "1 chance out of X to drop");
+		DropHandler.DROP_RATE_COM = config.getInt("pack_drop_rate_common", "drops", 16, 0, Integer.MAX_VALUE, "Chance out of X to drop common packs");
+		DropHandler.DROP_RATE_UNC = config.getInt("pack_drop_rate_uncommon", "drops", 32, 0, Integer.MAX_VALUE, "Chance out of X to drop uncommon packs");
+		DropHandler.DROP_RATE_RAR = config.getInt("pack_drop_rate_rare", "drops", 48, 0, Integer.MAX_VALUE, "Chance out of X to drop rare packs");
+		DropHandler.DROP_RATE_ANC = config.getInt("pack_drop_rate_ancient", "drops", 64, 0, Integer.MAX_VALUE, "Chance out of X to drop ancient packs");
+		DropHandler.DROP_RATE_LEG = config.getInt("pack_drop_rate_legendary", "drops", 256, 0, Integer.MAX_VALUE, "Chance out of X to drop legendary packs");
 
-		DropHandler.DROP_RATE_STD = config.getInt("pack_drop_rate_standard", "drops", 40, 0, Integer.MAX_VALUE, "1 chance out of X to drop");
-		DropHandler.DROP_RATE_EDT = config.getInt("pack_drop_rate_edition", "drops", 40, 0, Integer.MAX_VALUE, "1 chance out of X to drop");
+		DropHandler.DROP_RATE_STD = config.getInt("pack_drop_rate_standard", "drops", 40, 0, Integer.MAX_VALUE, "Chance out of X to drop standard packs");
+		DropHandler.DROP_RATE_EDT = config.getInt("pack_drop_rate_edition", "drops", 40, 0, Integer.MAX_VALUE, "Chance out of X to drop set-specific (edition) packs");
 
 		config.save();
 	}

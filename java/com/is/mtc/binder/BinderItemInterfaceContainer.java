@@ -4,6 +4,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import com.is.mtc.Reference;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -29,7 +30,7 @@ import org.lwjgl.util.vector.Vector2f;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.packet.MTCMessage;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Tools;
 
 public class BinderItemInterfaceContainer extends GuiScreen
@@ -124,33 +125,33 @@ public class BinderItemInterfaceContainer extends GuiScreen
 	protected void actionPerformed(GuiButton button) {
 		switch (button.id) {
 		case LESS1:
-			MineTradingCards.snw.sendToServer(new MTCMessage(LESS1));
+			MineTradingCards.simpleNetworkWrapper.sendToServer(new MTCMessage(LESS1));
 			BinderItem.changePageBy(bic.getBinderStack(), -1);
 			break;
 		case LESS2:
-			MineTradingCards.snw.sendToServer(new MTCMessage(LESS2));
+			MineTradingCards.simpleNetworkWrapper.sendToServer(new MTCMessage(LESS2));
 			BinderItem.changePageBy(bic.getBinderStack(), -4);
 			break;
 		case LESS3:
-			MineTradingCards.snw.sendToServer(new MTCMessage(LESS3));
+			MineTradingCards.simpleNetworkWrapper.sendToServer(new MTCMessage(LESS3));
 			BinderItem.changePageBy(bic.getBinderStack(), -8);
 			break;
 
 		case MORE1:
-			MineTradingCards.snw.sendToServer(new MTCMessage(MORE1));
+			MineTradingCards.simpleNetworkWrapper.sendToServer(new MTCMessage(MORE1));
 			BinderItem.changePageBy(bic.getBinderStack(), 1);
 			break;
 		case MORE2:
-			MineTradingCards.snw.sendToServer(new MTCMessage(MORE2));
+			MineTradingCards.simpleNetworkWrapper.sendToServer(new MTCMessage(MORE2));
 			BinderItem.changePageBy(bic.getBinderStack(), 4);
 			break;
 		case MORE3:
-			MineTradingCards.snw.sendToServer(new MTCMessage(MORE3));
+			MineTradingCards.simpleNetworkWrapper.sendToServer(new MTCMessage(MORE3));
 			BinderItem.changePageBy(bic.getBinderStack(), 8);
 			break;
 
 		case MODE_SWITCH:
-			MineTradingCards.snw.sendToServer(new MTCMessage(MODE_SWITCH));
+			MineTradingCards.simpleNetworkWrapper.sendToServer(new MTCMessage(MODE_SWITCH));
 			Vector2f drawPos = new Vector2f((width - UI_SIZE.x) / 2, (height - UI_SIZE.y) / 2);
 			int mode = bic.getBinderStack().stackTagCompound.getInteger("mode_mtc");
 
@@ -329,7 +330,7 @@ public class BinderItemInterfaceContainer extends GuiScreen
 		Vector2f drawPos = new Vector2f((width - UI_SIZE.x) / 2, (height - UI_SIZE.y) / 2);
 
 		drawDefaultBackground();
-		mc.renderEngine.bindTexture(new ResourceLocation(MineTradingCards.MODID, "textures/gui/ui_binder_3.png"));
+		mc.renderEngine.bindTexture(new ResourceLocation(Reference.MODID, "textures/gui/ui_binder_3.png"));
 		drawTexturedModalRect((int)drawPos.x, (int)drawPos.y, 0, 0, (int)UI_SIZE.x, (int)UI_SIZE.y);
 
 		for (int i = 0; bic != null && i < 2; ++i) { // Display cards illustrations

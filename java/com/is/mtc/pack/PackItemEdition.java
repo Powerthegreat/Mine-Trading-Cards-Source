@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.is.mtc.Reference;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,7 +16,7 @@ import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.data_manager.EditionStructure;
 import com.is.mtc.root.Logs;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Rarity;
 
 public class PackItemEdition extends PackItemBase {
@@ -26,7 +27,7 @@ public class PackItemEdition extends PackItemBase {
 
 	public PackItemEdition() {
 		setUnlocalizedName("item_pack_edition");
-		setTextureName(MineTradingCards.MODID + ":item_pack_edition");
+		setTextureName(Reference.MODID + ":item_pack_edition");
 	}
 
 	@Override

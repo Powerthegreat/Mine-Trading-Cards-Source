@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
 

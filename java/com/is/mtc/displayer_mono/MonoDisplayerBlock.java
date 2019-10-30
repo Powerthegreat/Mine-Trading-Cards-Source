@@ -1,5 +1,6 @@
 package com.is.mtc.displayer_mono;
 
+import com.is.mtc.Reference;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -13,7 +14,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Tools;
 
 public class MonoDisplayerBlock extends BlockContainer {
@@ -26,7 +27,7 @@ public class MonoDisplayerBlock extends BlockContainer {
 		setLightLevel(0.9375F);
 
 		setBlockName("block_monodisplayer");
-		setBlockTextureName(MineTradingCards.MODID + ":block_monodisplayer");
+		setBlockTextureName(Reference.MODID + ":block_monodisplayer");
 		setCreativeTab(MineTradingCards.MODTAB);
 
 		setHardness(5.0F);
@@ -100,9 +101,9 @@ public class MonoDisplayerBlock extends BlockContainer {
 
 	@Override
 	public void registerBlockIcons(IIconRegister ireg) {
-		iFace = ireg.registerIcon(MineTradingCards.MODID + ":block_displayer");
-		iSides = ireg.registerIcon(MineTradingCards.MODID + ":block_raw"); // Faces w/o the illustration
-		iDisplaySide = ireg.registerIcon(MineTradingCards.MODID + ":block_displayer_side");
+		iFace = ireg.registerIcon(Reference.MODID + ":block_displayer");
+		iSides = ireg.registerIcon(Reference.MODID + ":block_raw"); // Faces w/o the illustration
+		iDisplaySide = ireg.registerIcon(Reference.MODID + ":block_displayer_side");
 	}
 
 	@Override

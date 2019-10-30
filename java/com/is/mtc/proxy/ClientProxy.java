@@ -7,7 +7,7 @@ import com.is.mtc.displayer.DisplayerBlockTileEntity;
 import com.is.mtc.displayer_mono.MonoDisplayerBlockRenderer;
 import com.is.mtc.displayer_mono.MonoDisplayerBlockTileEntity;
 import com.is.mtc.root.Logs;
-import com.is.mtc.root.MineTradingCards;
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.village.VillageHandler;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
