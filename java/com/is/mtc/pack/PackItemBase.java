@@ -45,7 +45,8 @@ public class PackItemBase extends Item {
 
 		genStack.stackTagCompound = new NBTTagCompound();
 		genStack.stackTagCompound.setString("cdwd", cdwd); // Setting card
-		genStack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, Databank.getCardByCDWD(cdwd).getAssetPath().size()));
+		if (Databank.getCardByCDWD(cdwd).getAssetPath().size() > 0)
+			genStack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, Databank.getCardByCDWD(cdwd).getAssetPath().size()));
 		spawnedEnt = new EntityItem(w, player.posX, player.posY + 1, player.posZ, genStack); // Spawning card
 
 		w.spawnEntityInWorld(spawnedEnt);

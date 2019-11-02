@@ -77,7 +77,8 @@ public class CardItem extends Item {
 		if (!stack.stackTagCompound.hasKey("assetnumber")) {
 			CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
 			if (cStruct != null)
-				stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getAssetPath().size()));
+				if (cStruct.getAssetPath().size() > 0)
+					stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getAssetPath().size()));
 		}
 
 		return stack;

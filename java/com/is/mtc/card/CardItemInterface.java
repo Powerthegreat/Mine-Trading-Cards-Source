@@ -21,7 +21,7 @@ public class CardItemInterface extends GuiScreen {
 	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
 		int dpx = (width - CardItemInterface.UI_WIDTH) / 2, dpy = (height - CardItemInterface.UI_HEIGHT) / 2;
 
-		cStruct.preloadRessource(mc.getTextureManager(), stack.stackTagCompound.getInteger("assetnumber"));
+		cStruct.preloadResource(mc.getTextureManager(), stack.stackTagCompound.getInteger("assetnumber"));
 		drawDefaultBackground();
 		mc.renderEngine.bindTexture(cStruct.getResourceLocation());
 		drawTexturedModalRect(dpx, dpy, CardItemInterface.UI_WIDTH, CardItemInterface.UI_HEIGHT);
