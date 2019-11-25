@@ -171,4 +171,17 @@ public class DisplayerBlockTileEntity extends TileEntity implements IInventory {
 	public boolean isUseableByPlayer(EntityPlayer user) { // Use standard chest formula
 		return worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) == this && user.getDistanceSq(this.xCoord + 0.5D, this.yCoord + 0.5D, this.zCoord + 0.5D) <= 64.0D;
 	}
+
+	public void spinCards() {
+		ItemStack[] tempContent = content.clone();
+		content[0] = tempContent[3];
+		content[1] = tempContent[0];
+		content[2] = tempContent[1];
+		content[3] = tempContent[2];
+
+		markDirty();
+
+		if (worldObj != null)
+			worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+	}
 }

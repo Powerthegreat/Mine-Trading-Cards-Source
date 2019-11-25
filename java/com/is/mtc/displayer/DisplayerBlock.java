@@ -4,6 +4,7 @@ import com.is.mtc.MineTradingCards;
 import com.is.mtc.Reference;
 import com.is.mtc.handler.GuiHandler;
 import com.is.mtc.root.Tools;
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -17,6 +18,7 @@ import net.minecraft.world.World;
 public class DisplayerBlock extends BlockContainer {
 
 	private IIcon iFace, iSides;
+	private boolean wasPowered;
 
 	public DisplayerBlock() {
 		super(Material.iron);
@@ -40,7 +42,7 @@ public class DisplayerBlock extends BlockContainer {
 									int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
 		TileEntity tileEntity = w.getTileEntity(px, py, pz);
 
-		if (tileEntity == null || !(tileEntity instanceof DisplayerBlockTileEntity))
+		if (!(tileEntity instanceof DisplayerBlockTileEntity))
 			return false;
 
 		player.openGui(MineTradingCards.INSTANCE, GuiHandler.GUI_DISPLAYER, w, px, py, pz);
@@ -97,5 +99,19 @@ public class DisplayerBlock extends BlockContainer {
 	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
+	}
+
+	@Override
+	public void onNeighborBlockChange(World world, int x, int y, int z, Block neighbor) {
+		boolean isPowered = world.isBlockIndirectlyGettingPowered(x, y, z);
+		try {
+			DisplayerBlockTileEntity thisEntity = (DisplayerBlockTileEntity) world.getTileEntity(x, y, z);
+			if (isPowered && !wasPowered) {
+				thisEntity.spinCards();
+			}
+		} catch (Exception ignored) {
+
+		}
+		wasPowered = isPowered;
 	}
 }
