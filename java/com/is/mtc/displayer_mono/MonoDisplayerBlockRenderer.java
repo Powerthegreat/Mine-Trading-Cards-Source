@@ -78,7 +78,11 @@ public class MonoDisplayerBlockRenderer extends TileEntitySpecialRenderer {
 					bindTexture(new ResourceLocation(Reference.MODID, "textures/items/item_card_" + Rarity.toString(ci.getCardRarity()).toLowerCase() + ".png"));
 				else {
 					cStruct.preloadResource(field_147501_a.field_147553_e, stack.stackTagCompound.getInteger("assetnumber"));
-					bindTexture(cStruct.getResourceLocation());
+					if (cStruct.getResourceLocation() != null) {
+						bindTexture(cStruct.getResourceLocation());
+					} else {
+						bindTexture(new ResourceLocation(Reference.MODID, "textures/items/item_card_" + Rarity.toString(ci.getCardRarity()).toLowerCase() + ".png"));
+					}
 				}
 
 				tessellator.setColorRGBA_F(1, 1, 1, 1);
