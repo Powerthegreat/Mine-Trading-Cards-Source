@@ -39,7 +39,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.oredict.OreDictionary;
+import net.minecraftforge.oredict.ShapedOreRecipe;
 
 import java.io.File;
 
@@ -161,11 +161,11 @@ public class MineTradingCards {
 
 		GameRegistry.addShapelessRecipe(new ItemStack(binder), Items.book, cardCommon);
 
-		GameRegistry.addRecipe(new ItemStack(cardCommon), "mmm", "ppp", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"));
-		GameRegistry.addRecipe(new ItemStack(cardUncommon), "mmm", "pip", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"), 'i', OreDictionary.getOres("ingotIron"));
-		GameRegistry.addRecipe(new ItemStack(cardRare), "mmm", "pgp", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"), 'g', OreDictionary.getOres("ingotGold"));
-		GameRegistry.addRecipe(new ItemStack(cardAncient), "mmm", "pdp", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"), 'd', OreDictionary.getOres("gemDiamond"));
-		GameRegistry.addRecipe(new ItemStack(cardLegendary), "mmm", "pDp", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"), 'D', OreDictionary.getOres("blockDiamond"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardCommon), "mmm", "ppp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardUncommon), "mmm", "pip", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'i', "ingotIron"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardRare), "mmm", "pgp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'g', "ingotGold"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardAncient), "mmm", "pdp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'd', "gemDiamond"));
+		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardLegendary), "mmm", "pDp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'D', "blockDiamond"));
 
 		MapGenStructureIO.func_143031_a(CardMasterHome.class, "Mtc_Cm_House"); // Register the house to the generator with a typed id
 		// Registers the Card Master villager's trades, and the creation handler for its home
