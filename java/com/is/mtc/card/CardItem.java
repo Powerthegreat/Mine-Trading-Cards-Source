@@ -69,7 +69,8 @@ public class CardItem extends Item {
 
 			if (cStruct != null) {
 				stack.stackTagCompound.setString("cdwd", cStruct.getCDWD());
-				stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getAssetPath().size()));
+				if (cStruct.getAssetPath().size() > 0)
+					stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getAssetPath().size()));
 			} else
 				Logs.errLog("Unable to generate a card of this rarity: " + Rarity.toString(rarity));
 		}
