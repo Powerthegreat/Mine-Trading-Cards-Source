@@ -10,10 +10,7 @@ import com.is.mtc.displayer_mono.MonoDisplayerBlock;
 import com.is.mtc.displayer_mono.MonoDisplayerBlockTileEntity;
 import com.is.mtc.handler.DropHandler;
 import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.pack.PackItemBase;
-import com.is.mtc.pack.PackItemEdition;
-import com.is.mtc.pack.PackItemRarity;
-import com.is.mtc.pack.PackItemStandard;
+import com.is.mtc.pack.*;
 import com.is.mtc.packet.MTCMessage;
 import com.is.mtc.packet.MTCMessageHandler;
 import com.is.mtc.proxy.CommonProxy;
@@ -42,6 +39,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.oredict.OreDictionary;
 
 import java.io.File;
 
@@ -56,7 +54,7 @@ public class MineTradingCards {
 
 	// Cards, packs, binders and display blocks to be registered
 	public static CardItem cardCommon, cardUncommon, cardRare, cardAncient, cardLegendary;
-	public static PackItemBase packCommon, packUncommon, packRare, packAncient, packLegendary, packStandard, packEdition; // Common (com), unccommon (unc), rare (rar), ancient (anc), legendary (leg), standard (std), edition (edt)
+	public static PackItemBase packCommon, packUncommon, packRare, packAncient, packLegendary, packStandard, packEdition, packCustom; // Common (com), unccommon (unc), rare (rar), ancient (anc), legendary (leg), standard (std), edition (edt)
 
 	public static BinderItem binder;
 	public static DisplayerBlock displayerBlock;
@@ -112,6 +110,7 @@ public class MineTradingCards {
 
 		packStandard = new PackItemStandard();
 		packEdition = new PackItemEdition();
+		packCustom = new PackItemCustom();
 
 		binder = new BinderItem();
 		displayerBlock = new DisplayerBlock();
@@ -137,6 +136,7 @@ public class MineTradingCards {
 
 		Injector.registerItem(packStandard);
 		Injector.registerItem(packEdition);
+		Injector.registerItem(packCustom);
 
 		Injector.registerItem(binder);
 		Injector.registerBlock(displayerBlock);
@@ -160,6 +160,12 @@ public class MineTradingCards {
 		GameRegistry.addRecipe(new ItemStack(monoDisplayerBlock, 4), "IWI", "WgW", "IGI", 'I', Items.iron_ingot, 'G', Blocks.glass, 'g', Blocks.glowstone, 'W', Blocks.planks);
 
 		GameRegistry.addShapelessRecipe(new ItemStack(binder), Items.book, cardCommon);
+
+		GameRegistry.addRecipe(new ItemStack(cardCommon), "mmm", "ppp", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"));
+		GameRegistry.addRecipe(new ItemStack(cardUncommon), "mmm", "pip", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"), 'i', OreDictionary.getOres("ingotIron"));
+		GameRegistry.addRecipe(new ItemStack(cardRare), "mmm", "pgp", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"), 'g', OreDictionary.getOres("ingotGold"));
+		GameRegistry.addRecipe(new ItemStack(cardAncient), "mmm", "pdp", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"), 'd', OreDictionary.getOres("gemDiamond"));
+		GameRegistry.addRecipe(new ItemStack(cardLegendary), "mmm", "pDp", "bbb", 'm', OreDictionary.getOres("dyeWhite"), 'p', Items.paper, 'b', OreDictionary.getOres("dyeBlack"), 'D', OreDictionary.getOres("blockDiamond"));
 
 		MapGenStructureIO.func_143031_a(CardMasterHome.class, "Mtc_Cm_House"); // Register the house to the generator with a typed id
 		// Registers the Card Master villager's trades, and the creation handler for its home
@@ -195,6 +201,7 @@ public class MineTradingCards {
 
 		DropHandler.DROP_RATE_STD = config.getInt("pack_drop_rate_standard", "drops", 40, 0, Integer.MAX_VALUE, "Chance out of X to drop standard packs");
 		DropHandler.DROP_RATE_EDT = config.getInt("pack_drop_rate_edition", "drops", 40, 0, Integer.MAX_VALUE, "Chance out of X to drop set-specific (edition) packs");
+		DropHandler.DROP_RATE_CUSTOM = config.getInt("pack_drop_rate_custom", "drops", 40, 0, Integer.MAX_VALUE, "Chance out of X to drop custom packs");
 
 		config.save();
 	}
