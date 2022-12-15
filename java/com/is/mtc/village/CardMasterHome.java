@@ -1,14 +1,15 @@
 package com.is.mtc.village;
 
+import java.util.List;
+import java.util.Random;
+
 import com.is.mtc.root.Logs;
+
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import java.util.List;
-import java.util.Random;
 
 public class CardMasterHome extends StructureVillagePieces.House1 {
 	private int averageGroundLevel = -1;
@@ -58,7 +59,7 @@ public class CardMasterHome extends StructureVillagePieces.House1 {
 	}
 
 	protected int func_74888_b(int p_74888_1_) {
-		return VillageHandler.TRADER_ID;
+		return VillagerHandler.TRADER_ID;
 	}
 }
 

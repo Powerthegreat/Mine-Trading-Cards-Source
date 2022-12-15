@@ -1,6 +1,9 @@
 package com.is.mtc.handler;
 
+import java.util.Random;
+
 import com.is.mtc.MineTradingCards;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
@@ -12,8 +15,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-
-import java.util.Random;
 
 public class DropHandler {
 
@@ -55,6 +56,7 @@ public class DropHandler {
 
 	@SubscribeEvent
 	public void onEvent(LivingDropsEvent event) {
+		
 		if (!(event.entity instanceof EntityLiving)) // Not a known living entity
 			return;
 

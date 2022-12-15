@@ -1,14 +1,15 @@
 package com.is.mtc.pack;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import com.is.mtc.Reference;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class PackItemStandard extends PackItemBase {
 

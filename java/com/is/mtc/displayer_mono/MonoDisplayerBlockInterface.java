@@ -1,10 +1,12 @@
 package com.is.mtc.displayer_mono;
 
+import org.lwjgl.util.vector.Vector2f;
+
 import com.is.mtc.Reference;
+
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.util.vector.Vector2f;
 
 public class MonoDisplayerBlockInterface extends GuiContainer {
 

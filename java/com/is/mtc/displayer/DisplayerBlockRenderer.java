@@ -1,18 +1,20 @@
 package com.is.mtc.displayer;
 
+import org.lwjgl.opengl.GL11;
+
 import com.is.mtc.Reference;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.root.Tools;
+
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 
 public class DisplayerBlockRenderer extends TileEntitySpecialRenderer {
 

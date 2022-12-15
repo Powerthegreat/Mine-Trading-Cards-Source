@@ -1,5 +1,7 @@
 package com.is.mtc;
 
+import java.io.File;
+
 import com.is.mtc.binder.BinderItem;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.DataLoader;
@@ -10,14 +12,23 @@ import com.is.mtc.displayer_mono.MonoDisplayerBlock;
 import com.is.mtc.displayer_mono.MonoDisplayerBlockTileEntity;
 import com.is.mtc.handler.DropHandler;
 import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.pack.*;
+import com.is.mtc.pack.PackItemBase;
+import com.is.mtc.pack.PackItemCustom;
+import com.is.mtc.pack.PackItemEdition;
+import com.is.mtc.pack.PackItemRarity;
+import com.is.mtc.pack.PackItemStandard;
 import com.is.mtc.packet.MTCMessage;
 import com.is.mtc.packet.MTCMessageHandler;
 import com.is.mtc.proxy.CommonProxy;
-import com.is.mtc.root.*;
+import com.is.mtc.root.CC_CreateCard;
+import com.is.mtc.root.CC_ForceCreateCard;
+import com.is.mtc.root.Injector;
+import com.is.mtc.root.Logs;
+import com.is.mtc.root.Rarity;
 import com.is.mtc.village.CardMasterHome;
 import com.is.mtc.village.CardMasterHomeHandler;
-import com.is.mtc.village.VillageHandler;
+import com.is.mtc.village.VillagerHandler;
+
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
@@ -41,9 +52,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
-import java.io.File;
-
-@Mod(modid = Reference.MODID, version = Reference.VERSION, name = Reference.NAME)
+@Mod(modid = Reference.MODID, version = Reference.MOD_VERSION, name = Reference.NAME)
 public class MineTradingCards {
 	// The instance of the mod class that forge uses
 	@Instance(Reference.MODID)
@@ -51,7 +60,7 @@ public class MineTradingCards {
 
 	// Whether the proxy is remote
 	public static boolean PROXY_IS_REMOTE = false;
-
+	
 	// Cards, packs, binders and display blocks to be registered
 	public static CardItem cardCommon, cardUncommon, cardRare, cardAncient, cardLegendary;
 	public static PackItemBase packCommon, packUncommon, packRare, packAncient, packLegendary, packStandard, packEdition, packCustom; // Common (com), unccommon (unc), rare (rar), ancient (anc), legendary (leg), standard (std), edition (edt)
@@ -63,7 +72,13 @@ public class MineTradingCards {
 	// The directories that MTC works with
 	private static String DATA_DIR = "";
 	private static String CONF_DIR = "";
-
+	
+	// Configuration stuff
+	public static final String CONFIG_CAT_DROPS = "drops";
+	public static final String CONFIG_CAT_LOGS = "logs";
+	public static final String CONFIG_CAT_RECIPES = "recipes";
+	public static boolean ENABLE_CARD_RECIPES = true;
+	
 	// The proxy, either a combined client or a dedicated server
 	@SidedProxy(clientSide = "com.is.mtc.proxy.ClientProxy", serverSide = "com.is.mtc.proxy.ServerProxy")
 	public static CommonProxy PROXY;
@@ -160,16 +175,18 @@ public class MineTradingCards {
 		GameRegistry.addRecipe(new ItemStack(monoDisplayerBlock, 4), "IWI", "WgW", "IGI", 'I', Items.iron_ingot, 'G', Blocks.glass, 'g', Blocks.glowstone, 'W', Blocks.planks);
 
 		GameRegistry.addShapelessRecipe(new ItemStack(binder), Items.book, cardCommon);
-
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardCommon), "mmm", "ppp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardUncommon), "mmm", "pip", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'i', "ingotIron"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardRare), "mmm", "pgp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'g', "ingotGold"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardAncient), "mmm", "pdp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'd', "gemDiamond"));
-		GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardLegendary), "mmm", "pDp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'D', "blockDiamond"));
+		
+		if (ENABLE_CARD_RECIPES) {
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardCommon), "mmm", "ppp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardUncommon), "mmm", "pip", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'i', "ingotIron"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardRare), "mmm", "pgp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'g', "ingotGold"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardAncient), "mmm", "pdp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'd', "gemDiamond"));
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardLegendary), "mmm", "pDp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'D', "blockDiamond"));	
+		}
 
 		MapGenStructureIO.func_143031_a(CardMasterHome.class, "Mtc_Cm_House"); // Register the house to the generator with a typed id
 		// Registers the Card Master villager's trades, and the creation handler for its home
-		VillagerRegistry.instance().registerVillageTradeHandler(VillageHandler.TRADER_ID, new VillageHandler());
+		VillagerRegistry.instance().registerVillageTradeHandler(VillagerHandler.TRADER_ID, new VillagerHandler());
 		VillagerRegistry.instance().registerVillageCreationHandler(new CardMasterHomeHandler());
 	}
 
@@ -184,25 +201,30 @@ public class MineTradingCards {
 
 	private void readConfig(FMLPreInitializationEvent event) {
 		// Loads from the configuration file
-		Configuration config = new Configuration(new File(CONF_DIR, "Mine Trading Cards.cfg"), "1v", false);
+		Configuration config = new Configuration(new File(CONF_DIR, "Mine Trading Cards.cfg"), Reference.CONFIG_VERSION, false);
 		config.load();
-
-		Logs.ENABLE_DEV_LOGS = config.getBoolean("devlog_enabled", "logs", false, "Enable developer logs");
-
-		DropHandler.CAN_DROP_MOB = config.getBoolean("mobs_can_drop", "drops", true, "Can mobs drop packs on death");
-		DropHandler.CAN_DROP_ANIMAL = config.getBoolean("animals_can_drop", "drops", false, "Can animals drop packs on death");
-		DropHandler.CAN_DROP_PLAYER = config.getBoolean("players_can_drop", "drops", false, "Can players drop packs on death");
-
-		DropHandler.DROP_RATE_COM = config.getInt("pack_drop_rate_common", "drops", 16, 0, Integer.MAX_VALUE, "Chance out of X to drop common packs");
-		DropHandler.DROP_RATE_UNC = config.getInt("pack_drop_rate_uncommon", "drops", 32, 0, Integer.MAX_VALUE, "Chance out of X to drop uncommon packs");
-		DropHandler.DROP_RATE_RAR = config.getInt("pack_drop_rate_rare", "drops", 48, 0, Integer.MAX_VALUE, "Chance out of X to drop rare packs");
-		DropHandler.DROP_RATE_ANC = config.getInt("pack_drop_rate_ancient", "drops", 64, 0, Integer.MAX_VALUE, "Chance out of X to drop ancient packs");
-		DropHandler.DROP_RATE_LEG = config.getInt("pack_drop_rate_legendary", "drops", 256, 0, Integer.MAX_VALUE, "Chance out of X to drop legendary packs");
-
-		DropHandler.DROP_RATE_STD = config.getInt("pack_drop_rate_standard", "drops", 40, 0, Integer.MAX_VALUE, "Chance out of X to drop standard packs");
-		DropHandler.DROP_RATE_EDT = config.getInt("pack_drop_rate_edition", "drops", 40, 0, Integer.MAX_VALUE, "Chance out of X to drop set-specific (edition) packs");
-		DropHandler.DROP_RATE_CUSTOM = config.getInt("pack_drop_rate_custom", "drops", 40, 0, Integer.MAX_VALUE, "Chance out of X to drop custom packs");
-
+		
+		// Logging
+		Logs.ENABLE_DEV_LOGS = config.getBoolean("devlog_enabled", CONFIG_CAT_LOGS, false, "Enable developer logs");
+		
+		// Recipes
+		ENABLE_CARD_RECIPES = config.getBoolean("enable_card_recipes", CONFIG_CAT_RECIPES, true, "Enable recipes for crafting individual cards");
+		
+		// Drops toggle
+		DropHandler.CAN_DROP_MOB = config.getBoolean("mobs_can_drop", CONFIG_CAT_DROPS, true, "Can mobs drop packs on death");
+		DropHandler.CAN_DROP_ANIMAL = config.getBoolean("animals_can_drop", CONFIG_CAT_DROPS, false, "Can animals drop packs on death");
+		DropHandler.CAN_DROP_PLAYER = config.getBoolean("players_can_drop", CONFIG_CAT_DROPS, false, "Can players drop packs on death");
+		// Tiered pack drop rates
+		DropHandler.DROP_RATE_COM = config.getInt("pack_drop_rate_common", CONFIG_CAT_DROPS, 16, 0, Integer.MAX_VALUE, "Chance out of X to drop common packs");
+		DropHandler.DROP_RATE_UNC = config.getInt("pack_drop_rate_uncommon", CONFIG_CAT_DROPS, 32, 0, Integer.MAX_VALUE, "Chance out of X to drop uncommon packs");
+		DropHandler.DROP_RATE_RAR = config.getInt("pack_drop_rate_rare", CONFIG_CAT_DROPS, 48, 0, Integer.MAX_VALUE, "Chance out of X to drop rare packs");
+		DropHandler.DROP_RATE_ANC = config.getInt("pack_drop_rate_ancient", CONFIG_CAT_DROPS, 64, 0, Integer.MAX_VALUE, "Chance out of X to drop ancient packs");
+		DropHandler.DROP_RATE_LEG = config.getInt("pack_drop_rate_legendary", CONFIG_CAT_DROPS, 256, 0, Integer.MAX_VALUE, "Chance out of X to drop legendary packs");
+		// Non-tiered pack drop rates
+		DropHandler.DROP_RATE_STD = config.getInt("pack_drop_rate_standard", CONFIG_CAT_DROPS, 40, 0, Integer.MAX_VALUE, "Chance out of X to drop standard packs");
+		DropHandler.DROP_RATE_EDT = config.getInt("pack_drop_rate_edition", CONFIG_CAT_DROPS, 40, 0, Integer.MAX_VALUE, "Chance out of X to drop set-specific (edition) packs");
+		DropHandler.DROP_RATE_CUSTOM = config.getInt("pack_drop_rate_custom", CONFIG_CAT_DROPS, 40, 0, Integer.MAX_VALUE, "Chance out of X to drop custom packs");
+		
 		config.save();
 	}
 

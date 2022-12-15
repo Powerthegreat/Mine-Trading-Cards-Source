@@ -1,11 +1,21 @@
 package com.is.mtc.binder;
 
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.util.vector.Vector2f;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.Reference;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.packet.MTCMessage;
 import com.is.mtc.root.Tools;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -22,14 +32,6 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.util.vector.Vector2f;
-
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 public class BinderItemInterfaceContainer extends GuiScreen {
 	protected static final ResourceLocation field_147001_a = new ResourceLocation("textures/gui/container/inventory.png");
