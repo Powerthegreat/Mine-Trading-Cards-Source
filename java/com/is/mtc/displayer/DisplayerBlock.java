@@ -4,6 +4,7 @@ import com.is.mtc.MineTradingCards;
 import com.is.mtc.Reference;
 import com.is.mtc.handler.GuiHandler;
 import com.is.mtc.root.Tools;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;

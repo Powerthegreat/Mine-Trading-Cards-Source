@@ -2,6 +2,7 @@ package com.is.mtc.root;
 
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.card.CardItem;
+
 import net.minecraft.util.EnumChatFormatting;
 
 public class Rarity {

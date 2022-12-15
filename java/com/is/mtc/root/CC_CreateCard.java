@@ -1,6 +1,9 @@
 package com.is.mtc.root;
 
+import java.util.List;
+
 import com.is.mtc.data_manager.Databank;
+
 import net.minecraft.command.CommandTime;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.item.EntityItem;
@@ -8,8 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class CC_CreateCard extends CommandTime { // Command to create an existing card
 

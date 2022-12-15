@@ -1,14 +1,15 @@
 package com.is.mtc.binder;
 
+import java.util.Arrays;
+
 import com.is.mtc.root.Tools;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
-
-import java.util.Arrays;
 
 public class BinderItemInventory implements IInventory {
 
