@@ -6,11 +6,14 @@ import java.util.Random;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 
-public class CardMasterHomeHandler
-		implements VillagerRegistry.IVillageCreationHandler {
+public class CardMasterHomeHandler implements VillagerRegistry.IVillageCreationHandler {
+	
+	public static int SHOP_WEIGHT = 5;
+	public static int SHOP_MAX_NUMBER = 1;
+	
 	@Override
-	public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int i) {
-		return new StructureVillagePieces.PieceWeight(CardMasterHome.class, 9, 1);
+	public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int villageSize) {
+		return new StructureVillagePieces.PieceWeight(CardMasterHome.class, SHOP_WEIGHT, SHOP_MAX_NUMBER);
 	}
 
 	@Override
@@ -19,7 +22,7 @@ public class CardMasterHomeHandler
 	}
 
 	@Override
-	public Object buildComponent(StructureVillagePieces.PieceWeight villagePiece, StructureVillagePieces.Start startPiece, List pieces, Random random, int p1, int p2, int p3, int p4, int p5) {
-		return CardMasterHome.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
+	public Object buildComponent(StructureVillagePieces.PieceWeight villagePiece, StructureVillagePieces.Start startPiece, List pieces, Random random, int x, int y, int z, int horizIndex, int componentType) {
+		return CardMasterHome.buildComponent(startPiece, pieces, random, x, y, z, horizIndex, componentType);
 	}
 }

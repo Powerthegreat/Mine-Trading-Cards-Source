@@ -3,9 +3,9 @@ package com.is.mtc.binder;
 import java.util.List;
 
 import com.is.mtc.MineTradingCards;
-import com.is.mtc.Reference;
 import com.is.mtc.handler.GuiHandler;
 import com.is.mtc.root.Tools;
+import com.is.mtc.util.Reference;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;

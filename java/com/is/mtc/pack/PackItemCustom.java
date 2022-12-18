@@ -6,11 +6,11 @@ import java.util.Random;
 
 import javax.annotation.Nullable;
 
-import com.is.mtc.Reference;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.CustomPackStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.root.Logs;
+import com.is.mtc.util.Reference;
 import com.mojang.realmsclient.gui.ChatFormatting;
 
 import net.minecraft.entity.Entity;
@@ -99,8 +99,14 @@ public class PackItemCustom extends PackItemBase {
 		}
 
 		created = new ArrayList<String>();
-		packStructure.categoryQuantities.forEach((category, categoryInfo) -> createCards(category, categoryInfo[1], categoryInfo[0], created));
-
+		
+//		packStructure.categoryQuantities.forEach((category, categoryInfo) -> createCards(category, categoryInfo[1], categoryInfo[0], created));
+		for (String category : packStructure.categoryQuantities.keySet()) {
+//			packStructure.categoryQuantities.forEach((category, categoryInfo) -> createCards(category, categoryInfo[1], categoryInfo[0], created));
+			int[] categoryInfo = packStructure.categoryQuantities.get(category);
+			createCards(category, categoryInfo[1], categoryInfo[0], created);
+		}
+		
 		if (created.size() > 0) {
 			for (String cdwd : created) {
 				spawnCard(player, world, cdwd);

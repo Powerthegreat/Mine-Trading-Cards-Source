@@ -10,11 +10,11 @@ import org.lwjgl.opengl.GL12;
 import org.lwjgl.util.vector.Vector2f;
 
 import com.is.mtc.MineTradingCards;
-import com.is.mtc.Reference;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.packet.MTCMessage;
 import com.is.mtc.root.Tools;
+import com.is.mtc.util.Reference;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

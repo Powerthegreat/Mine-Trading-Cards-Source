@@ -22,7 +22,7 @@ public class CDFCardStructure {
 
 		name = "";
 		category = "";
-		assetPath = new ArrayList<>();
+		assetPath = new ArrayList();
 		weight = 0;
 	}
 

@@ -35,6 +35,7 @@ public class ClientProxy extends CommonProxy {
 
 		ClientRegistry.bindTileEntitySpecialRenderer(DisplayerBlockTileEntity.class, new DisplayerBlockRenderer());
 		ClientRegistry.bindTileEntitySpecialRenderer(MonoDisplayerBlockTileEntity.class, new MonoDisplayerBlockRenderer());
-		VillagerRegistry.instance().registerVillagerSkin(VillagerHandler.TRADER_ID, new ResourceLocation("is_mtc", "textures/skins/card_master.png"));
+		VillagerRegistry.instance().registerVillagerSkin(VillagerHandler.ID_CARD_MASTER, new ResourceLocation("is_mtc", "textures/skins/card_master.png"));
+		VillagerRegistry.instance().registerVillagerSkin(VillagerHandler.ID_CARD_TRADER, new ResourceLocation("is_mtc", "textures/skins/card_trader.png"));
 	}
 }

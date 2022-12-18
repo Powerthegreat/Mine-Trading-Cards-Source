@@ -3,9 +3,9 @@ package com.is.mtc.pack;
 import java.util.ArrayList;
 import java.util.Random;
 
-import com.is.mtc.Reference;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
+import com.is.mtc.util.Reference;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

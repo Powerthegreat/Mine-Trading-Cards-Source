@@ -4,12 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.is.mtc.Reference;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.data_manager.EditionStructure;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
+import com.is.mtc.util.Reference;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
