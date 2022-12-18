@@ -1,9 +1,9 @@
 package com.is.mtc.displayer;
 
 import com.is.mtc.MineTradingCards;
-import com.is.mtc.Reference;
 import com.is.mtc.handler.GuiHandler;
 import com.is.mtc.root.Tools;
+import com.is.mtc.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;

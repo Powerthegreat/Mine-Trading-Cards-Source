@@ -3,13 +3,13 @@ package com.is.mtc.card;
 import java.util.List;
 
 import com.is.mtc.MineTradingCards;
-import com.is.mtc.Reference;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.handler.GuiHandler;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.root.Tools;
+import com.is.mtc.util.Reference;
 
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,7 +38,7 @@ public class CardItem extends Item {
 		return rarity;
 	}
 	
-	private ItemStack applyCDWDtoStack(ItemStack stack, CardStructure cStruct) {
+	public static ItemStack applyCDWDtoStack(ItemStack stack, CardStructure cStruct) {
 		stack.stackTagCompound.setString("cdwd", cStruct.getCDWD());
 		if (cStruct.getAssetPath().size() > 0) {
 			stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getAssetPath().size()));

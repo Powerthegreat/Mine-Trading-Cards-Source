@@ -30,10 +30,10 @@ public class CardStructure {
 
 	private String name, category, /*assetPath, */
 			desc;
-	private List<String> assetPath = new ArrayList<>();
+	private List<String> assetPath = new ArrayList();
 	private int weight;
 
-	private List<DynamicTexture> dytex = new ArrayList<>();
+	private List<DynamicTexture> dytex = new ArrayList();
 	private ResourceLocation relo;
 
 	public CardStructure(JsonElement jsonId, JsonElement jsonEdition, JsonElement jsonRarity) {
@@ -63,7 +63,7 @@ public class CardStructure {
 			return true;
 
 		this.name = Tools.clean(name);
-		this.assetPath = new ArrayList<>();
+		this.assetPath = new ArrayList();
 		for (String asset : assetPath) {
 			this.assetPath.add(Tools.clean(asset));
 		}
@@ -71,7 +71,7 @@ public class CardStructure {
 		this.desc = Tools.clean(desc);
 
 		if (!this.assetPath.isEmpty()) {
-			dytex = new ArrayList<>();
+			dytex = new ArrayList();
 
 			for (String asset : this.assetPath) {
 				if (!asset.isEmpty()) {
