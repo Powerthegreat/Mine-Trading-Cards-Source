@@ -1,10 +1,13 @@
 package com.is.mtc.util;
 
+import com.mojang.realmsclient.gui.ChatFormatting;
+
 public class Reference {
 	public static final String MODID = "is_mtc";
-	public static final String MOD_VERSION = "2.4.0";
+	public static final String MOD_VERSION = "@VERSION@";
 	public static final String CONFIG_VERSION = "1.1";
 	public static final String NAME = "Mine Trading Cards";
+	public static final String NAME_COLORIZED = ChatFormatting.BLUE+"Mine Trading Cards"+ChatFormatting.RESET;
 	
 	// Mod compats
 	public static final String VILLAGE_NAMES_MODID = "VillageNames";
@@ -35,4 +38,8 @@ public class Reference {
 	public static final String ITEM_CARD_OVERLAY = ":card_overlay";
 	public static final String ITEM_PACK_GRAYSCALE = ":pack_grayscale";
 	public static final String ITEM_PACK_OVERLAY = ":pack_overlay";
+	
+	// Update checker
+	public static final String URL = "https://www.curseforge.com/minecraft/mc-mods/mine-trading-cards-open-source-edition";
+	public static final String VERSION_CHECKER_URL = "TBD";
 }
