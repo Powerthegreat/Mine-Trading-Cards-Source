@@ -55,13 +55,13 @@ public class VillagerHandler
 			"1.0|common_card_random|1|iron_ingot|2-4",
 	        "0.9|edition_pack|1|emerald|2|iron_ingot|0-1",
 	        "1.0|uncommon_pack|1|emerald|2|gold_ingot|0-1",
-			"0.9|uncommon_card_random|1|gold_ingot|2-3",
+			"0.8|uncommon_card_random|1|gold_ingot|2-3",
 	        "1.0|rare_pack|1|emerald|3-6",
-			"0.8|rare_card_random|1|emerald|2-3",
+			"0.7|rare_card_random|1|emerald|2-3",
 	        "1.0|ancient_pack|1|emerald|16-21",
-			"0.7|ancient_card_random|1|emerald|18-24",
+			"0.6|ancient_card_random|1|emerald|18-24",
 	        "0.5|legendary_pack|1|emerald|53-64",
-			"0.6|legendary_card_random|1|diamond|16-21",
+			"0.5|legendary_card_random|1|diamond|16-21",
 			};
 	public static String[] CARD_MASTER_TRADE_LIST = CARD_MASTER_TRADE_LIST_DEFAULT;
 	
@@ -69,19 +69,19 @@ public class VillagerHandler
 	        // Trade either a specific card for an arbitrary card of that same level,
 			// or a non-generated card for two arbitrary cards of that level.
 			"1.0|common_card_random|1|common_card|1",
-	        "0.9|common_card|1|common_card|1|common_card|1",
+	        "0.5|common_card|1|common_card|1|common_card|1",
 	        "1.0|uncommon_card_random|1|uncommon_card|1",
-	        "0.8|uncommon_card|1|uncommon_card|1|uncommon_card|1",
+	        "0.4|uncommon_card|1|uncommon_card|1|uncommon_card|1",
 	        "1.0|rare_card_random|1|rare_card|1",
-	        "0.7|rare_card|1|rare_card|1|rare_card|1",
+	        "0.3|rare_card|1|rare_card|1|rare_card|1",
 	        "1.0|ancient_card_random|1|ancient_card|1",
-	        "0.6|ancient_card|1|ancient_card|1|ancient_card|1",
+	        "0.2|ancient_card|1|ancient_card|1|ancient_card|1",
 	        "0.5|legendary_card_random|1|legendary_card|1",
 			};
 	public static String[] CARD_TRADER_TRADE_LIST = CARD_TRADER_TRADE_LIST_DEFAULT;
 	
 	@Nullable
-	private static ItemStack getItemStackFromKeyName(String item_key, int count) {
+	private static ItemStack getItemStackFromKeyName(String item_key, int count, Random random) {
 		
 		item_key = item_key.toLowerCase().trim();
 		
@@ -157,10 +157,10 @@ public class VillagerHandler
 		
 		// Turn card into specific type
 		if (is_random) {
-			CardStructure cStruct = Databank.generateACard(rarity);
+			CardStructure cStruct = Databank.generateACard(rarity, random);
 			if (cStruct != null) {
 				returnstack.stackTagCompound = new NBTTagCompound();
-				returnstack = CardItem.applyCDWDtoStack(returnstack, cStruct);
+				returnstack = CardItem.applyCDWDtoStack(returnstack, cStruct, random);
 			}
 		}
 		
@@ -189,7 +189,7 @@ public class VillagerHandler
 			int sellamt_low = Integer.valueOf(sellitem_range[0]);
 			int sellamt_high = Integer.valueOf(sellitem_range[sellitem_range.length>1 ? 1 : 0]);
 			int sellamt_randomized = MathHelper.clamp_int(sellamt_low + (sellamt_high > sellamt_low ? random.nextInt(sellamt_high-sellamt_low+1) : 0), 0, 64);
-			ItemStack sellitem_stack = sellamt_randomized==0 ? null : getItemStackFromKeyName(sellitem, sellamt_randomized);
+			ItemStack sellitem_stack = sellamt_randomized==0 ? null : getItemStackFromKeyName(sellitem, sellamt_randomized, random);
 			
 			// Buying item (1) stuff
 			String buyitem1 = split_config_entry[INDEX_BUYITEM1];
@@ -202,7 +202,7 @@ public class VillagerHandler
 			int buyamt1_low = Integer.valueOf(buyitem1_range[0]);
 			int buyamt1_high = Integer.valueOf(buyitem1_range[buyitem1_range.length>1 ? 1 : 0]);
 			int buyamt1_randomized = MathHelper.clamp_int(buyamt1_low + (buyamt1_high > buyamt1_low ? random.nextInt(buyamt1_high-buyamt1_low+1) : 0), 0, 64);
-			ItemStack buyitem1_stack = buyamt1_randomized==0 ? null : getItemStackFromKeyName(buyitem1, buyamt1_randomized);
+			ItemStack buyitem1_stack = buyamt1_randomized==0 ? null : getItemStackFromKeyName(buyitem1, buyamt1_randomized, random);
 			
 			// Buying item (2) stuff
 			ItemStack buyitem2_stack = null;
@@ -218,7 +218,7 @@ public class VillagerHandler
 				int buyamt2_low = Integer.valueOf(buyitem2_range[0]);
 				int buyamt2_high = Integer.valueOf(buyitem2_range[buyitem2_range.length>1 ? 1 : 0]);
 				int buyamt2_randomized = MathHelper.clamp_int(buyamt2_low + (buyamt2_high > buyamt2_low ? random.nextInt(buyamt2_high-buyamt2_low+1) : 0), 0, 64);
-				buyitem2_stack = buyamt2_randomized==0 ? null : getItemStackFromKeyName(buyitem2, buyamt2_randomized);
+				buyitem2_stack = buyamt2_randomized==0 ? null : getItemStackFromKeyName(buyitem2, buyamt2_randomized, random);
 			}
 			
 			// Return null if there are malformations

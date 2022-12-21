@@ -1,15 +1,21 @@
 package com.is.mtc.pack;
 
 import java.util.ArrayList;
+import java.util.Random;
 
+import com.is.mtc.MineTradingCards;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.util.Reference;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
 /*
@@ -35,28 +41,28 @@ public class PackItemRarity extends PackItemBase {
 
 	public PackItemRarity(int r) {
 		setUnlocalizedName(_str + Rarity.toString(r).toLowerCase());
-		setTextureName(Reference.MODID + ":" + _str + Rarity.toString(r).toLowerCase());
+		setTextureName(Reference.MODID + Reference.ITEM_PACK_GRAYSCALE);
 
 		rarity = r;
 	}
 
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player) {
+	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
 		ArrayList<String> created;
 
-		if (w.isRemote)
+		if (world.isRemote)
 			return stack;
 
 		created = new ArrayList<String>();
-		createCards(Rarity.COMMON, tCount[rarity][Rarity.COMMON], created);
-		createCards(Rarity.UNCOMMON, tCount[rarity][Rarity.UNCOMMON], created);
-		createCards(Rarity.RARE, tCount[rarity][Rarity.RARE], created);
-		createCards(Rarity.ANCIENT, tCount[rarity][Rarity.ANCIENT], created);
-		createCards(Rarity.LEGENDARY, tCount[rarity][Rarity.LEGENDARY], created);
+		createCards(Rarity.COMMON, tCount[rarity][Rarity.COMMON], created, world.rand);
+		createCards(Rarity.UNCOMMON, tCount[rarity][Rarity.UNCOMMON], created, world.rand);
+		createCards(Rarity.RARE, tCount[rarity][Rarity.RARE], created, world.rand);
+		createCards(Rarity.ANCIENT, tCount[rarity][Rarity.ANCIENT], created, world.rand);
+		createCards(Rarity.LEGENDARY, tCount[rarity][Rarity.LEGENDARY], created, world.rand);
 
 		if (created.size() > 0) {
 			for (String cdwd : created) {
-				spawnCard(player, w, cdwd);
+				spawnCard(player, world, cdwd);
 			}
 			stack.stackSize -= 1;
 		} else {
@@ -68,13 +74,13 @@ public class PackItemRarity extends PackItemBase {
 	}
 
 	@Override
-	protected void createCards(int cardRarity, int count, ArrayList<String> created) {
+	protected void createCards(int cardRarity, int count, ArrayList<String> created, Random random) {
 
 		for (int x = 0; x < count; ++x) { // Generate x cards
 			CardStructure cStruct = null;
 
 			for (int y = 0; y < RETRY; ++y) { // Retry x times until...
-				cStruct = Databank.generateACard(cardRarity);
+				cStruct = Databank.generateACard(cardRarity, random);
 
 				if (cStruct != null && !created.contains(cStruct.getCDWD())) { // ... cards was not already created. Duplicate prevention
 					created.add(cStruct.getCDWD());
@@ -83,4 +89,56 @@ public class PackItemRarity extends PackItemBase {
 			}
 		}
 	}
+	
+	// === ICON LAYERING AND COLORIZATION === //
+	
+    @SideOnly(Side.CLIENT)
+    private IIcon overlayIcon;
+    
+    @SideOnly(Side.CLIENT)
+    public boolean requiresMultipleRenderPasses()
+    {
+        return true;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public int getColorFromItemStack(ItemStack stack, int pass)
+    {
+    	if (pass==0)
+    	{
+	    	switch (this.rarity)
+	    	{
+	    	case Rarity.COMMON:
+	    		return MineTradingCards.PACK_COLOR_COMMON;
+	    	case Rarity.UNCOMMON:
+	    		return MineTradingCards.PACK_COLOR_UNCOMMON;
+	    	case Rarity.RARE:
+	    		return MineTradingCards.PACK_COLOR_RARE;
+	    	case Rarity.ANCIENT:
+	    		return MineTradingCards.PACK_COLOR_ANCIENT;
+	    	case Rarity.LEGENDARY:
+	    		return MineTradingCards.PACK_COLOR_LEGENDARY;
+	    	}
+	    	return Reference.COLOR_BLUE;
+    	}
+    	
+        return -1;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void registerIcons(IIconRegister iiconRegister)
+    {
+        super.registerIcons(iiconRegister);
+        
+        this.overlayIcon = iiconRegister.registerIcon(Reference.MODID + Reference.ITEM_PACK_OVERLAY);
+    }
+    
+    /**
+     * Gets an icon index based on an item's damage value and the given render pass
+     */
+    @SideOnly(Side.CLIENT)
+    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
+    {
+        return pass == 1 ? this.overlayIcon : this.itemIcon;
+    }
 }
