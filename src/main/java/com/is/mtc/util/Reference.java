@@ -41,5 +41,5 @@ public class Reference {
 	
 	// Update checker
 	public static final String URL = "https://www.curseforge.com/minecraft/mc-mods/mine-trading-cards-open-source-edition";
-	public static final String VERSION_CHECKER_URL = "TBD";
+	public static final String VERSION_CHECKER_URL = "https://raw.githubusercontent.com/Powerthegreat/Mine-Trading-Cards-Source/master/CURRENT_VERSION";
 }
