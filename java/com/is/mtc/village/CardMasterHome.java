@@ -12,6 +12,7 @@ import com.is.mtc.integration.villagenames.VNCompat;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.util.Functions;
 
+import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
@@ -35,29 +36,31 @@ public class CardMasterHome extends StructureVillagePieces.Village {
 	public int townColor3=13; // Green
 	public int townColor4=12; // Brown
 	public BiomeGenBase biome=null;
-
+	
 	// Make foundation with blanks as empty air and F as foundation spaces
     private static final String[] foundationPattern = new String[]{
-    		"FFFFFFFF",
-    		"FFFFFFFF",
-    		"FFFFFFFF",
-    		"FFFFFFFF",
-    		"FFFFFFFF",
-    		"FFFFFFFF",
-    		"FFFFFFFF",
-    		"FFFFFFFF",
-    		"FFFFFFFF",
+    		"          ",
+    		" FFFFFFFF ",
+    		" FFFFFFFF ",
+    		" FFFFFFFF ",
+    		" FFFFFFFF ",
+    		" FFFFFFFF ",
+    		" FFFFFFFF ",
+    		" FFFFFFFF ",
+    		" FFFFFFFF ",
+    		" FFFFFFFF ",
+    		"      P   ",
     };
     // Here are values to assign to the bounding box
 	public static final int STRUCTURE_WIDTH = foundationPattern[0].length();
 	public static final int STRUCTURE_DEPTH = foundationPattern.length;
-	public static final int STRUCTURE_HEIGHT = 8;
+	public static final int STRUCTURE_HEIGHT = 7;
 	// Values for lining things up
 	private static final int GROUND_LEVEL = 2; // Spaces above the bottom of the structure considered to be "ground level"
 	private static final int INCREASE_MIN_U = 3;
 	private static final int DECREASE_MAX_U = 0;
-	private static final int INCREASE_MIN_W = -1;
-	private static final int DECREASE_MAX_W = 8;
+	private static final int INCREASE_MIN_W = 0;
+	private static final int DECREASE_MAX_W = 4;
 	
 	private int averageGroundLevel = -1;
 	
@@ -119,7 +122,12 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         
     	// Reestablish biome if start was null or something
         if (this.biome==null) {this.biome = world.getBiomeGenForCoords((this.boundingBox.minX+this.boundingBox.maxX)/2, (this.boundingBox.minZ+this.boundingBox.maxZ)/2);}
-
+        
+        if (this.biome==BiomeGenBase.desert || this.biome==BiomeGenBase.desertHills)
+        {
+        	ReflectionHelper.setPrivateValue(StructureVillagePieces.Village.class, this, true, new String[]{"field_143014_b", "field_143014_b"});
+        }
+        
         Object[] blockObject;
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.dirt, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeDirtBlock = (Block)blockObject[0]; int biomeDirtMeta = (Integer)blockObject[1];
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.grass, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeGrassBlock = (Block)blockObject[0]; int biomeGrassMeta = (Integer)blockObject[1];
@@ -145,6 +153,18 @@ public class CardMasterHome extends StructureVillagePieces.Village {
     			// If marked with F: fill with dirt foundation
     			this.func_151554_b(world, biomeFillerBlock, biomeFillerMeta, u, GROUND_LEVEL-1, w, structureBB);
     		}
+    		else if (unitLetter.equals("P"))
+    		{
+    			// If marked with P: fill with dirt foundation and top with block-and-biome-appropriate path
+    			this.func_151554_b(world, biomeFillerBlock, biomeFillerMeta, u, GROUND_LEVEL-1+(world.getBlock(posX, posY, posZ).isNormalCube()?-1:0), w, structureBB);
+    			if (MineTradingCards.hasVillageNamesInstalled
+    					&& astrotibs.villagenames.config.village.VillageGeneratorConfigHandler.newVillageGenerator) {
+    				VNCompat.setPathSpecificBlock(world, chunkManager, bbCenterX, bbCenterZ, this.biome, posX, posY, posZ, false);
+    			}
+    			else {
+    				this.placeBlockAtCurrentPosition(world, Blocks.gravel, 0, u, GROUND_LEVEL-1, w, structureBB);
+    			}
+    		}
     		else if (world.getBlock(posX, posY, posZ)==biomeFillerBlock)
     		{
     			// If the space is blank and the block itself is dirt, add dirt foundation
@@ -165,11 +185,11 @@ public class CardMasterHome extends StructureVillagePieces.Village {
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.cobblestone, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeCobblestoneBlock = (Block)blockObject[0]; int biomeCobblestoneMeta = (Integer)blockObject[1];
         for(int[] uuvvww : new int[][]{
         	// Foundation
-        	{0,0,0, 7,0,8}, 
-        	{0,1,0, 7,1,0}, {0,1,8, 7,1,8}, {0,1,0, 1,1,8}, {7,1,0, 7,1,8}, 
+        	{1,0,1, 8,0,9}, 
+        	{1,1,1, 8,1,1}, {1,1,9, 8,1,9}, {1,1,1, 2,1,9}, {8,1,1, 8,1,9}, 
         	// Corner pillars
-        	{0,2,0, 0,4,0}, {7,2,0, 7,4,0}, 
-        	{0,2,8, 0,4,8}, {7,2,8, 7,4,8}, 
+        	{1,2,1, 1,4,1}, {8,2,1, 8,4,1}, 
+        	{1,2,9, 1,4,9}, {8,2,9, 8,4,9}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvww[0], uuvvww[1], uuvvww[2], uuvvww[3], uuvvww[4], uuvvww[5], biomeCobblestoneBlock, biomeCobblestoneMeta, biomeCobblestoneBlock, biomeCobblestoneMeta, false);	
@@ -179,10 +199,10 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         // Terracotta
         for(int[] uuvvwwm : new int[][]{
         	// Loss, lol
-        	{1,0,3, 2,0,3, this.townColor}, {1,0,7, 2,0,7, this.townColor}, {5,0,3, 6,0,3, this.townColor}, {5,0,6, 6,0,6, this.townColor}, 
-        	{1,0,1, 1,0,2, this.townColor2}, 
-        	{1,0,5, 2,0,5, this.townColor3}, 
-        	{5,0,1, 6,0,1, this.townColor4}, 
+        	{2,0,4, 3,0,4, this.townColor}, {2,0,8, 3,0,8, this.townColor}, {6,0,4, 7,0,4, this.townColor}, {6,0,7, 7,0,7, this.townColor}, 
+        	{2,0,2, 2,0,3, this.townColor2}, 
+        	{2,0,6, 3,0,6, this.townColor3}, 
+        	{6,0,2, 7,0,2, this.townColor4}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvwwm[0], uuvvwwm[1], uuvvwwm[2], uuvvwwm[3], uuvvwwm[4], uuvvwwm[5], Blocks.stained_hardened_clay, uuvvwwm[6], Blocks.stained_hardened_clay, uuvvwwm[6], false);	
@@ -191,7 +211,7 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         
         // Wool
         for(int[] uuvvwwm : new int[][]{
-        	{2,1,1, 6,1,7, this.townColor}, 
+        	{3,1,2, 7,1,8, this.townColor}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvwwm[0], uuvvwwm[1], uuvvwwm[2], uuvvwwm[3], uuvvwwm[4], uuvvwwm[5], Blocks.wool, uuvvwwm[6], Blocks.wool, uuvvwwm[6], false);	
@@ -200,7 +220,7 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         
         // Carpet
         for(int[] uuvvwwm : new int[][]{
-        	{3,3,2, 3,3,7, this.townColor2}, 
+        	{4,3,3, 4,3,8, this.townColor2}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvwwm[0], uuvvwwm[1], uuvvwwm[2], uuvvwwm[3], uuvvwwm[4], uuvvwwm[5], Blocks.carpet, uuvvwwm[6], Blocks.carpet, uuvvwwm[6], false);	
@@ -211,7 +231,7 @@ public class CardMasterHome extends StructureVillagePieces.Village {
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.log, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeLogVertBlock = (Block)blockObject[0]; int biomeLogVertMeta = (Integer)blockObject[1];
         for(int[] uuvvww : new int[][]{
         	// Posts beneath displays
-        	{1,2,2, 1,2,2}, {1,2,4, 1,2,4}, {1,2,6, 1,2,6}, 
+        	{2,2,3, 2,2,3}, {2,2,5, 2,2,5}, {2,2,7, 2,2,7}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvww[0], uuvvww[1], uuvvww[2], uuvvww[3], uuvvww[4], uuvvww[5], biomeLogVertBlock, biomeLogVertMeta, biomeLogVertBlock, biomeLogVertMeta, false);	
@@ -222,9 +242,9 @@ public class CardMasterHome extends StructureVillagePieces.Village {
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.log, 4+(this.coordBaseMode%2==0? 0:4), chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeLogHorAcrossBlock = (Block)blockObject[0]; int biomeLogHorAcrossMeta = (Integer)blockObject[1]; // Perpendicular to you
         for(int[] uuvvww : new int[][]{
         	// Front beam
-        	{1,4,0, 6,4,0}, 
+        	{2,4,1, 7,4,1}, 
         	// Rear beam
-        	{1,4,8, 6,4,8}, 
+        	{2,4,9, 7,4,9}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvww[0], uuvvww[1], uuvvww[2], uuvvww[3], uuvvww[4], uuvvww[5], biomeLogHorAcrossBlock, biomeLogHorAcrossMeta, biomeLogHorAcrossBlock, biomeLogHorAcrossMeta, false);	
@@ -234,9 +254,9 @@ public class CardMasterHome extends StructureVillagePieces.Village {
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.log, 4+(this.coordBaseMode%2==0? 4:0), chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeLogHorAlongBlock = (Block)blockObject[0]; int biomeLogHorAlongMeta = (Integer)blockObject[1]; // Toward you
         for (int[] uw : new int[][]{
         	// Left wall 
-        	{0,4,1, 0,4,7}, 
+        	{1,4,2, 1,4,8}, 
         	// Right wall 
-        	{7,4,1, 7,4,7}, 
+        	{8,4,2, 8,4,8}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uw[0], uw[1], uw[2], uw[3], uw[4], uw[5], biomeLogHorAlongBlock, biomeLogHorAlongMeta, biomeLogHorAlongBlock, biomeLogHorAlongMeta, false);
@@ -246,7 +266,7 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         // Bookshelves
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.bookshelf, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeBookshelfBlock = (Block)blockObject[0]; int biomeBookshelfMeta = (Integer)blockObject[1];
         for(int[] uuvvww : new int[][]{
-        	{1,4,1, 1,4,7}, 
+        	{2,4,2, 2,4,8}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvww[0], uuvvww[1], uuvvww[2], uuvvww[3], uuvvww[4], uuvvww[5], biomeBookshelfBlock, biomeBookshelfMeta, biomeBookshelfBlock, biomeBookshelfMeta, false);	
@@ -255,9 +275,9 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         // Torches
         for (int[] uvwo : new int[][]{ // Orientation - 0:forward, 1:rightward, 2:backward (toward you), 3:leftward, -1:upright;
         	// Over door
-        	{5,4,1, 0}, 
+        	{6,4,2, 0}, 
         	// Over table
-        	{6,4,5, 3}, 
+        	{7,4,6, 3}, 
         	}) {
         	this.placeBlockAtCurrentPosition(world, Blocks.torch, Functions.getTorchRotationMeta(uvwo[3], this.coordBaseMode), uvwo[0], uvwo[1], uvwo[2], structureBB);
         }
@@ -266,15 +286,15 @@ public class CardMasterHome extends StructureVillagePieces.Village {
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.planks, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeWoodenPlanksBlock = (Block)blockObject[0]; int biomeWoodenPlanksMeta = (Integer)blockObject[1];
         for(int[] uuvvww : new int[][]{
         	// Front wall
-        	{1,2,0, 1,3,0}, {2,2,0, 2,2,0}, {3,2,0, 4,3,0}, {6,2,0, 6,3,0}, 
+        	{2,2,1, 2,3,1}, {3,2,1, 3,2,1}, {4,2,1, 5,3,1}, {7,2,1, 7,3,1}, 
         	// Left wall
-        	{0,2,1, 0,3,7}, 
+        	{1,2,2, 1,3,8}, 
         	// Right wall
-        	{7,2,1, 7,3,7}, 
+        	{8,2,2, 8,3,8}, 
         	// Back wall
-        	{1,2,8, 1,3,8}, {2,2,8, 2,2,8}, {3,2,8, 4,3,8}, {5,2,8, 5,2,8},  {6,2,8, 6,3,8}, 
+        	{2,2,9, 2,3,9}, {3,2,9, 3,2,9}, {4,2,9, 5,3,9}, {6,2,9, 6,2,9},  {7,2,9, 7,3,9}, 
         	// Roof
-        	{1,5,1, 6,5,7}, {2,6,2, 5,6,6}, 
+        	{1,5,1, 8,5,1}, {8,5,2, 8,5,8}, {2,5,9, 8,5,9}, {1,5,2, 1,5,8}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvww[0], uuvvww[1], uuvvww[2], uuvvww[3], uuvvww[4], uuvvww[5], biomeWoodenPlanksBlock, biomeWoodenPlanksMeta, biomeWoodenPlanksBlock, biomeWoodenPlanksMeta, false);	
@@ -283,8 +303,8 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         
         // Windows
     	for (int[] uvw : new int[][]{
-    		{2,3,0}, // Front
-    		{2,3,8}, {5,3,8}, // Rear
+    		{3,3,1}, // Front
+    		{3,3,9}, {6,3,9}, // Rear
     		})
         {
     		this.placeBlockAtCurrentPosition(world, Blocks.glass_pane, 0, uvw[0], uvw[1], uvw[2], structureBB);
@@ -294,19 +314,17 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         // Wooden stairs
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.oak_stairs, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeWoodStairsBlock = (Block)blockObject[0];
     	for (int[] uuvvwwo : new int[][]{ // Orientation - 0: leftward, 1: rightward, 3:backward, 2:forward
-    		
     		// Roof
-    		{0,5,0, 6,5,0, 3}, {7,5,0, 7,5,7, 1}, {1,5,8, 7,5,8, 2}, {0,5,1, 0,5,8, 0}, 
-    		{1,6,1, 5,6,1, 3}, {6,6,1, 6,6,6, 1}, {2,6,7, 6,6,7, 2}, {1,6,2, 1,6,7, 0}, 
+    		{0,5,0, 8,5,0, 3}, {9,5,0, 9,5,9, 1}, {1,5,10, 9,5,10, 2}, {0,5,1, 0,5,10, 0},
     		
     		// Counter
-    		{3,2,2, 3,2,7, 0+4}, 
+    		{4,2,3, 4,2,8, 0+4}, 
     		
     		// Shelves
-    		{1,2,1, 1,3,1, 1}, {1,2,3, 1,3,3, 1}, {1,2,5, 1,3,5, 1}, {1,2,7, 1,3,7, 1}, 
+    		{2,2,2, 2,3,2, 1}, {2,2,4, 2,3,4, 1}, {2,2,6, 2,3,6, 1}, {2,2,8, 2,3,8, 1}, 
     		
     		// Seats
-    		{6,2,4, 6,2,4, 2}, {6,2,6, 6,2,6, 3}, 
+    		{7,2,5, 7,2,5, 2}, {7,2,7, 7,2,7, 3}, 
     		})
         {
     		this.fillWithMetadataBlocks(world, structureBB, uuvvwwo[0], uuvvwwo[1], uuvvwwo[2], uuvvwwo[3], uuvvwwo[4], uuvvwwo[5], biomeWoodStairsBlock, this.getMetadataWithOffset(Blocks.oak_stairs, uuvvwwo[6]%4)+(uuvvwwo[6]/4)*4, biomeWoodStairsBlock, this.getMetadataWithOffset(Blocks.oak_stairs, uuvvwwo[6]%4)+(uuvvwwo[6]/4)*4, false);	
@@ -315,7 +333,7 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         // Table
         Object[][] tableComponentObjects = VNCompat.chooseModWoodenTable(biomeWoodenPlanksBlock==Blocks.planks ? biomeWoodenPlanksMeta : 0);
     	for (int[] uuvvww : new int[][]{
-        	{6,2,5},  
+        	{7,2,6}, 
     		})
         {
     		for (int i=1; i>=0; i--)
@@ -324,21 +342,12 @@ public class CardMasterHome extends StructureVillagePieces.Village {
     		}
         }
     	
-    	// Fence Gate (Along)
-    	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.fence_gate, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeFenceGateBlock = (Block)blockObject[0]; int biomeFenceGateMeta = (Integer)blockObject[1];
-    	for(int[] uvw : new int[][]{
-    		{3,2,1}, 
-        	})
-        {
-    		this.placeBlockAtCurrentPosition(world, biomeFenceGateBlock, Functions.getMetadataWithOffset(biomeFenceGateBlock, (biomeFenceGateMeta+1)%8, this.coordBaseMode), uvw[0], uvw[1], uvw[2], structureBB);
-        }
-    	
     	
         // Bottom wood slab
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.wooden_slab, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeWoodSlabBottomBlock = (Block)blockObject[0]; int biomeWoodSlabBottomMeta = (Integer)blockObject[1];
         for(int[] uuvvww : new int[][]{
-        	// Ceiling
-        	{2,7,2, 5,7,6}, 
+        	// Roof
+        	{1,6,1, 8,6,9}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvww[0], uuvvww[1], uuvvww[2], uuvvww[3], uuvvww[4], uuvvww[5], biomeWoodSlabBottomBlock, biomeWoodSlabBottomMeta, biomeWoodSlabBottomBlock, biomeWoodSlabBottomMeta, false);	
@@ -349,16 +358,37 @@ public class CardMasterHome extends StructureVillagePieces.Village {
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.wooden_slab, 8, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeWoodSlabTopBlock = (Block)blockObject[0]; int biomeWoodSlabTopMeta = (Integer)blockObject[1];
         for(int[] uuvvww : new int[][]{
         	// Ceiling
-        	{3,4,1, 3,4,7}, 
+        	{4,4,2, 4,4,8}, 
         	})
         {
         	this.fillWithMetadataBlocks(world, structureBB, uuvvww[0], uuvvww[1], uuvvww[2], uuvvww[3], uuvvww[4], uuvvww[5], biomeWoodSlabTopBlock, biomeWoodSlabTopMeta, biomeWoodSlabTopBlock, biomeWoodSlabTopMeta, false);	
         }
+    	
+        
+    	// Fence
+    	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.fence, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeFenceBlock = (Block)blockObject[0]; int biomeFenceMeta = (Integer)blockObject[1];
+    	for(int[] uvw : new int[][]{
+    		// Above counter
+    		{4,5,3}, {4,5,5}, {4,5,7}, 
+        	})
+        {
+    		this.placeBlockAtCurrentPosition(world, biomeFenceBlock, biomeFenceMeta, uvw[0], uvw[1], uvw[2], structureBB);
+        }
+    	
+        
+    	// Fence Gate (Along)
+    	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.fence_gate, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeFenceGateBlock = (Block)blockObject[0]; int biomeFenceGateMeta = (Integer)blockObject[1];
+    	for(int[] uvw : new int[][]{
+        	{4,2,2, 1, 0},
+        	})
+        {
+    		this.placeBlockAtCurrentPosition(world, biomeFenceGateBlock, Functions.getMetadataWithOffset(biomeFenceGateBlock, (biomeFenceGateMeta+1)%8, this.coordBaseMode), uvw[0], uvw[1], uvw[2], structureBB);
+        }
         
         
         // Card Display cases
-    	for (int[] uvwoc : new int[][]{
-    		{1,3,2, 1, 0}, {1,3,4, 1, 2}, {1,3,6, 1, 0}, 
+    	for (int[] uvwoc : new int[][]{ // 0=fore-facing (away from you); 1=right-facing; 2=back-facing (toward you); 3=left-facing
+    		{2,3,3, 1, 0}, {2,3,5, 1, 2}, {2,3,7, 1, 0}, 
     		})
         {
     		this.placeBlockAtCurrentPosition(world, MineTradingCards.monoDisplayerBlock, 0, uvwoc[0], uvwoc[1], uvwoc[2], structureBB);
@@ -372,10 +402,10 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         		ItemStack displaystack = new ItemStack(cardIsUncommon ? MineTradingCards.cardUncommon : MineTradingCards.cardCommon, 1);
         		
         		// Turn card into specific type
-    			CardStructure cStruct = Databank.generateACard(cardIsUncommon ? Rarity.UNCOMMON : Rarity.COMMON);
+    			CardStructure cStruct = Databank.generateACard(cardIsUncommon ? Rarity.UNCOMMON : Rarity.COMMON, random);
     			if (cStruct != null) {
     				displaystack.stackTagCompound = new NBTTagCompound();
-    				displaystack = CardItem.applyCDWDtoStack(displaystack, cStruct);
+    				displaystack = CardItem.applyCDWDtoStack(displaystack, cStruct, random);
     				
     				((IInventory) te).setInventorySlotContents(0, displaystack);
     			}
@@ -386,7 +416,7 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         // Doors
     	blockObject = VNCompat.getBiomeSpecificBlockObject(Blocks.wooden_door, 0, chunkManager, bbCenterX, bbCenterZ, this.biome); Block biomeWoodDoorBlock = (Block)blockObject[0];
         for (int[] uvwoor : new int[][]{ // u, v, w, orientation, isShut (1/0 for true/false), isRightHanded (1/0 for true/false)
-        	{5,2,0, 2, 1, 1}, 
+        	{6,2,1, 2, 1, 1}, 
         })
         {
         	for (int height=0; height<=1; height++)
@@ -397,15 +427,41 @@ public class CardMasterHome extends StructureVillagePieces.Village {
         }
     	
         
+        // Clear path for easier entry
+        for (int[] uvw : new int[][]{
+    		{6, GROUND_LEVEL, -1}, 
+       		})
+    	{
+        	int pathU = uvw[0]; int pathV = uvw[1]; int pathW = uvw[2];
+            
+            // Clear above and set foundation below
+            this.clearCurrentPositionBlocksUpwards(world, pathU, pathV, pathW, structureBB);
+        	this.func_151554_b(world, biomeFillerBlock, biomeFillerMeta, pathU, pathV-2, pathW, structureBB);
+        	// Top is grass which is converted to path
+        	if (world.isAirBlock(this.getXWithOffset(pathU, pathW), this.getYWithOffset(pathV-1), this.getZWithOffset(pathU, pathW)))
+        	{
+        		this.placeBlockAtCurrentPosition(world, biomeGrassBlock, biomeGrassMeta, pathU, pathV-1, pathW, structureBB);
+        	}
+        	
+			if (MineTradingCards.hasVillageNamesInstalled
+					&& astrotibs.villagenames.config.village.VillageGeneratorConfigHandler.newVillageGenerator) {
+				VNCompat.setPathSpecificBlock(world, chunkManager, bbCenterX, bbCenterZ, this.biome, this.getXWithOffset(pathU, pathW), this.getYWithOffset(pathV-1), this.getZWithOffset(pathU, pathW), false);
+			}
+			else {
+				this.placeBlockAtCurrentPosition(world, Blocks.gravel, 0, pathU, pathV-1, pathW, structureBB);
+			}
+        }
+    	
+        
 		// Villagers
         if (!this.entitiesGenerated)
         {
         	this.entitiesGenerated=true;
         	
         	// Card master behind counter
-        	int u = 2;
+        	int u = 3;
         	int v = 2;
-        	int w = 1 + random.nextInt(7);
+        	int w = 2 + random.nextInt(7);
         	
         	EntityVillager entityvillager = Functions.makeVillagerWithProfession(world, random, VillagerHandler.ID_CARD_MASTER, 0);
         	
@@ -415,9 +471,9 @@ public class CardMasterHome extends StructureVillagePieces.Village {
             // Up to two card traders in main area
             for (int i=0; i<2; i++) {
             	if (random.nextBoolean()) {
-            		u = 4 + random.nextInt(2);
+            		u = 5 + random.nextInt(2);
                 	v = 2;
-                	w = 2 + random.nextInt(3) + i*3;
+                	w = 3 + random.nextInt(3) + i*3;
                 	
                 	entityvillager = new EntityVillager(world);
                 	entityvillager = Functions.makeVillagerWithProfession(world, random, VillagerHandler.ID_CARD_TRADER, 0);

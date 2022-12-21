@@ -25,6 +25,7 @@ import com.is.mtc.root.CC_ForceCreateCard;
 import com.is.mtc.root.Injector;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
+import com.is.mtc.util.Functions;
 import com.is.mtc.util.Reference;
 import com.is.mtc.village.CardMasterHome;
 import com.is.mtc.village.CardMasterHomeHandler;
@@ -79,8 +80,31 @@ public class MineTradingCards {
 	public static final String CONFIG_CAT_DROPS = "drops";
 	public static final String CONFIG_CAT_LOGS = "logs";
 	public static final String CONFIG_CAT_RECIPES = "recipes";
-	public static final String CONFIG_CAT_VILLAGER = "villager";
+	public static final String CONFIG_CAT_VILLAGERS = "villagers";
+	public static final String CONFIG_CAT_COLORS = "colors";
+	
 	public static boolean ENABLE_CARD_RECIPES = true;
+	public static int CARD_COLOR_COMMON = Reference.COLOR_GREEN;
+	public static int CARD_COLOR_UNCOMMON = Reference.COLOR_GOLD;
+	public static int CARD_COLOR_RARE = Reference.COLOR_RED;
+	public static int CARD_COLOR_ANCIENT = Reference.COLOR_AQUA;
+	public static int CARD_COLOR_LEGENDARY = Reference.COLOR_LIGHT_PURPLE;
+	public static String CARD_TOOLTIP_COLOR_COMMON = "green";
+	public static String CARD_TOOLTIP_COLOR_UNCOMMON = "gold";
+	public static String CARD_TOOLTIP_COLOR_RARE = "red";
+	public static String CARD_TOOLTIP_COLOR_ANCIENT = "aqua";
+	public static String CARD_TOOLTIP_COLOR_LEGENDARY = "light_purple";
+	public static int PACK_COLOR_COMMON = Reference.COLOR_GREEN;
+	public static int PACK_COLOR_UNCOMMON = Reference.COLOR_GOLD;
+	public static int PACK_COLOR_RARE = Reference.COLOR_RED;
+	public static int PACK_COLOR_ANCIENT = Reference.COLOR_AQUA;
+	public static int PACK_COLOR_LEGENDARY = Reference.COLOR_LIGHT_PURPLE;
+	public static int PACK_COLOR_STANDARD = Reference.COLOR_BLUE;
+	
+	public static final String COLOR_ITEM_DESCRIPTION_1 = "Color for ";
+	public static final String COLOR_ITEM_DESCRIPTION_2 = "Entered as a decimal integer, or as a hexadecimal by putting # in front.";
+	public static final String COLOR_TOOLTIP_1 = "Tooltip color for ";
+	public static final String COLOR_TOOLTIP_2 = " cards, using \"friendly\" Minecraft color name";
 	
 	// Mod intercompatibility stuff
 	public static boolean hasVillageNamesInstalled = false;
@@ -236,9 +260,9 @@ public class MineTradingCards {
 		DropHandler.DROP_RATE_CUSTOM = config.getInt("pack_drop_rate_custom", CONFIG_CAT_DROPS, 40, 0, Integer.MAX_VALUE, "Chance out of X to drop custom packs");
 		
 		// Villager
-		VillagerHandler.ID_CARD_MASTER = config.getInt("card_master_id", CONFIG_CAT_VILLAGER, 7117, 6, Integer.MAX_VALUE, "Profession ID for the card master villager");
-		VillagerHandler.ID_CARD_TRADER = config.getInt("card_trader_id", CONFIG_CAT_VILLAGER, 7118, 6, Integer.MAX_VALUE, "Profession ID for the card trader villager");
-		VillagerHandler.CARD_MASTER_TRADE_LIST = config.getStringList("card_master_trades", CONFIG_CAT_VILLAGER, VillagerHandler.CARD_MASTER_TRADE_LIST_DEFAULT,
+		VillagerHandler.ID_CARD_MASTER = config.getInt("card_master_id", CONFIG_CAT_VILLAGERS, 7117, 6, Integer.MAX_VALUE, "Profession ID for the card master villager");
+		VillagerHandler.ID_CARD_TRADER = config.getInt("card_trader_id", CONFIG_CAT_VILLAGERS, 7118, 6, Integer.MAX_VALUE, "Profession ID for the card trader villager");
+		VillagerHandler.CARD_MASTER_TRADE_LIST = config.getStringList("card_master_trades", CONFIG_CAT_VILLAGERS, VillagerHandler.CARD_MASTER_TRADE_LIST_DEFAULT,
 				"List of possible Card Master trades. Entries are of the form:"
 				+ "\ntradechance|sellitem|amount|buyitem1|amount|buyitem2|amount"
 				+ "\ntradechance is a float from 0 to 1 representing the chance the trade will be considered when adding new trades to a villager."
@@ -248,7 +272,7 @@ public class MineTradingCards {
 				+ "\n\"amount\" is either an integer, or a range like 1-3."
 				+ "\nbuyitem2|amount is optional."
 				);
-		VillagerHandler.CARD_TRADER_TRADE_LIST = config.getStringList("card_trader_trades", CONFIG_CAT_VILLAGER, VillagerHandler.CARD_TRADER_TRADE_LIST_DEFAULT,
+		VillagerHandler.CARD_TRADER_TRADE_LIST = config.getStringList("card_trader_trades", CONFIG_CAT_VILLAGERS, VillagerHandler.CARD_TRADER_TRADE_LIST_DEFAULT,
 				"List of possible Card Trader trades. Entries are of the form:"
 				+ "\ntradechance|sellitem|amount|buyitem1|amount|buyitem2|amount"
 				+ "\ntradechance is a float from 0 to 1 representing the chance the trade will be considered when adding new trades to a villager."
@@ -258,9 +282,29 @@ public class MineTradingCards {
 				+ "\n\"amount\" is either an integer, or a range like 1-3."
 				+ "\nbuyitem2|amount is optional."
 				);
-		CardMasterHomeHandler.SHOP_WEIGHT = config.getInt("card_shop_weight", CONFIG_CAT_VILLAGER, 5, 0, 100, "Weighting for selection when villages generate. Farms and wood huts are 3, church is 20.");
-		CardMasterHomeHandler.SHOP_MAX_NUMBER = config.getInt("card_shop_max_number", CONFIG_CAT_VILLAGER, 1, 0, 32, "Maximum number of card master shops that can spawn per village");
+		CardMasterHomeHandler.SHOP_WEIGHT = config.getInt("card_shop_weight", CONFIG_CAT_VILLAGERS, 5, 0, 100, "Weighting for selection when villages generate. Farms and wood huts are 3, church is 20.");
+		CardMasterHomeHandler.SHOP_MAX_NUMBER = config.getInt("card_shop_max_number", CONFIG_CAT_VILLAGERS, 1, 0, 32, "Maximum number of card master shops that can spawn per village");
 		
+		// Colors
+		// Cards
+		CARD_COLOR_COMMON = Functions.parseColorInteger(config.getString("card_color_common", CONFIG_CAT_COLORS, "#55ff55", COLOR_ITEM_DESCRIPTION_1+"common cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GREEN);
+		CARD_COLOR_UNCOMMON = Functions.parseColorInteger(config.getString("card_color_uncommon", CONFIG_CAT_COLORS, "#ffaa00", COLOR_ITEM_DESCRIPTION_1+"uncommon cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GOLD);
+		CARD_COLOR_RARE = Functions.parseColorInteger(config.getString("card_color_rare", CONFIG_CAT_COLORS, "#ff5555", COLOR_ITEM_DESCRIPTION_1+"rare cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_RED);
+		CARD_COLOR_ANCIENT = Functions.parseColorInteger(config.getString("card_color_ancient", CONFIG_CAT_COLORS, "#55ffff", COLOR_ITEM_DESCRIPTION_1+"ancient cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_AQUA);
+		CARD_COLOR_LEGENDARY = Functions.parseColorInteger(config.getString("card_color_legendary", CONFIG_CAT_COLORS, "#ff55ff", COLOR_ITEM_DESCRIPTION_1+"legendary cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_LIGHT_PURPLE);
+		// Tooltips
+		CARD_TOOLTIP_COLOR_COMMON = config.getString("card_tooltip_color_common", CONFIG_CAT_COLORS, "green", COLOR_TOOLTIP_1+"common"+COLOR_TOOLTIP_2);
+		CARD_TOOLTIP_COLOR_UNCOMMON = config.getString("card_tooltip_color_uncommon", CONFIG_CAT_COLORS, "gold", COLOR_TOOLTIP_1+"uncommon"+COLOR_TOOLTIP_2);
+		CARD_TOOLTIP_COLOR_RARE = config.getString("card_tooltip_color_rare", CONFIG_CAT_COLORS, "red", COLOR_TOOLTIP_1+"rare"+COLOR_TOOLTIP_2);
+		CARD_TOOLTIP_COLOR_ANCIENT = config.getString("card_tooltip_color_ancient", CONFIG_CAT_COLORS, "aqua", COLOR_TOOLTIP_1+"ancient"+COLOR_TOOLTIP_2);
+		CARD_TOOLTIP_COLOR_LEGENDARY = config.getString("card_tooltip_color_legendary", CONFIG_CAT_COLORS, "light_purple", COLOR_TOOLTIP_1+"legendary"+COLOR_TOOLTIP_2);
+		// Packs
+		PACK_COLOR_COMMON = Functions.parseColorInteger(config.getString("pack_color_common", CONFIG_CAT_COLORS, "#55ff55", COLOR_ITEM_DESCRIPTION_1+"common packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GREEN);
+		PACK_COLOR_UNCOMMON = Functions.parseColorInteger(config.getString("pack_color_uncommon", CONFIG_CAT_COLORS, "#ffaa00", COLOR_ITEM_DESCRIPTION_1+"uncommon packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GOLD);
+		PACK_COLOR_RARE = Functions.parseColorInteger(config.getString("pack_color_rare", CONFIG_CAT_COLORS, "#ff5555", COLOR_ITEM_DESCRIPTION_1+"rare packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_RED);
+		PACK_COLOR_ANCIENT = Functions.parseColorInteger(config.getString("pack_color_ancient", CONFIG_CAT_COLORS, "#55ffff", COLOR_ITEM_DESCRIPTION_1+"ancient packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_AQUA);
+		PACK_COLOR_LEGENDARY = Functions.parseColorInteger(config.getString("pack_color_legendary", CONFIG_CAT_COLORS, "#ff55ff", COLOR_ITEM_DESCRIPTION_1+"legendary packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_LIGHT_PURPLE);
+		PACK_COLOR_STANDARD = Functions.parseColorInteger(config.getString("pack_color_standard", CONFIG_CAT_COLORS, "#5555ff", COLOR_ITEM_DESCRIPTION_1+"standard packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_BLUE);
 		
 		config.save();
 	}

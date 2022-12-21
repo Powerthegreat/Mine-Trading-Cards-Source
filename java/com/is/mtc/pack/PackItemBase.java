@@ -1,6 +1,7 @@
 package com.is.mtc.pack;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.data_manager.CardStructure;
@@ -23,13 +24,13 @@ public class PackItemBase extends Item {
 		setCreativeTab(MineTradingCards.MODTAB);
 	}
 
-	protected void createCards(int cardRarity, int count, ArrayList<String> created) {
+	protected void createCards(int cardRarity, int count, ArrayList<String> created, Random random) {
 
 		for (int x = 0; x < count; ++x) { // Generate x cards
 			CardStructure cStruct = null;
 
 			for (int y = 0; y < RETRY; ++y) { // Retry x times until...
-				cStruct = Databank.generateACard(cardRarity);
+				cStruct = Databank.generateACard(cardRarity, random);
 
 				if (cStruct != null && !created.contains(cStruct.getCDWD())) { // ... cards was not already created. Duplicate prevention
 					created.add(cStruct.getCDWD());
@@ -39,17 +40,17 @@ public class PackItemBase extends Item {
 		}
 	}
 
-	protected void spawnCard(EntityPlayer player, World w, String cdwd) {
-
+	protected void spawnCard(EntityPlayer player, World world, String cdwd) {
+		
 		ItemStack genStack = new ItemStack(Rarity.getAssociatedCardItem(Databank.getCardByCDWD(cdwd).getRarity()));
 		EntityItem spawnedEnt;
 
 		genStack.stackTagCompound = new NBTTagCompound();
 		genStack.stackTagCompound.setString("cdwd", cdwd); // Setting card
 		if (Databank.getCardByCDWD(cdwd).getAssetPath().size() > 0)
-			genStack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, Databank.getCardByCDWD(cdwd).getAssetPath().size()));
-		spawnedEnt = new EntityItem(w, player.posX, player.posY + 1, player.posZ, genStack); // Spawning card
+			genStack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, Databank.getCardByCDWD(cdwd).getAssetPath().size(), world.rand));
+		spawnedEnt = new EntityItem(world, player.posX, player.posY + 1, player.posZ, genStack); // Spawning card
 
-		w.spawnEntityInWorld(spawnedEnt);
+		world.spawnEntityInWorld(spawnedEnt);
 	}
 }

@@ -38,8 +38,9 @@ public class Rarity {
 		string = string.toUpperCase();
 
 		for (int i = 0; i < RCOUNT; ++i) {
-			if (STRINGSUPPERCASE[i].equals(string) || SHORTSTRINGSUPPERCASE[i].equals(string))
+			if (STRINGSUPPERCASE[i].equals(string) || SHORTSTRINGSUPPERCASE[i].equals(string)) {
 				return i;
+			}
 		}
 
 		return UNSET;
@@ -64,17 +65,23 @@ public class Rarity {
 	}
 
 	public static EnumChatFormatting toColor(int rarity) {
+		EnumChatFormatting ecf;
 		switch (rarity) {
 			case COMMON:
-				return EnumChatFormatting.GREEN;
+				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_COMMON);
+				return ecf!=null ? ecf : EnumChatFormatting.GREEN;
 			case UNCOMMON:
-				return EnumChatFormatting.GOLD;
+				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_UNCOMMON);
+				return ecf!=null ? ecf : EnumChatFormatting.GOLD;
 			case RARE:
-				return EnumChatFormatting.RED;
+				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_RARE);
+				return ecf!=null ? ecf : EnumChatFormatting.RED;
 			case ANCIENT:
-				return EnumChatFormatting.AQUA;
+				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_ANCIENT);
+				return ecf!=null ? ecf : EnumChatFormatting.AQUA;
 			case LEGENDARY:
-				return EnumChatFormatting.DARK_PURPLE;
+				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_LEGENDARY);
+				return ecf!=null ? ecf : EnumChatFormatting.DARK_PURPLE;
 
 			default:
 				return null;

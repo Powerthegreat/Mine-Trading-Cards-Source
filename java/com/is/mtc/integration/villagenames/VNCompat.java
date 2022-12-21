@@ -93,4 +93,34 @@ public class VNCompat {
 				};
 		}
 	}
+	
+	public static int setPathSpecificBlock(World world, WorldChunkManager chunkManager, int bbCenterX, int bbCenterZ, BiomeGenBase biome, int posX, int posY, int posZ, boolean searchDownward)
+	{
+		// Determine MaterialType
+		astrotibs.villagenames.utility.FunctionsVN.MaterialType materialType = astrotibs.villagenames.utility.FunctionsVN.MaterialType.OAK;
+		Map<String, ArrayList<String>> mappedBiomes = astrotibs.villagenames.config.village.VillageGeneratorConfigHandler.unpackBiomes(
+				astrotibs.villagenames.config.village.VillageGeneratorConfigHandler.spawnBiomesNames
+				);
+		
+		// Determine whether mod subs are allowed
+		boolean disallowModSubs = false;
+		String mappeddisallowModSubs = (String) (mappedBiomes.get("DisallowModSubs")).get(mappedBiomes.get("BiomeNames").indexOf(biome.biomeName));
+		if (mappeddisallowModSubs.toLowerCase().trim().equals("nosub")) {
+			disallowModSubs = true;
+		}
+		
+		try {
+        	String mappedMaterialType = (String) (mappedBiomes.get("MaterialTypes")).get(mappedBiomes.get("BiomeNames").indexOf(biome.biomeName));
+        	if (mappedMaterialType.equals("")) {
+        		materialType = astrotibs.villagenames.utility.FunctionsVN.MaterialType.getMaterialTemplateForBiome(chunkManager, bbCenterX, bbCenterZ);
+        	} else {
+        		materialType = astrotibs.villagenames.utility.FunctionsVN.MaterialType.getMaterialTypeFromName(mappedMaterialType, astrotibs.villagenames.utility.FunctionsVN.MaterialType.OAK);
+        	}
+        }
+		catch (Exception e) {
+			materialType = astrotibs.villagenames.utility.FunctionsVN.MaterialType.getMaterialTemplateForBiome(chunkManager, bbCenterX, bbCenterZ);
+		}
+		
+		return astrotibs.villagenames.village.StructureVillageVN.setPathSpecificBlock(world, materialType, biome, disallowModSubs, posX, posY, posZ, searchDownward);
+	}
 }

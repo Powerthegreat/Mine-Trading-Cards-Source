@@ -1,7 +1,5 @@
 package com.is.mtc.handler;
 
-import java.util.Random;
-
 import com.is.mtc.MineTradingCards;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -45,13 +43,14 @@ public class DropHandler {
 	}
 
 	private void testDrop(int rate, Item drop, LivingDropsEvent event) {
-		if (rate <= 0)
+		if (rate <= 0) {
 			return;
-		Random r = new Random();
-		int dv = r.nextInt(rate);
+		}
+		int dv = event.entity.worldObj.rand.nextInt(rate);
 
-		if (dv == 0)
+		if (dv == 0) {
 			addDrop(drop, event);
+		}
 	}
 
 	@SubscribeEvent
