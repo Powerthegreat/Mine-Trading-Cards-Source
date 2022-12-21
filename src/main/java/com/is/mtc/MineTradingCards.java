@@ -27,10 +27,13 @@ import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.util.Functions;
 import com.is.mtc.util.Reference;
+import com.is.mtc.version.DevVersionWarning;
+import com.is.mtc.version.VersionChecker;
 import com.is.mtc.village.CardMasterHome;
 import com.is.mtc.village.CardMasterHomeHandler;
 import com.is.mtc.village.VillagerHandler;
 
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -77,11 +80,12 @@ public class MineTradingCards {
 	private static String CONF_DIR = "";
 	
 	// Configuration stuff
+	public static final String CONFIG_CAT_COLORS = "colors";
 	public static final String CONFIG_CAT_DROPS = "drops";
 	public static final String CONFIG_CAT_LOGS = "logs";
 	public static final String CONFIG_CAT_RECIPES = "recipes";
+	public static final String CONFIG_CAT_UPDATES = "updates";
 	public static final String CONFIG_CAT_VILLAGERS = "villagers";
-	public static final String CONFIG_CAT_COLORS = "colors";
 	
 	public static boolean ENABLE_CARD_RECIPES = true;
 	public static int CARD_COLOR_COMMON = Reference.COLOR_GREEN;
@@ -100,6 +104,7 @@ public class MineTradingCards {
 	public static int PACK_COLOR_ANCIENT = Reference.COLOR_AQUA;
 	public static int PACK_COLOR_LEGENDARY = Reference.COLOR_LIGHT_PURPLE;
 	public static int PACK_COLOR_STANDARD = Reference.COLOR_BLUE;
+	public static boolean ENABLE_UPDATE_CHECKER = true;
 	
 	public static final String COLOR_ITEM_DESCRIPTION_1 = "Color for ";
 	public static final String COLOR_ITEM_DESCRIPTION_2 = "Entered as a decimal integer, or as a hexadecimal by putting # in front.";
@@ -128,7 +133,11 @@ public class MineTradingCards {
 		// Gets the config and reads the cards, and runs the preinitialisation from the proxy
 		DATA_DIR = event.getModConfigurationDirectory().getParentFile().getAbsolutePath().replace('\\', '/') + "/mtc/";
 		CONF_DIR = event.getModConfigurationDirectory().getAbsolutePath().replace('\\', '/') + '/';
-
+		
+        // Version check monitor
+        if (Reference.MOD_VERSION.contains("DEV") || Reference.MOD_VERSION.equals("@VERSION@")) {FMLCommonHandler.instance().bus().register(DevVersionWarning.instance);}
+        else if (ENABLE_UPDATE_CHECKER) {FMLCommonHandler.instance().bus().register(VersionChecker.instance);}
+		
 		PROXY.preInit(event);
 		readConfig(event);
 
@@ -238,11 +247,26 @@ public class MineTradingCards {
 		Configuration config = new Configuration(new File(CONF_DIR, "Mine Trading Cards.cfg"), Reference.CONFIG_VERSION, false);
 		config.load();
 		
-		// Logging
-		Logs.ENABLE_DEV_LOGS = config.getBoolean("devlog_enabled", CONFIG_CAT_LOGS, false, "Enable developer logs");
-		
-		// Recipes
-		ENABLE_CARD_RECIPES = config.getBoolean("enable_card_recipes", CONFIG_CAT_RECIPES, true, "Enable recipes for crafting individual cards");
+		// Colors
+		// Cards
+		CARD_COLOR_COMMON = Functions.parseColorInteger(config.getString("card_color_common", CONFIG_CAT_COLORS, "#55ff55", COLOR_ITEM_DESCRIPTION_1+"common cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GREEN);
+		CARD_COLOR_UNCOMMON = Functions.parseColorInteger(config.getString("card_color_uncommon", CONFIG_CAT_COLORS, "#ffaa00", COLOR_ITEM_DESCRIPTION_1+"uncommon cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GOLD);
+		CARD_COLOR_RARE = Functions.parseColorInteger(config.getString("card_color_rare", CONFIG_CAT_COLORS, "#ff5555", COLOR_ITEM_DESCRIPTION_1+"rare cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_RED);
+		CARD_COLOR_ANCIENT = Functions.parseColorInteger(config.getString("card_color_ancient", CONFIG_CAT_COLORS, "#55ffff", COLOR_ITEM_DESCRIPTION_1+"ancient cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_AQUA);
+		CARD_COLOR_LEGENDARY = Functions.parseColorInteger(config.getString("card_color_legendary", CONFIG_CAT_COLORS, "#ff55ff", COLOR_ITEM_DESCRIPTION_1+"legendary cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_LIGHT_PURPLE);
+		// Tooltips
+		CARD_TOOLTIP_COLOR_COMMON = config.getString("card_tooltip_color_common", CONFIG_CAT_COLORS, "green", COLOR_TOOLTIP_1+"common"+COLOR_TOOLTIP_2);
+		CARD_TOOLTIP_COLOR_UNCOMMON = config.getString("card_tooltip_color_uncommon", CONFIG_CAT_COLORS, "gold", COLOR_TOOLTIP_1+"uncommon"+COLOR_TOOLTIP_2);
+		CARD_TOOLTIP_COLOR_RARE = config.getString("card_tooltip_color_rare", CONFIG_CAT_COLORS, "red", COLOR_TOOLTIP_1+"rare"+COLOR_TOOLTIP_2);
+		CARD_TOOLTIP_COLOR_ANCIENT = config.getString("card_tooltip_color_ancient", CONFIG_CAT_COLORS, "aqua", COLOR_TOOLTIP_1+"ancient"+COLOR_TOOLTIP_2);
+		CARD_TOOLTIP_COLOR_LEGENDARY = config.getString("card_tooltip_color_legendary", CONFIG_CAT_COLORS, "light_purple", COLOR_TOOLTIP_1+"legendary"+COLOR_TOOLTIP_2);
+		// Packs
+		PACK_COLOR_COMMON = Functions.parseColorInteger(config.getString("pack_color_common", CONFIG_CAT_COLORS, "#55ff55", COLOR_ITEM_DESCRIPTION_1+"common packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GREEN);
+		PACK_COLOR_UNCOMMON = Functions.parseColorInteger(config.getString("pack_color_uncommon", CONFIG_CAT_COLORS, "#ffaa00", COLOR_ITEM_DESCRIPTION_1+"uncommon packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GOLD);
+		PACK_COLOR_RARE = Functions.parseColorInteger(config.getString("pack_color_rare", CONFIG_CAT_COLORS, "#ff5555", COLOR_ITEM_DESCRIPTION_1+"rare packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_RED);
+		PACK_COLOR_ANCIENT = Functions.parseColorInteger(config.getString("pack_color_ancient", CONFIG_CAT_COLORS, "#55ffff", COLOR_ITEM_DESCRIPTION_1+"ancient packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_AQUA);
+		PACK_COLOR_LEGENDARY = Functions.parseColorInteger(config.getString("pack_color_legendary", CONFIG_CAT_COLORS, "#ff55ff", COLOR_ITEM_DESCRIPTION_1+"legendary packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_LIGHT_PURPLE);
+		PACK_COLOR_STANDARD = Functions.parseColorInteger(config.getString("pack_color_standard", CONFIG_CAT_COLORS, "#5555ff", COLOR_ITEM_DESCRIPTION_1+"standard packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_BLUE);
 		
 		// Drops toggle
 		DropHandler.CAN_DROP_MOB = config.getBoolean("mobs_can_drop", CONFIG_CAT_DROPS, true, "Can mobs drop packs on death");
@@ -258,6 +282,12 @@ public class MineTradingCards {
 		DropHandler.DROP_RATE_STD = config.getInt("pack_drop_rate_standard", CONFIG_CAT_DROPS, 40, 0, Integer.MAX_VALUE, "Chance out of X to drop standard packs");
 		DropHandler.DROP_RATE_EDT = config.getInt("pack_drop_rate_edition", CONFIG_CAT_DROPS, 40, 0, Integer.MAX_VALUE, "Chance out of X to drop set-specific (edition) packs");
 		DropHandler.DROP_RATE_CUSTOM = config.getInt("pack_drop_rate_custom", CONFIG_CAT_DROPS, 40, 0, Integer.MAX_VALUE, "Chance out of X to drop custom packs");
+		
+		// Logging
+		Logs.ENABLE_DEV_LOGS = config.getBoolean("devlog_enabled", CONFIG_CAT_LOGS, false, "Enable developer logs");
+		
+		// Recipes
+		ENABLE_CARD_RECIPES = config.getBoolean("enable_card_recipes", CONFIG_CAT_RECIPES, true, "Enable recipes for crafting individual cards");
 		
 		// Villager
 		VillagerHandler.ID_CARD_MASTER = config.getInt("card_master_id", CONFIG_CAT_VILLAGERS, 7117, 6, Integer.MAX_VALUE, "Profession ID for the card master villager");
@@ -285,26 +315,9 @@ public class MineTradingCards {
 		CardMasterHomeHandler.SHOP_WEIGHT = config.getInt("card_shop_weight", CONFIG_CAT_VILLAGERS, 5, 0, 100, "Weighting for selection when villages generate. Farms and wood huts are 3, church is 20.");
 		CardMasterHomeHandler.SHOP_MAX_NUMBER = config.getInt("card_shop_max_number", CONFIG_CAT_VILLAGERS, 1, 0, 32, "Maximum number of card master shops that can spawn per village");
 		
-		// Colors
-		// Cards
-		CARD_COLOR_COMMON = Functions.parseColorInteger(config.getString("card_color_common", CONFIG_CAT_COLORS, "#55ff55", COLOR_ITEM_DESCRIPTION_1+"common cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GREEN);
-		CARD_COLOR_UNCOMMON = Functions.parseColorInteger(config.getString("card_color_uncommon", CONFIG_CAT_COLORS, "#ffaa00", COLOR_ITEM_DESCRIPTION_1+"uncommon cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GOLD);
-		CARD_COLOR_RARE = Functions.parseColorInteger(config.getString("card_color_rare", CONFIG_CAT_COLORS, "#ff5555", COLOR_ITEM_DESCRIPTION_1+"rare cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_RED);
-		CARD_COLOR_ANCIENT = Functions.parseColorInteger(config.getString("card_color_ancient", CONFIG_CAT_COLORS, "#55ffff", COLOR_ITEM_DESCRIPTION_1+"ancient cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_AQUA);
-		CARD_COLOR_LEGENDARY = Functions.parseColorInteger(config.getString("card_color_legendary", CONFIG_CAT_COLORS, "#ff55ff", COLOR_ITEM_DESCRIPTION_1+"legendary cards. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_LIGHT_PURPLE);
-		// Tooltips
-		CARD_TOOLTIP_COLOR_COMMON = config.getString("card_tooltip_color_common", CONFIG_CAT_COLORS, "green", COLOR_TOOLTIP_1+"common"+COLOR_TOOLTIP_2);
-		CARD_TOOLTIP_COLOR_UNCOMMON = config.getString("card_tooltip_color_uncommon", CONFIG_CAT_COLORS, "gold", COLOR_TOOLTIP_1+"uncommon"+COLOR_TOOLTIP_2);
-		CARD_TOOLTIP_COLOR_RARE = config.getString("card_tooltip_color_rare", CONFIG_CAT_COLORS, "red", COLOR_TOOLTIP_1+"rare"+COLOR_TOOLTIP_2);
-		CARD_TOOLTIP_COLOR_ANCIENT = config.getString("card_tooltip_color_ancient", CONFIG_CAT_COLORS, "aqua", COLOR_TOOLTIP_1+"ancient"+COLOR_TOOLTIP_2);
-		CARD_TOOLTIP_COLOR_LEGENDARY = config.getString("card_tooltip_color_legendary", CONFIG_CAT_COLORS, "light_purple", COLOR_TOOLTIP_1+"legendary"+COLOR_TOOLTIP_2);
-		// Packs
-		PACK_COLOR_COMMON = Functions.parseColorInteger(config.getString("pack_color_common", CONFIG_CAT_COLORS, "#55ff55", COLOR_ITEM_DESCRIPTION_1+"common packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GREEN);
-		PACK_COLOR_UNCOMMON = Functions.parseColorInteger(config.getString("pack_color_uncommon", CONFIG_CAT_COLORS, "#ffaa00", COLOR_ITEM_DESCRIPTION_1+"uncommon packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_GOLD);
-		PACK_COLOR_RARE = Functions.parseColorInteger(config.getString("pack_color_rare", CONFIG_CAT_COLORS, "#ff5555", COLOR_ITEM_DESCRIPTION_1+"rare packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_RED);
-		PACK_COLOR_ANCIENT = Functions.parseColorInteger(config.getString("pack_color_ancient", CONFIG_CAT_COLORS, "#55ffff", COLOR_ITEM_DESCRIPTION_1+"ancient packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_AQUA);
-		PACK_COLOR_LEGENDARY = Functions.parseColorInteger(config.getString("pack_color_legendary", CONFIG_CAT_COLORS, "#ff55ff", COLOR_ITEM_DESCRIPTION_1+"legendary packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_LIGHT_PURPLE);
-		PACK_COLOR_STANDARD = Functions.parseColorInteger(config.getString("pack_color_standard", CONFIG_CAT_COLORS, "#5555ff", COLOR_ITEM_DESCRIPTION_1+"standard packs. "+COLOR_ITEM_DESCRIPTION_2).trim(), Reference.COLOR_BLUE);
+		// Update Checker
+		ENABLE_UPDATE_CHECKER = config.getBoolean("enable_update_checker", CONFIG_CAT_UPDATES, true, "Displays a client-side chat message on login if there's an update available.");
+		
 		
 		config.save();
 	}
