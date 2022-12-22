@@ -33,6 +33,21 @@ public class Reference {
 	// Custom
 	public static final int COLOR_BROWN = 0xad7030;
 	
+	// Drops
+	public static final String KEY_CARD_COM = "common_card";
+	public static final String KEY_CARD_UNC = "uncommon_card";
+	public static final String KEY_CARD_RAR = "rare_card";
+	public static final String KEY_CARD_ANC = "ancient_card";
+	public static final String KEY_CARD_LEG = "legendary_card";
+	public static final String KEY_PACK_COM = "common_pack";
+	public static final String KEY_PACK_UNC = "uncommon_pack";
+	public static final String KEY_PACK_RAR = "rare_pack";
+	public static final String KEY_PACK_ANC = "ancient_pack";
+	public static final String KEY_PACK_LEG = "legendary_pack";
+	public static final String KEY_PACK_STD = "standard_pack";
+	public static final String KEY_PACK_EDT = "edition_pack";
+	public static final String KEY_PACK_CUS = "custom_pack";
+	
 	// Textures
 	public static final String ITEM_CARD_GRAYSCALE = ":card_grayscale";
 	public static final String ITEM_CARD_OVERLAY = ":card_overlay";

@@ -10,6 +10,7 @@ import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
+import com.is.mtc.util.Reference;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.entity.passive.EntityVillager;
@@ -103,48 +104,48 @@ public class VillagerHandler
 			item = Items.diamond;
 		}
 		// Packs
-		else if (item_key.equals("common_pack")) {
+		else if (item_key.equals(Reference.KEY_PACK_COM)) {
 			item = MineTradingCards.packCommon;
 		}
-		else if (item_key.equals("uncommon_pack")) {
+		else if (item_key.equals(Reference.KEY_PACK_UNC)) {
 			item = MineTradingCards.packUncommon;
 		}
-		else if (item_key.equals("rare_pack")) {
+		else if (item_key.equals(Reference.KEY_PACK_RAR)) {
 			item = MineTradingCards.packRare;
 		}
-		else if (item_key.equals("ancient_pack")) {
+		else if (item_key.equals(Reference.KEY_PACK_ANC)) {
 			item = MineTradingCards.packAncient;
 		}
-		else if (item_key.equals("legendary_pack")) {
+		else if (item_key.equals(Reference.KEY_PACK_LEG)) {
 			item = MineTradingCards.packLegendary;
 		}
-		else if (item_key.equals("standard_pack")) {
+		else if (item_key.equals(Reference.KEY_PACK_STD)) {
 			item = MineTradingCards.packStandard;
 		}
-		else if (item_key.equals("edition_pack")) {
+		else if (item_key.equals(Reference.KEY_PACK_EDT)) {
 			item = MineTradingCards.packEdition;
 		}
-		else if (item_key.equals("custom_pack")) {
+		else if (item_key.equals(Reference.KEY_PACK_CUS)) {
 			item = MineTradingCards.packCustom;
 		}
 		// Cards
-		else if (item_key.equals("common_card") ||item_key.equals("common_card_random")) {
+		else if (item_key.equals(Reference.KEY_CARD_COM) ||item_key.equals(Reference.KEY_CARD_COM+"_random")) {
 			item = MineTradingCards.cardCommon;
 			rarity = Rarity.COMMON;
 		}
-		else if (item_key.equals("uncommon_card") ||item_key.equals("uncommon_card_random")) {
+		else if (item_key.equals(Reference.KEY_CARD_UNC) ||item_key.equals(Reference.KEY_CARD_UNC+"_random")) {
 			item = MineTradingCards.cardUncommon;
 			rarity = Rarity.UNCOMMON;
 		}
-		else if (item_key.equals("rare_card") || item_key.equals("rare_card_random")) {
+		else if (item_key.equals(Reference.KEY_CARD_RAR) || item_key.equals(Reference.KEY_CARD_RAR+"_random")) {
 			item = MineTradingCards.cardRare;
 			rarity = Rarity.RARE;
 		}
-		else if (item_key.equals("ancient_card") || item_key.equals("ancient_card_random")) {
+		else if (item_key.equals(Reference.KEY_CARD_ANC) || item_key.equals(Reference.KEY_CARD_ANC+"_random")) {
 			item = MineTradingCards.cardAncient;
 			rarity = Rarity.ANCIENT;
 		}
-		else if (item_key.equals("legendary_card") || item_key.equals("legendary_card_random")) {
+		else if (item_key.equals(Reference.KEY_CARD_LEG) || item_key.equals(Reference.KEY_CARD_LEG+"_random")) {
 			item = MineTradingCards.cardLegendary;
 			rarity = Rarity.LEGENDARY;
 		}
