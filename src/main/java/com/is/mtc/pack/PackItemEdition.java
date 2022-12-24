@@ -4,11 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.data_manager.EditionStructure;
 import com.is.mtc.root.Logs;
-import com.is.mtc.root.Rarity;
+import com.is.mtc.util.Functions;
 import com.is.mtc.util.Reference;
 
 import cpw.mods.fml.relauncher.Side;
@@ -20,13 +21,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 public class PackItemEdition extends PackItemBase {
-
-	private static final int[] cCount = {7, 2, 1};
-	private static final int[] rWeight = {25, 29, 30};
-	private static final int rtWeight = rWeight[2];
+	
+	public static String[] EDITION_PACK_CONTENT = PackItemStandard.STANDARD_PACK_CONTENT_DEFAULT;
 	
 	private static final String EDITION_ID_KEY = "edition_id";
 	
@@ -85,21 +85,18 @@ public class PackItemEdition extends PackItemBase {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		ArrayList<String> created;
-		EditionStructure eStruct;
-		NBTTagCompound nbt;
-		Random random = world.rand;
-		int i;
-
-		if (world.isRemote)
-			return stack;
+		if (world.isRemote) {return stack;} // Don't do this on the client side
 
 		if (!stack.hasTagCompound() || !stack.stackTagCompound.hasKey(EDITION_ID_KEY)) {
 			Logs.errLog("PackItemEdition: Missing NBT or NBTTag");
 			return stack;
 		}
-
+		
+		ArrayList<String> created;
+		Random random = world.rand;
+		NBTTagCompound nbt;
 		nbt = stack.stackTagCompound;
+		EditionStructure eStruct;
 		eStruct = Databank.getEditionWithId(stack.stackTagCompound.getString(EDITION_ID_KEY));
 
 		if (eStruct == null) {
@@ -107,19 +104,52 @@ public class PackItemEdition extends PackItemBase {
 			Logs.errLog("PackItemEdition: Edition is missing");
 			return stack;
 		}
+		
+		// Figure out how many of each card rarity to create
+		
+		int[] card_set_to_create = new int[] {0,0,0,0,0}; // Set of cards that will come out of the pack
 
+		for (String entry : EDITION_PACK_CONTENT)
+		{
+			try {
+				double[] card_weighted_dist = new double[] {0,0,0,0,0}; // Distribution used when a card is randomized
+				
+				// Split entry
+				String[] split_entry = entry.toLowerCase().trim().split("x");
+				
+				float count = MathHelper.clamp_float(Float.parseFloat(split_entry[0]), 0F, 64F);
+				int drop_count_characteristic = (int) count;
+				float drop_count_mantissa = count % 1;
+				
+				String[] distribution_split = split_entry[1].split(":");
+				
+				for (int i=0; i<distribution_split.length; i++) {
+					card_weighted_dist[i]=Integer.parseInt(distribution_split[i].trim());
+				}
+				
+				// Repeat for the number of cards prescribed
+				for (int i=0; i<drop_count_characteristic + (random.nextFloat()<drop_count_mantissa ? 1 : 0); i++)
+				{
+					Object chosen_rarity = Functions.weightedRandom(CardItem.CARD_RARITY_ARRAY, card_weighted_dist, random);
+					
+					if (chosen_rarity!=null) {
+						card_set_to_create[(Integer)chosen_rarity]++;
+					}
+				}
+			}
+			catch (Exception e) {
+				Logs.errLog("Something went wrong parsing edition_pack_contents line: " + entry);
+			}
+		}
+
+		// Actually create the cards
+		
 		created = new ArrayList<String>();
-		createCards(eStruct.getId(), Rarity.COMMON, cCount[Rarity.COMMON], created, random);
-		createCards(eStruct.getId(), Rarity.UNCOMMON, cCount[Rarity.UNCOMMON], created, random);
-
-		i = random.nextInt(rtWeight);
-		if (i < rWeight[0])
-			createCards(eStruct.getId(), Rarity.RARE, cCount[Rarity.RARE], created, random);
-		else if (i < rWeight[1])
-			createCards(eStruct.getId(), Rarity.ANCIENT, cCount[Rarity.RARE], created, random);
-		else if (i < rWeight[2])
-			createCards(eStruct.getId(), Rarity.LEGENDARY, cCount[Rarity.RARE], created, random);
-
+		
+		for (int rarity : CardItem.CARD_RARITY_ARRAY) {
+			createCards(eStruct.getId(), rarity, card_set_to_create[rarity], created, world.rand);
+		}
+		
 		if (created.size() > 0) {
 			for (String cdwd : created) {
 				spawnCard(player, world, cdwd);

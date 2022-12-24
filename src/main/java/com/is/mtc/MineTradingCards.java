@@ -83,6 +83,7 @@ public class MineTradingCards {
 	public static final String CONFIG_CAT_COLORS = "colors";
 	public static final String CONFIG_CAT_DROPS = "drops";
 	public static final String CONFIG_CAT_LOGS = "logs";
+	public static final String CONFIG_CAT_PACK_CONTENTS = "pack contents";
 	public static final String CONFIG_CAT_RECIPES = "recipes";
 	public static final String CONFIG_CAT_UPDATES = "updates";
 	public static final String CONFIG_CAT_VILLAGERS = "villagers";
@@ -126,8 +127,17 @@ public class MineTradingCards {
 			return MineTradingCards.packStandard;
 		}
 	};
-	//-
-
+	
+	private static final String cardPackDistributionDescription(String rarity, boolean allowNx) {
+		return "Number and type of cards dropped when a "+rarity+" pack is opened. Entries are of the form:"
+		+ "\nNxW:W:W:W:W" + (allowNx ? " or Nx" : "")
+		+ "\nN is the number of cards added from this row. It can be an integer (e.g. 5) or it can be a float like 3.4 (40% of the time 4 will be generated; otherwise 3 will)."
+		+ "\nx is just the letter x. Leave this as is."
+		+ "\nW:W:W:W:W:W is a distribution of rarity weights representing Com:Unc:Rar:Anc:Leg. Each card generated from this row will be drawn from this distribution. "
+		+ "For example: 0:1:0:0:1 has an equal chance of being an Uncommon or Legendary card. 2:1:1:1:1 can be any rarity, but is twice as likely to be "+rarity+" as the other rarities."
+		+ (allowNx ? "\nFor Nx formatting, the weighting portion is omitted. All cards genrerated are "+rarity+", because this is a "+rarity+" pack. N can be an integer or a float, as explained above." : "");
+	}
+	
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		// Gets the config and reads the cards, and runs the preinitialisation from the proxy
@@ -313,8 +323,16 @@ public class MineTradingCards {
 				+ "\nThis list applies even if \"can_drop\" is false."
 				);
 		
-		// === Logging ===
-		Logs.ENABLE_DEV_LOGS = config.getBoolean("devlog_enabled", CONFIG_CAT_LOGS, false, "Enable developer logs");
+		
+		// === Pack contents ===
+		PackItemRarity.COMMON_PACK_CONTENT = config.getStringList("common_pack_contents", CONFIG_CAT_PACK_CONTENTS, PackItemRarity.COMMON_PACK_CONTENT_DEFAULT, cardPackDistributionDescription("Common", true));
+		PackItemRarity.UNCOMMON_PACK_CONTENT = config.getStringList("uncommon_pack_contents", CONFIG_CAT_PACK_CONTENTS, PackItemRarity.UNCOMMON_PACK_CONTENT_DEFAULT, cardPackDistributionDescription("Uncommon", true));
+		PackItemRarity.RARE_PACK_CONTENT = config.getStringList("rare_pack_contents", CONFIG_CAT_PACK_CONTENTS, PackItemRarity.RARE_PACK_CONTENT_DEFAULT, cardPackDistributionDescription("Rare", true));
+		PackItemRarity.ANCIENT_PACK_CONTENT = config.getStringList("ancient_pack_contents", CONFIG_CAT_PACK_CONTENTS, PackItemRarity.ANCIENT_PACK_CONTENT_DEFAULT, cardPackDistributionDescription("Ancient", true));
+		PackItemRarity.LEGENDARY_PACK_CONTENT = config.getStringList("legendary_pack_contents", CONFIG_CAT_PACK_CONTENTS, PackItemRarity.LEGENDARY_PACK_CONTENT_DEFAULT, cardPackDistributionDescription("Legendary", true));
+		PackItemStandard.STANDARD_PACK_CONTENT = config.getStringList("standard_pack_contents", CONFIG_CAT_PACK_CONTENTS, PackItemStandard.STANDARD_PACK_CONTENT_DEFAULT, cardPackDistributionDescription("Standard", false));
+		PackItemEdition.EDITION_PACK_CONTENT = config.getStringList("edition_pack_contents", CONFIG_CAT_PACK_CONTENTS, PackItemStandard.STANDARD_PACK_CONTENT_DEFAULT, cardPackDistributionDescription("Edition", false));
+		
 		
 		// === Recipes ===
 		ENABLE_CARD_RECIPES = config.getBoolean("enable_card_recipes", CONFIG_CAT_RECIPES, true, "Enable recipes for crafting individual cards");
@@ -344,6 +362,9 @@ public class MineTradingCards {
 				);
 		CardMasterHomeHandler.SHOP_WEIGHT = config.getInt("card_shop_weight", CONFIG_CAT_VILLAGERS, 5, 0, 100, "Weighting for selection when villages generate. Farms and wood huts are 3, church is 20.");
 		CardMasterHomeHandler.SHOP_MAX_NUMBER = config.getInt("card_shop_max_number", CONFIG_CAT_VILLAGERS, 1, 0, 32, "Maximum number of card master shops that can spawn per village");
+
+		// === Logging ===
+		Logs.ENABLE_DEV_LOGS = config.getBoolean("devlog_enabled", CONFIG_CAT_LOGS, false, "Enable developer logs");
 		
 		// === Update Checker ===
 		ENABLE_UPDATE_CHECKER = config.getBoolean("enable_update_checker", CONFIG_CAT_UPDATES, true, "Displays a client-side chat message on login if there's an update available.");
