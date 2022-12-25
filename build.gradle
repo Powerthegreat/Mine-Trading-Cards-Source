@@ -24,7 +24,7 @@ archivesBaseName = "MineTradingCards-1.7.10"
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
     runDir = "eclipse"
-	replaceIn 'com/is/mtc/util/Reference.java'
+	replaceIn 'src/main/java/com/is/mtc/util/Reference.java'
 	replace '@VERSION@', project.version
 }
 
