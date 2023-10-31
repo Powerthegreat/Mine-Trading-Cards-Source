@@ -1,9 +1,9 @@
 package com.is.mtc.data_manager;
 
+import com.is.mtc.root.Tools;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.is.mtc.root.Tools;
 
 public class CDFCardStructure {
 
@@ -22,7 +22,7 @@ public class CDFCardStructure {
 
 		name = "";
 		category = "";
-		assetPath = new ArrayList();
+		assetPath = new ArrayList<>();
 		weight = 0;
 	}
 
@@ -81,7 +81,7 @@ public class CDFCardStructure {
 		return weight;
 	}
 
-	public List<String> getAssetPath() {
+	public List<String> getAssetPaths() {
 		return assetPath;
 	}
 

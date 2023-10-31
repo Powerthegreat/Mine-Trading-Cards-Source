@@ -14,7 +14,6 @@ import com.is.mtc.displayer_mono.MonoDisplayerBlockInterface;
 import com.is.mtc.displayer_mono.MonoDisplayerBlockTileEntity;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Tools;
-
 import cpw.mods.fml.common.network.IGuiHandler;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -60,11 +59,11 @@ public class GuiHandler implements IGuiHandler {
 				if (Tools.hasCDWD(stack)) {
 					CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
 
-					if (cStruct != null && cStruct.getDynamicTexture() != null) // Card registered and dynamic texture (illustration) exists
-						return new CardItemInterface(player.getHeldItem());
-					else {
-						Logs.chatMessage(player, "Unable to open card illustration: Missing client side illustration: " + stack.stackTagCompound.getString("cdwd"));
-						Logs.errLog("Unable to open card illustration: Missing client side illustration: " + stack.stackTagCompound.getString("cdwd"));
+					if (CardStructure.isValidCStructAsset(cStruct, stack)) { // Card registered and dynamic texture (illustration) exists
+						return new CardItemInterface(stack);
+					} else {
+						Logs.chatMessage(player, "Unable to open card illustration: Missing client side illustration: " + stack.stackTagCompound.getString("cdwd") + " asset number " + stack.getTagCompound().getInteger("assetnumber"));
+						Logs.errLog("Unable to open card illustration: Missing client side illustration: " + stack.stackTagCompound.getString("cdwd") + " asset number " + stack.getTagCompound().getInteger("assetnumber"));
 					}
 				}
 				break;

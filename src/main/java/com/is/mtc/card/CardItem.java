@@ -1,8 +1,5 @@
 package com.is.mtc.card;
 
-import java.util.List;
-import java.util.Random;
-
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
@@ -11,7 +8,6 @@ import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.root.Tools;
 import com.is.mtc.util.Reference;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -24,15 +20,18 @@ import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Random;
+
 public class CardItem extends Item {
-	
+
+	public static final int[] CARD_RARITY_ARRAY = new int[]{Rarity.COMMON, Rarity.UNCOMMON, Rarity.RARE, Rarity.ANCIENT, Rarity.LEGENDARY};
 	private static final String PREFIX = "item_card_";
 	private static final int MAX_DESC_LENGTH = 42;
-
 	private int rarity;
-	
-	public static final int[] CARD_RARITY_ARRAY = new int[] {Rarity.COMMON, Rarity.UNCOMMON, Rarity.RARE, Rarity.ANCIENT, Rarity.LEGENDARY};
-	
+	@SideOnly(Side.CLIENT)
+	private IIcon overlayIcon;
+
 	public CardItem(int r) {
 		setUnlocalizedName(PREFIX + Rarity.toString(r).toLowerCase());
 		setTextureName(Reference.MODID + Reference.ITEM_CARD_GRAYSCALE);
@@ -41,18 +40,18 @@ public class CardItem extends Item {
 		rarity = r;
 	}
 
-	public int getCardRarity() {
-		return rarity;
-	}
-	
 	public static ItemStack applyCDWDtoStack(ItemStack stack, CardStructure cStruct, Random random) {
 		stack.stackTagCompound.setString("cdwd", cStruct.getCDWD());
-		if (cStruct.getAssetPath().size() > 0) {
-			stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getAssetPath().size(), random));
+		if (cStruct.getResourceLocations().size() > 1) {
+			stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getResourceLocations().size(), random));
 		}
 		return stack;
 	}
-	
+
+	public int getCardRarity() {
+		return rarity;
+	}
+
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String cdwd = Tools.hasCDWD(stack) ? stack.stackTagCompound.getString("cdwd") : null;
@@ -81,30 +80,29 @@ public class CardItem extends Item {
 		if (!stack.hasTagCompound()) {
 			stack.stackTagCompound = new NBTTagCompound();
 		}
-		
+
 		if (!Tools.hasCDWD(stack)) {
 			CardStructure cStruct = Databank.generateACard(rarity, world.rand);
-			
+
 			if (cStruct != null) {
-				if (stack.stackSize!=1) { // Generate a single card from the stack and drop it into inventory
+				if (stack.stackSize != 1) { // Generate a single card from the stack and drop it into inventory
 					ItemStack popoffStack = stack.copy();
 					if (!popoffStack.hasTagCompound()) {
 						popoffStack.stackTagCompound = new NBTTagCompound();
 					}
-					popoffStack.stackSize=1;
+					popoffStack.stackSize = 1;
 					popoffStack = applyCDWDtoStack(popoffStack, cStruct, world.rand);
-					
+
 					EntityItem dropped_card = player.entityDropItem(popoffStack, 1);
 					dropped_card.delayBeforeCanPickup = 0;
-					
+
 					if (!player.capabilities.isCreativeMode) {
 						stack.stackSize--;
 					}
-				}
-				else { // Add data to the singleton "empty" card 
+				} else { // Add data to the singleton "empty" card
 					stack = applyCDWDtoStack(stack, cStruct, world.rand);
 				}
-				
+
 			} else
 				Logs.errLog("Unable to generate a card of this rarity: " + Rarity.toString(rarity));
 		}
@@ -112,8 +110,8 @@ public class CardItem extends Item {
 		if (!stack.stackTagCompound.hasKey("assetnumber")) {
 			CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
 			if (cStruct != null) {
-				if (cStruct.getAssetPath().size() > 0) {
-					stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getAssetPath().size(), world.rand));
+				if (cStruct.getResourceLocations().size() > 1) {
+					stack.stackTagCompound.setInteger("assetnumber", Tools.randInt(0, cStruct.getResourceLocations().size(), world.rand));
 				}
 			}
 		}
@@ -121,6 +119,7 @@ public class CardItem extends Item {
 		return stack;
 	}
 
+	// === ICON LAYERING AND COLORIZATION === //
 
 	@Override
 	public void addInformation(ItemStack stack, EntityPlayer player, List infos, boolean par_4) {
@@ -142,7 +141,7 @@ public class CardItem extends Item {
 
 		infos.add("");
 		infos.add("Edition: " + Rarity.toColor(rarity) + Databank.getEditionWithId(cStruct.getEdition()).getName());
-		
+
 		if (!cStruct.getCategory().isEmpty()) {
 			infos.add("Category: " + EnumChatFormatting.WHITE + cStruct.getCategory());
 		}
@@ -168,56 +167,45 @@ public class CardItem extends Item {
 		infos.add("");
 		infos.add(cStruct.numeral + "/" + Databank.getEditionWithId(cStruct.getEdition()).cCount);
 	}
-	
-	// === ICON LAYERING AND COLORIZATION === //
-	
-    @SideOnly(Side.CLIENT)
-    private IIcon overlayIcon;
-    
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses()
-    {
-        return true;
-    }
 
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack stack, int pass)
-    {
-    	if (pass==0)
-    	{
-	    	switch (this.rarity)
-	    	{
-	    	case Rarity.COMMON:
-	    		return MineTradingCards.CARD_COLOR_COMMON;
-	    	case Rarity.UNCOMMON:
-	    		return MineTradingCards.CARD_COLOR_UNCOMMON;
-	    	case Rarity.RARE:
-	    		return MineTradingCards.CARD_COLOR_RARE;
-	    	case Rarity.ANCIENT:
-	    		return MineTradingCards.CARD_COLOR_ANCIENT;
-	    	case Rarity.LEGENDARY:
-	    		return MineTradingCards.CARD_COLOR_LEGENDARY;
-	    	}
-	    	return Reference.COLOR_GRAY;
-    	}
-    	
-        return -1;
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iiconRegister)
-    {
-        super.registerIcons(iiconRegister);
-        
-        this.overlayIcon = iiconRegister.registerIcon(Reference.MODID + Reference.ITEM_CARD_OVERLAY);
-    }
-    
-    /**
-     * Gets an icon index based on an item's damage value and the given render pass
-     */
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
-    {
-        return pass == 1 ? this.overlayIcon : this.itemIcon;
-    }
+	@SideOnly(Side.CLIENT)
+	public boolean requiresMultipleRenderPasses() {
+		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack stack, int pass) {
+		if (pass == 0) {
+			switch (this.rarity) {
+				case Rarity.COMMON:
+					return MineTradingCards.CARD_COLOR_COMMON;
+				case Rarity.UNCOMMON:
+					return MineTradingCards.CARD_COLOR_UNCOMMON;
+				case Rarity.RARE:
+					return MineTradingCards.CARD_COLOR_RARE;
+				case Rarity.ANCIENT:
+					return MineTradingCards.CARD_COLOR_ANCIENT;
+				case Rarity.LEGENDARY:
+					return MineTradingCards.CARD_COLOR_LEGENDARY;
+			}
+			return Reference.COLOR_GRAY;
+		}
+
+		return -1;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister iiconRegister) {
+		super.registerIcons(iiconRegister);
+
+		this.overlayIcon = iiconRegister.registerIcon(Reference.MODID + Reference.ITEM_CARD_OVERLAY);
+	}
+
+	/**
+	 * Gets an icon index based on an item's damage value and the given render pass
+	 */
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
+		return pass == 1 ? this.overlayIcon : this.itemIcon;
+	}
 }

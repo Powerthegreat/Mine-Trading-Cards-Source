@@ -1,5 +1,9 @@
 package com.is.mtc.displayer_mono;
 
+import com.is.mtc.displayer.DisplayerBlockTileEntity;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.entity.item.EntityItem;
 import org.lwjgl.opengl.GL11;
 
 import com.is.mtc.card.CardItem;
@@ -19,77 +23,128 @@ import net.minecraft.util.ResourceLocation;
 public class MonoDisplayerBlockRenderer extends TileEntitySpecialRenderer {
 
 	@Override
-	public void renderTileEntityAt(TileEntity te, double x, double y, double z, float par5) {
+	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float par5) {
 		Tessellator tessellator = Tessellator.instance;
-		MonoDisplayerBlockTileEntity dbte = (MonoDisplayerBlockTileEntity) te;
+		MonoDisplayerBlockTileEntity displayerBlockTileEntity = (MonoDisplayerBlockTileEntity) tileEntity;
+		EntityItem item = null;
 
 		RenderHelper.disableStandardItemLighting();
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 
-		if (dbte.getWorldObj().getBlockMetadata(dbte.xCoord, dbte.yCoord, dbte.zCoord) == Tools.SIDE_NORTH) {
-			tessellator.startDrawingQuads();
-			bindTextureForSlot(tessellator, dbte, 0);
-			tessellator.addVertexWithUV(0, 0, 0 - 0.01D, 1, 1);
-			tessellator.addVertexWithUV(0, 1D, 0 - 0.01D, 1, 0);
-			tessellator.addVertexWithUV(1D, 1D, 0 - 0.01D, 0, 0);
-			tessellator.addVertexWithUV(1D, 0, 0 - 0.01D, 0, 1);
-			tessellator.draw();
-		} else if (dbte.getWorldObj().getBlockMetadata(dbte.xCoord, dbte.yCoord, dbte.zCoord) == Tools.SIDE_SOUTH) {
-			tessellator.startDrawingQuads();
-			bindTextureForSlot(tessellator, dbte, 0);
-			tessellator.addVertexWithUV(1D, 0, 1.01D, 1, 1);
-			tessellator.addVertexWithUV(1D, 1D, 1.01D, 1, 0);
-			tessellator.addVertexWithUV(0, 1D, 1.01D, 0, 0);
-			tessellator.addVertexWithUV(0, 0, 1.01D, 0, 1);
-			tessellator.draw();
-		} else if (dbte.getWorldObj().getBlockMetadata(dbte.xCoord, dbte.yCoord, dbte.zCoord) == Tools.SIDE_EAST) {
-			tessellator.startDrawingQuads();
-			bindTextureForSlot(tessellator, dbte, 0);
-			tessellator.addVertexWithUV(1.01D, 0, 0, 1, 1);
-			tessellator.addVertexWithUV(1.01D, 1D, 0, 1, 0);
-			tessellator.addVertexWithUV(1.01D, 1D, 1D, 0, 0);
-			tessellator.addVertexWithUV(1.01D, 0, 1D, 0, 1);
-			tessellator.draw();
-		} else if (dbte.getWorldObj().getBlockMetadata(dbte.xCoord, dbte.yCoord, dbte.zCoord) == Tools.SIDE_WEST) {
-			tessellator.startDrawingQuads();
-			bindTextureForSlot(tessellator, dbte, 0);
-			tessellator.addVertexWithUV(0 - 0.01D, 0, 1D, 1, 1);
-			tessellator.addVertexWithUV(0 - 0.01D, 1D, 1D, 1, 0);
-			tessellator.addVertexWithUV(0 - 0.01D, 1D, 0, 0, 0);
-			tessellator.addVertexWithUV(0 - 0.01D, 0, 0, 0, 1);
-			tessellator.draw();
+		int displayTexture = bindTextureForSlot(tessellator, displayerBlockTileEntity, 0);
+		if (displayerBlockTileEntity.getWorldObj().getBlockMetadata(displayerBlockTileEntity.xCoord, displayerBlockTileEntity.yCoord, displayerBlockTileEntity.zCoord) == Tools.SIDE_NORTH) {
+			if (displayTexture == 0) {
+				tessellator.startDrawingQuads();
+				tessellator.addVertexWithUV(0, 0, 0 - 0.01D, 1, 1);
+				tessellator.addVertexWithUV(0, 1D, 0 - 0.01D, 1, 0);
+				tessellator.addVertexWithUV(1D, 1D, 0 - 0.01D, 0, 0);
+				tessellator.addVertexWithUV(1D, 0, 0 - 0.01D, 0, 1);
+				tessellator.draw();
+			} else if (displayTexture == 1) {
+				item = new EntityItem(tileEntity.getWorldObj(), x, y, z, displayerBlockTileEntity.getStackInSlot(0));
+				item.hoverStart = 0;
+				RenderItem.renderInFrame = true;
+				RenderHelper.enableStandardItemLighting();
+				GL11.glTranslated(0.5, 0.10, 0);
+				GL11.glScaled(2, 2, 2);
+				RenderManager.instance.renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
+				RenderHelper.disableStandardItemLighting();
+				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glTranslated(-0.5, -0.10, 0);
+			}
+		} else if (displayerBlockTileEntity.getWorldObj().getBlockMetadata(displayerBlockTileEntity.xCoord, displayerBlockTileEntity.yCoord, displayerBlockTileEntity.zCoord) == Tools.SIDE_SOUTH) {
+			if (displayTexture == 0) {
+				tessellator.startDrawingQuads();
+				bindTextureForSlot(tessellator, displayerBlockTileEntity, 0);
+				tessellator.addVertexWithUV(1D, 0, 1.01D, 1, 1);
+				tessellator.addVertexWithUV(1D, 1D, 1.01D, 1, 0);
+				tessellator.addVertexWithUV(0, 1D, 1.01D, 0, 0);
+				tessellator.addVertexWithUV(0, 0, 1.01D, 0, 1);
+				tessellator.draw();
+			} else if (displayTexture == 1) {
+				item = new EntityItem(tileEntity.getWorldObj(), x, y, z, displayerBlockTileEntity.getStackInSlot(0));
+				item.hoverStart = 0;
+				RenderItem.renderInFrame = true;
+				RenderHelper.enableStandardItemLighting();
+				GL11.glTranslated(0.5, 0.10, 1);
+				GL11.glScaled(2, 2, 2);
+				GL11.glRotated(180, 0, 1, 0);
+				RenderManager.instance.renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
+				RenderHelper.disableStandardItemLighting();
+				GL11.glRotated(-180, 0, 1, 0);
+				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glTranslated(-0.5, -0.10, -1);
+			}
+		} else if (displayerBlockTileEntity.getWorldObj().getBlockMetadata(displayerBlockTileEntity.xCoord, displayerBlockTileEntity.yCoord, displayerBlockTileEntity.zCoord) == Tools.SIDE_EAST) {
+			if (displayTexture == 0) {
+				tessellator.startDrawingQuads();
+				bindTextureForSlot(tessellator, displayerBlockTileEntity, 0);
+				tessellator.addVertexWithUV(1.01D, 0, 0, 1, 1);
+				tessellator.addVertexWithUV(1.01D, 1D, 0, 1, 0);
+				tessellator.addVertexWithUV(1.01D, 1D, 1D, 0, 0);
+				tessellator.addVertexWithUV(1.01D, 0, 1D, 0, 1);
+				tessellator.draw();
+			} else if (displayTexture == 1) {
+				item = new EntityItem(tileEntity.getWorldObj(), x, y, z, displayerBlockTileEntity.getStackInSlot(0));
+				item.hoverStart = 0;
+				RenderItem.renderInFrame = true;
+				RenderHelper.enableStandardItemLighting();
+				GL11.glTranslated(1, 0.10, 0.5);
+				GL11.glScaled(2, 2, 2);
+				GL11.glRotated(-90, 0, 1, 0);
+				RenderManager.instance.renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
+				RenderHelper.disableStandardItemLighting();
+				GL11.glRotated(90, 0, 1, 0);
+				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glTranslated(-1, -0.10, -0.5);
+			}
+		} else if (displayerBlockTileEntity.getWorldObj().getBlockMetadata(displayerBlockTileEntity.xCoord, displayerBlockTileEntity.yCoord, displayerBlockTileEntity.zCoord) == Tools.SIDE_WEST) {
+			if (displayTexture == 0) {
+				tessellator.startDrawingQuads();
+				bindTextureForSlot(tessellator, displayerBlockTileEntity, 0);
+				tessellator.addVertexWithUV(0 - 0.01D, 0, 1D, 1, 1);
+				tessellator.addVertexWithUV(0 - 0.01D, 1D, 1D, 1, 0);
+				tessellator.addVertexWithUV(0 - 0.01D, 1D, 0, 0, 0);
+				tessellator.addVertexWithUV(0 - 0.01D, 0, 0, 0, 1);
+				tessellator.draw();
+			} else if (displayTexture == 1) {
+				item = new EntityItem(tileEntity.getWorldObj(), x, y, z, displayerBlockTileEntity.getStackInSlot(0));
+				item.hoverStart = 0;
+				RenderItem.renderInFrame = true;
+				RenderHelper.enableStandardItemLighting();
+				GL11.glTranslated(0, 0.10, 0.5);
+				GL11.glScaled(2, 2, 2);
+				GL11.glRotated(90, 0, 1, 0);
+				RenderManager.instance.renderEntityWithPosYaw(item, 0, 0, 0, 0, 0);
+				RenderHelper.disableStandardItemLighting();
+				GL11.glRotated(-90, 0, 1, 0);
+				GL11.glScaled(0.5, 0.5, 0.5);
+				GL11.glTranslated(0, -0.10, -0.5);
+			}
 		}
 
 		GL11.glPopMatrix();
 		RenderHelper.enableStandardItemLighting();
 	}
 
-	private void bindTextureForSlot(Tessellator tessellator, MonoDisplayerBlockTileEntity dbte, int slot) {
-		ItemStack stack;
+	private int bindTextureForSlot(Tessellator tessellator, MonoDisplayerBlockTileEntity monoDisplayerBlockTileEntity, int slot) {
+		ItemStack stack = monoDisplayerBlockTileEntity.getItemStackInSlot(slot);
 
-		if ((stack = dbte.getItemStackInSlot(slot)) != null) {
+		if (Tools.isValidCard(stack)) {
+			CardItem ci = (CardItem) stack.getItem();
+			CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
 
-			if (!Tools.isValidCard(stack))
-				tessellator.setColorRGBA_F(1, 1, 1, 0);
-			else {
-				CardItem ci = (CardItem) stack.getItem();
-				CardStructure cStruct = Databank.getCardByCDWD(stack.stackTagCompound.getString("cdwd"));
-
-				if (cStruct == null || cStruct.getDynamicTexture() == null) // Card not registered or unregistered illustration, use item image instead
-					bindTexture(new ResourceLocation(Reference.MODID, "textures/items/item_card_" + Rarity.toString(ci.getCardRarity()).toLowerCase() + ".png"));
-				else {
-					cStruct.preloadResource(field_147501_a.field_147553_e, stack.stackTagCompound.getInteger("assetnumber"));
-					if (cStruct.getResourceLocation() != null) {
-						bindTexture(cStruct.getResourceLocation());
-					} else {
-						bindTexture(new ResourceLocation(Reference.MODID, "textures/items/item_card_" + Rarity.toString(ci.getCardRarity()).toLowerCase() + ".png"));
-					}
-				}
-
-				tessellator.setColorRGBA_F(1, 1, 1, 1);
+			tessellator.setColorRGBA_F(1, 1, 1, 1);
+			if (CardStructure.isValidCStructAsset(cStruct, stack)) {
+				bindTexture(cStruct.getResourceLocations().get(stack.getTagCompound().getInteger("assetnumber")));
+				return 0;
+			} else { // Card not registered or unregistered illustration, use item image instead
+				return 1;
 			}
-		} else
+		} else {
 			tessellator.setColorRGBA_F(1, 1, 1, 0);
+			return -1;
+		}
 	}
 }

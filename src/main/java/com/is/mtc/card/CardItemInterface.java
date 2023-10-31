@@ -2,7 +2,6 @@ package com.is.mtc.card;
 
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
@@ -22,10 +21,9 @@ public class CardItemInterface extends GuiScreen {
 	public void drawScreen(int p_73863_1_, int p_73863_2_, float p_73863_3_) {
 		int dpx = (width - CardItemInterface.UI_WIDTH) / 2, dpy = (height - CardItemInterface.UI_HEIGHT) / 2;
 
-		cStruct.preloadResource(mc.getTextureManager(), stack.stackTagCompound.getInteger("assetnumber"));
 		drawDefaultBackground();
-		if (cStruct.getResourceLocation() != null) {
-			mc.renderEngine.bindTexture(cStruct.getResourceLocation());
+		if (CardStructure.isValidCStructAsset(cStruct, stack)) {
+			mc.renderEngine.bindTexture(cStruct.getResourceLocations().get(stack.getTagCompound().getInteger("assetnumber")));
 			drawTexturedModalRect(dpx, dpy, CardItemInterface.UI_WIDTH, CardItemInterface.UI_HEIGHT);
 		}
 		super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
