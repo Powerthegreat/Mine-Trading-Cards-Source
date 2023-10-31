@@ -2,7 +2,6 @@ package com.is.mtc.root;
 
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.card.CardItem;
-
 import net.minecraft.util.EnumChatFormatting;
 
 public class Rarity {
@@ -69,19 +68,19 @@ public class Rarity {
 		switch (rarity) {
 			case COMMON:
 				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_COMMON);
-				return ecf!=null ? ecf : EnumChatFormatting.GREEN;
+				return ecf != null ? ecf : EnumChatFormatting.GREEN;
 			case UNCOMMON:
 				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_UNCOMMON);
-				return ecf!=null ? ecf : EnumChatFormatting.GOLD;
+				return ecf != null ? ecf : EnumChatFormatting.GOLD;
 			case RARE:
 				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_RARE);
-				return ecf!=null ? ecf : EnumChatFormatting.RED;
+				return ecf != null ? ecf : EnumChatFormatting.RED;
 			case ANCIENT:
 				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_ANCIENT);
-				return ecf!=null ? ecf : EnumChatFormatting.AQUA;
+				return ecf != null ? ecf : EnumChatFormatting.AQUA;
 			case LEGENDARY:
 				ecf = EnumChatFormatting.getValueByName(MineTradingCards.CARD_TOOLTIP_COLOR_LEGENDARY);
-				return ecf!=null ? ecf : EnumChatFormatting.DARK_PURPLE;
+				return ecf != null ? ecf : EnumChatFormatting.DARK_PURPLE;
 
 			default:
 				return null;

@@ -1,9 +1,5 @@
 package com.is.mtc.pack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
@@ -11,7 +7,6 @@ import com.is.mtc.data_manager.EditionStructure;
 import com.is.mtc.root.Logs;
 import com.is.mtc.util.Functions;
 import com.is.mtc.util.Reference;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -24,12 +19,17 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class PackItemEdition extends PackItemBase {
-	
-	public static String[] EDITION_PACK_CONTENT = PackItemStandard.STANDARD_PACK_CONTENT_DEFAULT;
-	
+
 	private static final String EDITION_ID_KEY = "edition_id";
-	
+	public static String[] EDITION_PACK_CONTENT = PackItemStandard.STANDARD_PACK_CONTENT_DEFAULT;
+	@SideOnly(Side.CLIENT)
+	private IIcon overlayIcon;
+
 	public PackItemEdition() {
 		setUnlocalizedName("item_pack_edition");
 		setTextureName(Reference.MODID + Reference.ITEM_PACK_GRAYSCALE);
@@ -38,7 +38,7 @@ public class PackItemEdition extends PackItemBase {
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity player, int par_4, boolean par_5) {
 		Random random = world.rand;
-		
+
 		if (!stack.hasTagCompound())
 			stack.stackTagCompound = new NBTTagCompound();
 
@@ -48,7 +48,7 @@ public class PackItemEdition extends PackItemBase {
 			stack.stackTagCompound.setString(EDITION_ID_KEY, Databank.getEditionWithNumeralId(i).getId());
 		}
 	}
-	
+
 	@Override
 	public String getItemStackDisplayName(ItemStack stack) {
 		String eid = stack.hasTagCompound() && stack.stackTagCompound.hasKey(EDITION_ID_KEY) ? stack.stackTagCompound.getString(EDITION_ID_KEY) : null;
@@ -85,13 +85,15 @@ public class PackItemEdition extends PackItemBase {
 
 	@Override
 	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
-		if (world.isRemote) {return stack;} // Don't do this on the client side
+		if (world.isRemote) {
+			return stack;
+		} // Don't do this on the client side
 
 		if (!stack.hasTagCompound() || !stack.stackTagCompound.hasKey(EDITION_ID_KEY)) {
 			Logs.errLog("PackItemEdition: Missing NBT or NBTTag");
 			return stack;
 		}
-		
+
 		ArrayList<String> created;
 		Random random = world.rand;
 		NBTTagCompound nbt;
@@ -104,52 +106,49 @@ public class PackItemEdition extends PackItemBase {
 			Logs.errLog("PackItemEdition: Edition is missing");
 			return stack;
 		}
-		
-		// Figure out how many of each card rarity to create
-		
-		int[] card_set_to_create = new int[] {0,0,0,0,0}; // Set of cards that will come out of the pack
 
-		for (String entry : EDITION_PACK_CONTENT)
-		{
+		// Figure out how many of each card rarity to create
+
+		int[] card_set_to_create = new int[]{0, 0, 0, 0, 0}; // Set of cards that will come out of the pack
+
+		for (String entry : EDITION_PACK_CONTENT) {
 			try {
-				double[] card_weighted_dist = new double[] {0,0,0,0,0}; // Distribution used when a card is randomized
-				
+				double[] card_weighted_dist = new double[]{0, 0, 0, 0, 0}; // Distribution used when a card is randomized
+
 				// Split entry
 				String[] split_entry = entry.toLowerCase().trim().split("x");
-				
+
 				float count = MathHelper.clamp_float(Float.parseFloat(split_entry[0]), 0F, 64F);
 				int drop_count_characteristic = (int) count;
 				float drop_count_mantissa = count % 1;
-				
+
 				String[] distribution_split = split_entry[1].split(":");
-				
-				for (int i=0; i<distribution_split.length; i++) {
-					card_weighted_dist[i]=Integer.parseInt(distribution_split[i].trim());
+
+				for (int i = 0; i < distribution_split.length; i++) {
+					card_weighted_dist[i] = Integer.parseInt(distribution_split[i].trim());
 				}
-				
+
 				// Repeat for the number of cards prescribed
-				for (int i=0; i<drop_count_characteristic + (random.nextFloat()<drop_count_mantissa ? 1 : 0); i++)
-				{
+				for (int i = 0; i < drop_count_characteristic + (random.nextFloat() < drop_count_mantissa ? 1 : 0); i++) {
 					Object chosen_rarity = Functions.weightedRandom(CardItem.CARD_RARITY_ARRAY, card_weighted_dist, random);
-					
-					if (chosen_rarity!=null) {
-						card_set_to_create[(Integer)chosen_rarity]++;
+
+					if (chosen_rarity != null) {
+						card_set_to_create[(Integer) chosen_rarity]++;
 					}
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Logs.errLog("Something went wrong parsing edition_pack_contents line: " + entry);
 			}
 		}
 
 		// Actually create the cards
-		
+
 		created = new ArrayList<String>();
-		
+
 		for (int rarity : CardItem.CARD_RARITY_ARRAY) {
 			createCards(eStruct.getId(), rarity, card_set_to_create[rarity], created, world.rand);
 		}
-		
+
 		if (created.size() > 0) {
 			for (String cdwd : created) {
 				spawnCard(player, world, cdwd);
@@ -162,6 +161,8 @@ public class PackItemEdition extends PackItemBase {
 
 		return stack;
 	}
+
+	// === ICON LAYERING AND COLORIZATION === //
 
 	private void createCards(String edition, int cardRarity, int count, ArrayList<String> created, Random random) {
 
@@ -180,44 +181,34 @@ public class PackItemEdition extends PackItemBase {
 			}
 		}
 	}
-	
-	// === ICON LAYERING AND COLORIZATION === //
-	
-    @SideOnly(Side.CLIENT)
-    private IIcon overlayIcon;
-    
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses()
-    {
-        return true;
-    }
-    
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack stack, int pass)
-    {
-    	if (pass==0)
-    	{
-    		String eid = stack.hasTagCompound() && stack.stackTagCompound.hasKey(EDITION_ID_KEY) ? stack.stackTagCompound.getString(EDITION_ID_KEY) : null;
-    		return eid != null && Databank.getEditionWithId(eid) != null ? Databank.getEditionWithId(eid).getColor() : Reference.COLOR_GRAY;
-    	}
-    	
-        return -1;
-    }
 
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iiconRegister)
-    {
-        super.registerIcons(iiconRegister);
-        
-        this.overlayIcon = iiconRegister.registerIcon(Reference.MODID + Reference.ITEM_PACK_OVERLAY);
-    }
-    
-    /**
-     * Gets an icon index based on an item's damage value and the given render pass
-     */
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
-    {
-        return pass == 1 ? this.overlayIcon : this.itemIcon;
-    }
+	@SideOnly(Side.CLIENT)
+	public boolean requiresMultipleRenderPasses() {
+		return true;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack stack, int pass) {
+		if (pass == 0) {
+			String eid = stack.hasTagCompound() && stack.stackTagCompound.hasKey(EDITION_ID_KEY) ? stack.stackTagCompound.getString(EDITION_ID_KEY) : null;
+			return eid != null && Databank.getEditionWithId(eid) != null ? Databank.getEditionWithId(eid).getColor() : Reference.COLOR_GRAY;
+		}
+
+		return -1;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister iiconRegister) {
+		super.registerIcons(iiconRegister);
+
+		this.overlayIcon = iiconRegister.registerIcon(Reference.MODID + Reference.ITEM_PACK_OVERLAY);
+	}
+
+	/**
+	 * Gets an icon index based on an item's damage value and the given render pass
+	 */
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
+		return pass == 1 ? this.overlayIcon : this.itemIcon;
+	}
 }

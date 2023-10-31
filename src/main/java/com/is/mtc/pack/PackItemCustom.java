@@ -1,18 +1,11 @@
 package com.is.mtc.pack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.CustomPackStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.root.Logs;
 import com.is.mtc.util.Reference;
 import com.mojang.realmsclient.gui.ChatFormatting;
-
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -23,10 +16,17 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class PackItemCustom extends PackItemBase {
 
 	private static final String CUSTOM_PACK_ID_KEY = "custom_pack_id";
-	
+	@SideOnly(Side.CLIENT)
+	private IIcon overlayIcon;
+
 	public PackItemCustom() {
 		setUnlocalizedName("item_pack_custom");
 		setTextureName(Reference.MODID + Reference.ITEM_PACK_GRAYSCALE);
@@ -55,8 +55,7 @@ public class PackItemCustom extends PackItemBase {
 		if (cpid != null) {
 			if (packStructure == null) { // Pack was created earlier, but edition was removed in the meantime
 				return "custom_pack_" + cpid;
-			}
-			else {
+			} else {
 				return packStructure.getName();
 			}
 		} else {
@@ -108,14 +107,14 @@ public class PackItemCustom extends PackItemBase {
 		}
 
 		created = new ArrayList<String>();
-		
+
 //		packStructure.categoryQuantities.forEach((category, categoryInfo) -> createCards(category, categoryInfo[1], categoryInfo[0], created));
 		for (String category : packStructure.categoryQuantities.keySet()) {
 //			packStructure.categoryQuantities.forEach((category, categoryInfo) -> createCards(category, categoryInfo[1], categoryInfo[0], created));
 			int[] categoryInfo = packStructure.categoryQuantities.get(category);
 			createCards(category, categoryInfo[1], categoryInfo[0], created, world.rand);
 		}
-		
+
 		if (created.size() > 0) {
 			for (String cdwd : created) {
 				spawnCard(player, world, cdwd);
@@ -128,6 +127,8 @@ public class PackItemCustom extends PackItemBase {
 
 		return stack;
 	}
+
+	// === ICON LAYERING AND COLORIZATION === //
 
 	private void createCards(String category, int cardRarity, int count, ArrayList<String> created, Random random) {
 
@@ -146,44 +147,34 @@ public class PackItemCustom extends PackItemBase {
 			}
 		}
 	}
-	
-	// === ICON LAYERING AND COLORIZATION === //
-	
-    @SideOnly(Side.CLIENT)
-    private IIcon overlayIcon;
-    
-    @SideOnly(Side.CLIENT)
-    public boolean requiresMultipleRenderPasses()
-    {
-        return true;
-    }
 
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack stack, int pass)
-    {
-    	if (pass==0)
-    	{
-    		String eid = stack.hasTagCompound() && stack.stackTagCompound.hasKey(CUSTOM_PACK_ID_KEY) ? stack.stackTagCompound.getString(CUSTOM_PACK_ID_KEY) : null;
-    		return eid != null && Databank.getCustomPackWithId(eid) != null ? Databank.getCustomPackWithId(eid).getColor() : Reference.COLOR_GRAY;
-    	}
-    	
-        return -1;
-    }
+	@SideOnly(Side.CLIENT)
+	public boolean requiresMultipleRenderPasses() {
+		return true;
+	}
 
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iiconRegister)
-    {
-        super.registerIcons(iiconRegister);
-        
-        this.overlayIcon = iiconRegister.registerIcon(Reference.MODID + Reference.ITEM_PACK_OVERLAY);
-    }
-    
-    /**
-     * Gets an icon index based on an item's damage value and the given render pass
-     */
-    @SideOnly(Side.CLIENT)
-    public IIcon getIconFromDamageForRenderPass(int damage, int pass)
-    {
-        return pass == 1 ? this.overlayIcon : this.itemIcon;
-    }
+	@SideOnly(Side.CLIENT)
+	public int getColorFromItemStack(ItemStack stack, int pass) {
+		if (pass == 0) {
+			String eid = stack.hasTagCompound() && stack.stackTagCompound.hasKey(CUSTOM_PACK_ID_KEY) ? stack.stackTagCompound.getString(CUSTOM_PACK_ID_KEY) : null;
+			return eid != null && Databank.getCustomPackWithId(eid) != null ? Databank.getCustomPackWithId(eid).getColor() : Reference.COLOR_GRAY;
+		}
+
+		return -1;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IIconRegister iiconRegister) {
+		super.registerIcons(iiconRegister);
+
+		this.overlayIcon = iiconRegister.registerIcon(Reference.MODID + Reference.ITEM_PACK_OVERLAY);
+	}
+
+	/**
+	 * Gets an icon index based on an item's damage value and the given render pass
+	 */
+	@SideOnly(Side.CLIENT)
+	public IIcon getIconFromDamageForRenderPass(int damage, int pass) {
+		return pass == 1 ? this.overlayIcon : this.itemIcon;
+	}
 }

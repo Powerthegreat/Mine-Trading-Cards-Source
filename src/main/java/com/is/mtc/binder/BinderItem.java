@@ -1,17 +1,16 @@
 package com.is.mtc.binder;
 
-import java.util.List;
-
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.handler.GuiHandler;
 import com.is.mtc.root.Tools;
 import com.is.mtc.util.Reference;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class BinderItem extends Item {
 
@@ -29,26 +28,6 @@ public class BinderItem extends Item {
 	}
 
 	/*-*/
-
-	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player) {
-
-		if (w.isRemote)
-			return stack;
-
-		testNBT(stack);
-		player.openGui(MineTradingCards.INSTANCE, GuiHandler.GUI_BINDER, w, (int) player.posX, (int) player.posY, (int) player.posZ);
-
-		return stack;
-	}
-
-	@Override
-	public void addInformation(ItemStack stack, EntityPlayer player, List infos, boolean par_4) {
-		testNBT(stack);
-
-		infos.add("");
-		infos.add("Page: " + (stack.stackTagCompound.getInteger("page") + 1) + "/" + BinderItemInventory.getTotalPages());
-	}
 
 	public static void testNBT(ItemStack binderStack) {
 		if (binderStack.stackTagCompound == null) {// Create nbt if not already existing
@@ -74,6 +53,26 @@ public class BinderItem extends Item {
 		testNBT(binderStack);
 
 		return binderStack.stackTagCompound.getInteger("page");
+	}
+
+	@Override
+	public ItemStack onItemRightClick(ItemStack stack, World w, EntityPlayer player) {
+
+		if (w.isRemote)
+			return stack;
+
+		testNBT(stack);
+		player.openGui(MineTradingCards.INSTANCE, GuiHandler.GUI_BINDER, w, (int) player.posX, (int) player.posY, (int) player.posZ);
+
+		return stack;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List infos, boolean par_4) {
+		testNBT(stack);
+
+		infos.add("");
+		infos.add("Page: " + (stack.stackTagCompound.getInteger("page") + 1) + "/" + BinderItemInventory.getTotalPages());
 	}
 
 	public int getItemStackLimit(ItemStack stack) {

@@ -1,11 +1,11 @@
 package com.is.mtc.data_manager;
 
+import com.is.mtc.root.Logs;
+import com.is.mtc.root.Rarity;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Random;
-
-import com.is.mtc.root.Logs;
-import com.is.mtc.root.Rarity;
 
 public class Databank {
 
@@ -35,7 +35,7 @@ public class Databank {
 	private static Map<String, CustomPackStructure> custom_packs_by_name;
 	private static Map<Integer, CustomPackStructure> custom_packs_by_color;
 	private static Map<Integer, CustomPackStructure> custom_packs_by_numeral_id;
-	
+
 	/// NOTE LinkedHashMap to keep the precise order
 	public static void setup() {
 		editions_by_id = new LinkedHashMap<String, EditionStructure>();
@@ -85,7 +85,7 @@ public class Databank {
 		editions_by_id.put(eStruct.getId(), eStruct);
 		editions_by_name.put(eStruct.getName(), eStruct);
 		editions_by_color.put(eStruct.getColor(), eStruct);
-		
+
 		eStruct.eNI = editions_by_numeral_id.size();
 		editions_by_numeral_id.put(eStruct.eNI, eStruct);
 
@@ -114,22 +114,21 @@ public class Databank {
 	}
 
 	public static EditionStructure getEditionWithId(String id) {
-		return editions_by_id.containsKey(id) ? editions_by_id.get(id) : null;
+		return editions_by_id.getOrDefault(id, null);
 	}
 
 	public static EditionStructure getEditionWithName(String name) {
-		return editions_by_name.containsKey(name) ? editions_by_name.get(name) : null;
+		return editions_by_name.getOrDefault(name, null);
 	}
 
 	public static EditionStructure getEditionWithColor(int color) {
-		return editions_by_color.containsKey(color) ? editions_by_color.get(color) : null;
+		return editions_by_color.getOrDefault(color, null);
 	}
 
 	public static EditionStructure getEditionWithNumeralId(int nid) {
-		return editions_by_numeral_id.containsKey(nid) ? editions_by_numeral_id.get(nid) : null;
+		return editions_by_numeral_id.getOrDefault(nid, null);
 	}
-	
-	
+
 	public static boolean registerACustomPack(CustomPackStructure cpStruct) {
 		if (!cpStruct.isValid()) {
 			Logs.errLog("Custom pack is invalid (Invalid/missing ID or name)");
@@ -159,19 +158,19 @@ public class Databank {
 	}
 
 	public static CustomPackStructure getCustomPackWithId(String id) {
-		return custom_packs_by_id.containsKey(id) ? custom_packs_by_id.get(id) : null;
+		return custom_packs_by_id.getOrDefault(id, null);
 	}
 
 	public static CustomPackStructure getCustomPackWithName(String name) {
-		return custom_packs_by_name.containsKey(name) ? custom_packs_by_name.get(name) : null;
+		return custom_packs_by_name.getOrDefault(name, null);
 	}
 
 	public static CustomPackStructure getCustomPackWithNumeralId(int nid) {
-		return custom_packs_by_numeral_id.containsKey(nid) ? custom_packs_by_numeral_id.get(nid) : null;
+		return custom_packs_by_numeral_id.getOrDefault(nid, null);
 	}
 
 	public static CustomPackStructure getCustomPackWithColor(int nid) {
-		return custom_packs_by_color.containsKey(nid) ? custom_packs_by_color.get(nid) : null;
+		return custom_packs_by_color.getOrDefault(nid, null);
 	}
 
 	public static boolean registerACard(CardStructure cStruct) {
@@ -235,7 +234,7 @@ public class Databank {
 	}
 
 	public static CardStructure getCardByCDWD(String cdwd) {
-		return cards_by_cdwd.containsKey(cdwd) ? cards_by_cdwd.get(cdwd) : null;
+		return cards_by_cdwd.getOrDefault(cdwd, null);
 	}
 
 	public static CardStructure generateACard(int rarity, Random random) {
@@ -286,7 +285,7 @@ public class Databank {
 
 		if (rarity <= Rarity.UNSET || rarity >= Rarity.RCOUNT)
 			return null;
-		
+
 		if (!cards_by_wracat.containsKey(category))
 			return null;
 

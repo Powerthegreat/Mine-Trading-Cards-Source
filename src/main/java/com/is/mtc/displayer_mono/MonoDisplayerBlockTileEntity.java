@@ -1,7 +1,6 @@
 package com.is.mtc.displayer_mono;
 
 import com.is.mtc.displayer.DisplayerBlockTileEntity;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

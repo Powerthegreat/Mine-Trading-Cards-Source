@@ -1,15 +1,14 @@
 package com.is.mtc.binder;
 
-import java.util.Arrays;
-
 import com.is.mtc.root.Tools;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraftforge.common.util.Constants;
+
+import java.util.Arrays;
 
 public class BinderItemInventory implements IInventory {
 
@@ -23,6 +22,16 @@ public class BinderItemInventory implements IInventory {
 		BinderItem.testNBT(container);
 
 		readFromNBT(container.stackTagCompound);
+	}
+
+	/*-*/
+
+	public static int getTotalPages() {
+		return 64;
+	}
+
+	public static int getStacksPerPage() {
+		return 8;
 	}
 
 	/*-*/
@@ -56,16 +65,6 @@ public class BinderItemInventory implements IInventory {
 		}
 
 		nbt.setTag("Items", nbttaglist);
-	}
-
-	/*-*/
-
-	public static int getTotalPages() {
-		return 64;
-	}
-
-	public static int getStacksPerPage() {
-		return 8;
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package com.is.mtc;
 
-import java.io.File;
-
 import com.is.mtc.binder.BinderItem;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.DataLoader;
@@ -13,27 +11,20 @@ import com.is.mtc.displayer_mono.MonoDisplayerBlockTileEntity;
 import com.is.mtc.handler.ConfigHandler;
 import com.is.mtc.handler.DropHandler;
 import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.pack.PackItemBase;
-import com.is.mtc.pack.PackItemCustom;
-import com.is.mtc.pack.PackItemEdition;
-import com.is.mtc.pack.PackItemRarity;
-import com.is.mtc.pack.PackItemStandard;
+import com.is.mtc.pack.*;
 import com.is.mtc.packet.MTCMessage;
 import com.is.mtc.packet.MTCMessageHandler;
 import com.is.mtc.proxy.CommonProxy;
 import com.is.mtc.root.CC_CreateCard;
 import com.is.mtc.root.CC_ForceCreateCard;
 import com.is.mtc.root.Injector;
-import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
-import com.is.mtc.util.Functions;
 import com.is.mtc.util.Reference;
 import com.is.mtc.version.DevVersionWarning;
 import com.is.mtc.version.VersionChecker;
 import com.is.mtc.village.CardMasterHome;
 import com.is.mtc.village.CardMasterHomeHandler;
 import com.is.mtc.village.VillagerHandler;
-
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -59,12 +50,14 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 
+import java.io.File;
+
 @Mod(
 		modid = Reference.MODID,
 		name = Reference.NAME,
 		version = Reference.MOD_VERSION,
 		guiFactory = Reference.GUI_FACTORY
-		)
+)
 public class MineTradingCards {
 	// The instance of the mod class that forge uses
 	@Instance(Reference.MODID)
@@ -72,7 +65,7 @@ public class MineTradingCards {
 
 	// Whether the proxy is remote
 	public static boolean PROXY_IS_REMOTE = false;
-	
+
 	// Cards, packs, binders and display blocks to be registered
 	public static CardItem cardCommon, cardUncommon, cardRare, cardAncient, cardLegendary;
 	public static PackItemBase packCommon, packUncommon, packRare, packAncient, packLegendary, packStandard, packEdition, packCustom; // Common (com), unccommon (unc), rare (rar), ancient (anc), legendary (leg), standard (std), edition (edt)
@@ -80,11 +73,7 @@ public class MineTradingCards {
 	public static BinderItem binder;
 	public static DisplayerBlock displayerBlock;
 	public static MonoDisplayerBlock monoDisplayerBlock;
-
-	// The directories that MTC works with
-	private static String DATA_DIR = "";
 	public static String CONF_DIR = "";
-
 	// Configurable data
 	public static boolean ENABLE_CARD_RECIPES = true;
 	public static int CARD_COLOR_COMMON = Reference.COLOR_GREEN;
@@ -104,16 +93,12 @@ public class MineTradingCards {
 	public static int PACK_COLOR_LEGENDARY = Reference.COLOR_LIGHT_PURPLE;
 	public static int PACK_COLOR_STANDARD = Reference.COLOR_BLUE;
 	public static boolean ENABLE_UPDATE_CHECKER = true;
-
-	
 	// Mod intercompatibility stuff
 	public static boolean hasVillageNamesInstalled = false;
-	
 	// The proxy, either a combined client or a dedicated server
 	@SidedProxy(clientSide = "com.is.mtc.proxy.ClientProxy", serverSide = "com.is.mtc.proxy.ServerProxy")
 	public static CommonProxy PROXY;
 	public static SimpleNetworkWrapper simpleNetworkWrapper; // The network wrapper for the mod
-
 	// The creative tab that the mod uses
 	public static CreativeTabs MODTAB = new CreativeTabs("tab_mtc") {
 		@Override
@@ -121,21 +106,30 @@ public class MineTradingCards {
 			return MineTradingCards.packStandard;
 		}
 	};
-	
+	// The directories that MTC works with
+	private static String DATA_DIR = "";
+
+	public static String getDataDir() {
+		return DATA_DIR;
+	}
+
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
-		
-		// Display 
-        event.getModMetadata().logoFile = "mtc_banner.png";
-        
+
+		// Display
+		event.getModMetadata().logoFile = "mtc_banner.png";
+
 		// Gets the config and reads the cards, and runs the preinitialisation from the proxy
 		DATA_DIR = event.getModConfigurationDirectory().getParentFile().getAbsolutePath().replace('\\', '/') + "/resourcepacks/";
 		CONF_DIR = event.getModConfigurationDirectory().getAbsolutePath().replace('\\', '/') + '/';
-		
-        // Version check monitor
-        if (Reference.MOD_VERSION.contains("DEV") || Reference.MOD_VERSION.equals("@VERSION@")) {FMLCommonHandler.instance().bus().register(DevVersionWarning.instance);}
-        else if (ENABLE_UPDATE_CHECKER) {FMLCommonHandler.instance().bus().register(VersionChecker.instance);}
-		
+
+		// Version check monitor
+		if (Reference.MOD_VERSION.contains("DEV") || Reference.MOD_VERSION.equals("@VERSION@")) {
+			FMLCommonHandler.instance().bus().register(DevVersionWarning.instance);
+		} else if (ENABLE_UPDATE_CHECKER) {
+			FMLCommonHandler.instance().bus().register(VersionChecker.instance);
+		}
+
 		PROXY.preInit(event);
 		readConfig(event);
 
@@ -167,13 +161,13 @@ public class MineTradingCards {
 		binder = new BinderItem();
 		displayerBlock = new DisplayerBlock();
 		monoDisplayerBlock = new MonoDisplayerBlock();
-		
+
 		// Mod intercompat stuff
-        if (Loader.isModLoaded(Reference.VILLAGE_NAMES_MODID)) {
-        	hasVillageNamesInstalled = true;
-        }
+		if (Loader.isModLoaded(Reference.VILLAGE_NAMES_MODID)) {
+			hasVillageNamesInstalled = true;
+		}
 	}
-	
+
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event) {
 		// Runs the postinitialisation from the proxy, then registers the items and blocks
@@ -217,13 +211,13 @@ public class MineTradingCards {
 		GameRegistry.addRecipe(new ItemStack(monoDisplayerBlock, 4), "IWI", "WgW", "IGI", 'I', Items.iron_ingot, 'G', Blocks.glass, 'g', Blocks.glowstone, 'W', Blocks.planks);
 
 		GameRegistry.addShapelessRecipe(new ItemStack(binder), Items.book, cardCommon);
-		
+
 		if (ENABLE_CARD_RECIPES) {
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardCommon), "mmm", "ppp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack"));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardUncommon), "mmm", "pip", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'i', "ingotIron"));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardRare), "mmm", "pgp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'g', "ingotGold"));
 			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardAncient), "mmm", "pdp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'd', "gemDiamond"));
-			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardLegendary), "mmm", "pDp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'D', "blockDiamond"));	
+			GameRegistry.addRecipe(new ShapedOreRecipe(new ItemStack(cardLegendary), "mmm", "pDp", "bbb", 'm', "dyeWhite", 'p', Items.paper, 'b', "dyeBlack", 'D', "blockDiamond"));
 		}
 
 		MapGenStructureIO.func_143031_a(CardMasterHome.class, "Mtc_Cm_House"); // Register the house to the generator with a typed id
@@ -239,15 +233,11 @@ public class MineTradingCards {
 		event.registerServerCommand(new CC_CreateCard());
 		event.registerServerCommand(new CC_ForceCreateCard());
 	}
-	
+
 	private void readConfig(FMLPreInitializationEvent event) {
 		// Loads from the configuration file
 		ConfigHandler.config = new Configuration(new File(CONF_DIR, "Mine Trading Cards.cfg"), Reference.CONFIG_VERSION, false);
 		ConfigHandler.config.load();
 		ConfigHandler.saveConfig();
-	}
-	
-	public static String getDataDir() {
-		return DATA_DIR;
 	}
 }

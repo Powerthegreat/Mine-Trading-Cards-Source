@@ -1,24 +1,18 @@
 package com.is.mtc.displayer_mono;
 
-import com.is.mtc.displayer.DisplayerBlockTileEntity;
-import net.minecraft.client.renderer.entity.RenderItem;
-import net.minecraft.client.renderer.entity.RenderManager;
-import net.minecraft.entity.item.EntityItem;
-import org.lwjgl.opengl.GL11;
-
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
-import com.is.mtc.root.Rarity;
 import com.is.mtc.root.Tools;
-import com.is.mtc.util.Reference;
-
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class MonoDisplayerBlockRenderer extends TileEntitySpecialRenderer {
 

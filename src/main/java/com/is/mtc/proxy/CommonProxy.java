@@ -1,7 +1,6 @@
 package com.is.mtc.proxy;
 
 import com.is.mtc.root.Logs;
-
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
