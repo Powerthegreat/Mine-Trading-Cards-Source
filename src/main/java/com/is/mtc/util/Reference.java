@@ -61,6 +61,6 @@ public class Reference {
 	public static final String ITEM_PACK_OVERLAY = ":pack_overlay";
 
 	// Update checker
-	public static final String URL = "https://www.curseforge.com/minecraft/mc-mods/mine-trading-cards-open-source-edition";
+	public static final String URL = "https://modrinth.com/mod/mine-trading-cards";
 	public static final String VERSION_CHECKER_URL = "https://raw.githubusercontent.com/Powerthegreat/Mine-Trading-Cards-Source/master/CURRENT_VERSION";
 }

@@ -175,9 +175,9 @@ public class DisplayerBlockTileEntity extends TileEntity implements IInventory {
 	public void spinCards() {
 		ItemStack[] tempContent = content.clone();
 		content[0] = tempContent[3];
-		content[1] = tempContent[0];
-		content[2] = tempContent[1];
-		content[3] = tempContent[2];
+		content[1] = tempContent[2];
+		content[2] = tempContent[0];
+		content[3] = tempContent[1];
 
 		markDirty();
 
