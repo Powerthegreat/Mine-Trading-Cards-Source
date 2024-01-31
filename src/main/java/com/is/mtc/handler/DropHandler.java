@@ -1,9 +1,13 @@
 package com.is.mtc.handler;
 
+import java.util.Hashtable;
+import java.util.Random;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Logs;
 import com.is.mtc.util.Functions;
 import com.is.mtc.util.Reference;
+
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.boss.EntityDragon;
@@ -16,9 +20,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-
-import java.util.Hashtable;
-import java.util.Random;
 
 public class DropHandler {
 

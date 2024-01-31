@@ -1,8 +1,12 @@
 package com.is.mtc.gui;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.handler.ConfigHandler;
 import com.is.mtc.util.Reference;
+
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.GuiMessageDialog;
 import cpw.mods.fml.client.config.IConfigElement;
@@ -19,9 +23,6 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author AstroTibs

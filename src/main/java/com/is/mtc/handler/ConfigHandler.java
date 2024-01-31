@@ -9,6 +9,7 @@ import com.is.mtc.util.Functions;
 import com.is.mtc.util.Reference;
 import com.is.mtc.village.CardMasterHomeHandler;
 import com.is.mtc.village.VillagerHandler;
+
 import net.minecraftforge.common.config.Configuration;
 
 public class ConfigHandler {

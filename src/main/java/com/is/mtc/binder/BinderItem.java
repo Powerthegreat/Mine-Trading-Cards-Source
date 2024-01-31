@@ -1,16 +1,17 @@
 package com.is.mtc.binder;
 
+import java.util.List;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.handler.GuiHandler;
 import com.is.mtc.root.Tools;
 import com.is.mtc.util.Reference;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-
-import java.util.List;
 
 public class BinderItem extends Item {
 

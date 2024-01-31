@@ -1,5 +1,9 @@
 package com.is.mtc.village;
 
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.CardStructure;
@@ -7,6 +11,7 @@ import com.is.mtc.data_manager.Databank;
 import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.util.Reference;
+
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
@@ -16,9 +21,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.MathHelper;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
-
-import javax.annotation.Nullable;
-import java.util.Random;
 
 public class VillagerHandler
 		implements VillagerRegistry.IVillageTradeHandler {

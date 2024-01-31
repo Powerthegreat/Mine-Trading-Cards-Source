@@ -1,11 +1,11 @@
 package com.is.mtc.data_manager;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.google.gson.JsonElement;
 import com.is.mtc.root.Tools;
 import com.is.mtc.util.Functions;
-
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 public class CustomPackStructure {
 	public Map<String, int[]> categoryQuantities;

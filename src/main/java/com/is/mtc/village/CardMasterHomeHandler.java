@@ -1,10 +1,10 @@
 package com.is.mtc.village;
 
-import cpw.mods.fml.common.registry.VillagerRegistry;
-import net.minecraft.world.gen.structure.StructureVillagePieces;
-
 import java.util.List;
 import java.util.Random;
+
+import cpw.mods.fml.common.registry.VillagerRegistry;
+import net.minecraft.world.gen.structure.StructureVillagePieces;
 
 public class CardMasterHomeHandler implements VillagerRegistry.IVillageCreationHandler {
 

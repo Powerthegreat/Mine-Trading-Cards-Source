@@ -1,5 +1,9 @@
 package com.is.mtc.village;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.CardStructure;
@@ -7,6 +11,7 @@ import com.is.mtc.data_manager.Databank;
 import com.is.mtc.integration.villagenames.VNCompat;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.util.Functions;
+
 import cpw.mods.fml.relauncher.ReflectionHelper;
 import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityVillager;
@@ -21,10 +26,6 @@ import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class CardMasterHome extends StructureVillagePieces.Village {
 	public static final int STRUCTURE_HEIGHT = 7;

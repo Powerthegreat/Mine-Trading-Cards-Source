@@ -1,8 +1,15 @@
 package com.is.mtc.version;
 
+import java.io.InputStream;
+import java.net.URL;
+import java.nio.charset.Charset;
+
+import org.apache.commons.io.IOUtils;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.root.Logs;
 import com.is.mtc.util.Reference;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
@@ -11,11 +18,6 @@ import cpw.mods.fml.common.gameevent.TickEvent.PlayerTickEvent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.ForgeHooks;
-import org.apache.commons.io.IOUtils;
-
-import java.io.InputStream;
-import java.net.URL;
-import java.nio.charset.Charset;
 
 /**
  * Adapted from Jabelar's tutorials

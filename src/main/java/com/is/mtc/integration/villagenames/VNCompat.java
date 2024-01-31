@@ -1,6 +1,10 @@
 package com.is.mtc.integration.villagenames;
 
+import java.util.ArrayList;
+import java.util.Map;
+
 import com.is.mtc.MineTradingCards;
+
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -8,9 +12,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.biome.WorldChunkManager;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-
-import java.util.ArrayList;
-import java.util.Map;
 
 public class VNCompat {
 
