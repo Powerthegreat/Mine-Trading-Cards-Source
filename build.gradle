@@ -21,6 +21,9 @@ archivesBaseName = "MineTradingCards-1.7.10"
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8'
 sourceSets { main { output.resourcesDir = output.classesDirs.singleFile } }
 
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 minecraft {
     version = "1.7.10-10.13.4.1614-1.7.10"
     runDir = "run"
@@ -29,7 +32,7 @@ minecraft {
 }
 
 dependencies {
-	implementation files("api/VillageNames-1.7.10-4.4.3-deobf.jar")
+	implementation files("api/VillageNames-1.7.10-4.4.7-deobf.jar")
 }
 
 processResources
