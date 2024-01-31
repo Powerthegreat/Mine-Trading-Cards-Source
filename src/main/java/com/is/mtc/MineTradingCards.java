@@ -1,5 +1,7 @@
 package com.is.mtc;
 
+import java.io.File;
+
 import com.is.mtc.binder.BinderItem;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.data_manager.DataLoader;
@@ -11,7 +13,11 @@ import com.is.mtc.displayer_mono.MonoDisplayerBlockTileEntity;
 import com.is.mtc.handler.ConfigHandler;
 import com.is.mtc.handler.DropHandler;
 import com.is.mtc.handler.GuiHandler;
-import com.is.mtc.pack.*;
+import com.is.mtc.pack.PackItemBase;
+import com.is.mtc.pack.PackItemCustom;
+import com.is.mtc.pack.PackItemEdition;
+import com.is.mtc.pack.PackItemRarity;
+import com.is.mtc.pack.PackItemStandard;
 import com.is.mtc.packet.MTCMessage;
 import com.is.mtc.packet.MTCMessageHandler;
 import com.is.mtc.proxy.CommonProxy;
@@ -25,6 +31,7 @@ import com.is.mtc.version.VersionChecker;
 import com.is.mtc.village.CardMasterHome;
 import com.is.mtc.village.CardMasterHomeHandler;
 import com.is.mtc.village.VillagerHandler;
+
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
@@ -49,8 +56,6 @@ import net.minecraft.world.gen.structure.MapGenStructureIO;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.oredict.ShapedOreRecipe;
-
-import java.io.File;
 
 @Mod(
 		modid = Reference.MODID,

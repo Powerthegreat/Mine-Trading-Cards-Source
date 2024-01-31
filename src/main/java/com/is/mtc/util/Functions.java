@@ -1,6 +1,14 @@
 package com.is.mtc.util;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+
 import com.is.mtc.root.Logs;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.material.Material;
@@ -14,9 +22,6 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
-
-import java.lang.reflect.Array;
-import java.util.*;
 
 public class Functions {
 	// Represents the 1.14+ village types

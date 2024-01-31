@@ -1,11 +1,18 @@
 package com.is.mtc.pack;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import javax.annotation.Nullable;
+
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.CustomPackStructure;
 import com.is.mtc.data_manager.Databank;
 import com.is.mtc.root.Logs;
 import com.is.mtc.util.Reference;
 import com.mojang.realmsclient.gui.ChatFormatting;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -15,11 +22,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class PackItemCustom extends PackItemBase {
 

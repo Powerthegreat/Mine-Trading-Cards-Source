@@ -1,10 +1,10 @@
 package com.is.mtc.gui;
 
+import java.util.Set;
+
 import cpw.mods.fml.client.IModGuiFactory;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-
-import java.util.Set;
 
 public class MTCGuiFactory implements IModGuiFactory {
 	@Override

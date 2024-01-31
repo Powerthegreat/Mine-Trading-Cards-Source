@@ -1,10 +1,14 @@
 package com.is.mtc.pack;
 
+import java.util.ArrayList;
+import java.util.Random;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.card.CardItem;
 import com.is.mtc.root.Logs;
 import com.is.mtc.util.Functions;
 import com.is.mtc.util.Reference;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -13,9 +17,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class PackItemStandard extends PackItemBase {
 

@@ -1,5 +1,8 @@
 package com.is.mtc.card;
 
+import java.util.List;
+import java.util.Random;
+
 import com.is.mtc.MineTradingCards;
 import com.is.mtc.data_manager.CardStructure;
 import com.is.mtc.data_manager.Databank;
@@ -8,6 +11,7 @@ import com.is.mtc.root.Logs;
 import com.is.mtc.root.Rarity;
 import com.is.mtc.root.Tools;
 import com.is.mtc.util.Reference;
+
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -19,9 +23,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-
-import java.util.List;
-import java.util.Random;
 
 public class CardItem extends Item {
 
