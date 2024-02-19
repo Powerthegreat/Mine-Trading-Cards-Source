@@ -144,7 +144,7 @@ public class VillagerHandler
 
 		// Turn card into specific type
 		if (is_random) {
-			CardStructure cStruct = Databank.generateACard(rarity, random);
+			CardStructure cStruct = Databank.generateACard(rarity, new Random()); // Using new Random() because world random can cause issues generating cards
 			if (cStruct != null) {
 				returnstack.stackTagCompound = new NBTTagCompound();
 				returnstack = CardItem.applyCDWDtoStack(returnstack, cStruct, random);

@@ -29,7 +29,7 @@ minecraft {
 }
 
 dependencies {
-	implementation files("api/VillageNames-1.7.10-4.4.3-deobf.jar")
+	implementation files("api/VillageNames-1.7.10-4.4.7-deobf.jar")
 }
 
 processResources
