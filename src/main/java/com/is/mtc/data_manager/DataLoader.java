@@ -128,8 +128,8 @@ public class DataLoader {
 					}
 				}
 				if (Databank.getEditionsCount() == 0) {
-					Logs.errLog("No editions were registered");
-					return;
+					Logs.errLog("No editions were registered in resource pack " + resourcesZip);
+					continue;
 				}
 				for (Tuple entry : cardZipEntries) { // Load cards after editions
 					if ((boolean) entry.getSecond()) {
@@ -147,6 +147,10 @@ public class DataLoader {
 				}
 			} catch (IOException ignored) {
 			}
+		}
+		if (Databank.getEditionsCount() == 0) {
+			Logs.errLog("No editions were registered");
+			return;
 		}
 		Logs.stdLog("Done loading editions, cards, and custom packs from zipped resource packs");
 
