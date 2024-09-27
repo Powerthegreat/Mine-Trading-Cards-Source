@@ -6,6 +6,7 @@ import com.is.mtc.root.Tools;
 import com.is.mtc.util.Reference;
 
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
@@ -22,7 +23,7 @@ public class MonoDisplayerBlock extends BlockContainer {
 	private IIcon iFace, iSides, iDisplaySide;
 
 	public MonoDisplayerBlock() {
-		super(Material.iron);
+		super(new Material(MapColor.woodColor));
 
 		setLightLevel(0.9375F);
 
@@ -32,6 +33,7 @@ public class MonoDisplayerBlock extends BlockContainer {
 
 		setHardness(5.0F);
 		setResistance(10.0F);
+		setHarvestLevel("axe", 0);
 
 		isBlockContainer = true;
 	}

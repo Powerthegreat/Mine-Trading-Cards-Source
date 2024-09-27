@@ -7,6 +7,7 @@ import com.is.mtc.util.Reference;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
@@ -22,7 +23,7 @@ public class DisplayerBlock extends BlockContainer {
 	private boolean wasPowered;
 
 	public DisplayerBlock() {
-		super(Material.iron);
+		super(new Material(MapColor.woodColor));
 
 		setLightLevel(0.9375F);
 
@@ -32,6 +33,7 @@ public class DisplayerBlock extends BlockContainer {
 
 		setHardness(5.0F);
 		setResistance(10.0F);
+		setHarvestLevel("axe", 0);
 
 		isBlockContainer = true;
 	}
